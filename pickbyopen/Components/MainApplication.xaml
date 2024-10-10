@@ -1,0 +1,164 @@
+﻿<UserControl x:Class="Pickbyopen.Components.MainApplication"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Pickbyopen.Components"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Medium"
+             TextElement.FontSize="26"
+             FontFamily="{materialDesign:MaterialDesignFont}"
+             mc:Ignorable="d"
+             Unloaded="UnsubscribeAll"
+             d:DesignHeight="600" d:DesignWidth="1280">
+    <UserControl.Resources>
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1" 
+                                CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid Margin="0,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <Style TargetType="materialDesign:PackIcon">
+                <Setter Property="Width" Value="30"></Setter>
+                <Setter Property="Height" Value="30"></Setter>
+            </Style>
+        </Grid.Resources>
+        <TextBlock Grid.Row="0" Text="PICK BY OPEN" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,52"/>
+        <Button x:Name="ModeButton" Grid.Row="0" 
+                Style="{StaticResource MaterialDesignFloatingActionButton}" 
+                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,5,0" 
+                BorderBrush="{x:Null}" Background="{x:Null}" Foreground="LightGreen" ToolTip="Modo automático" Click="SwitchMode">
+            <StackPanel Margin="5">
+                <materialDesign:PackIcon x:Name="ModeIcon" Kind="Automatic"/>
+            </StackPanel>
+        </Button>
+        <materialDesign:Card Grid.Row="1" Margin="40,10,40,10" UniformCornerRadius="15" Background="#323131">
+            <Grid VerticalAlignment="Center" Height="158">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="120"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                <TextBlock x:Name="PartnumberLabel" Grid.Column="0" FontSize="24" Text="Desenho: " VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"/>
+                    <TextBox x:Name="PartnumberInput" MaxLength="15" Grid.Column="1" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0" Width="220" IsEnabled="False" SelectionChanged="SelectionChanged"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="220"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="DoorLabel" Grid.Column="0" FontSize="24" Text="Porta selecionada: " VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"/>
+                    <TextBlock x:Name="DoorInput" Grid.Column="1" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"/>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="StatusLabel" Grid.Column="0" FontSize="24" Text="Status: " VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"/>
+                    <TextBlock x:Name="StatusInput" Grid.Column="1" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"/>
+                </Grid>
+            </Grid>
+        </materialDesign:Card>
+        <Grid Grid.Row="2" Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="150"/>
+                <RowDefinition Height="150"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="door1"  Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 1" Height="100" Width="100" Click="ManualDoorOpen">
+                    1
+                </Button>
+                <Button x:Name="door2" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 2" Height="100" Width="100" Click="ManualDoorOpen">
+                    2
+                </Button>
+                <Button x:Name="door3" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 3" Height="100" Width="100" Click="ManualDoorOpen">
+                    3
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="door4" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 4" Height="100" Width="100" Click="ManualDoorOpen">
+                    4
+                </Button>
+                <Button x:Name="door5" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 5" Height="100" Width="100" Click="ManualDoorOpen">
+                    5
+                </Button>
+                <Button x:Name="door6" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 6" Height="100" Width="100" Click="ManualDoorOpen">
+                    6
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="door7" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 7" Height="100" Width="100" Click="ManualDoorOpen">
+                    7
+                </Button>
+                <Button x:Name="door8" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 8" Height="100" Width="100" Click="ManualDoorOpen">
+                    8
+                </Button>
+                <Button x:Name="door9" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 9" Height="100" Width="100" Click="ManualDoorOpen">
+                    9
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="door10" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 10" Height="100" Width="100" Click="ManualDoorOpen">
+                    10
+                </Button>
+                <Button x:Name="door11" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 11" Height="100" Width="100" Click="ManualDoorOpen">
+                    11
+                </Button>
+                <Button x:Name="door12" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 12" Height="100" Width="100" Click="ManualDoorOpen">
+                    12
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="door13"  Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 13" Height="100" Width="100" Click="ManualDoorOpen">
+                    13
+                </Button>
+                <Button x:Name="door14" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 14" Height="100" Width="100" Click="ManualDoorOpen">
+                    14
+                </Button>
+                <Button x:Name="door15" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 15" Height="100" Width="100" Click="ManualDoorOpen">
+                    15
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="door16" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 16" Height="100" Width="100" Click="ManualDoorOpen">
+                    16
+                </Button>
+                <Button x:Name="door17" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 17" Height="100" Width="100" Click="ManualDoorOpen">
+                    17
+                </Button>
+                <Button x:Name="door18" Style="{StaticResource RoundedButtonStyle}" Margin="10" Background="LightGray" Foreground="Black" ToolTip="Porta 18" Height="100" Width="100" Click="ManualDoorOpen">
+                    18
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
+    

@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="Pickbyopen.Components.EditUser"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Pickbyopen.Components"
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesign.Brush.Foreground}"
+             Background="#323131"
+             TextElement.FontWeight="Medium"
+             TextElement.FontSize="14"
+             FontFamily="{materialDesign:MaterialDesignFont}"
+             Height="400" Width="800">
+    <materialDesign:Card Margin="10" UniformCornerRadius="15" Background="#FF323232">
+        <Grid Background="#FF323232" Margin="10,0,0,0" VerticalAlignment="Center" Height="340">
+            <Label x:Name="Title" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="20" Width="389" Foreground="#FFD7D7D7"/>
+            <Button Style="{StaticResource MaterialDesignFloatingActionMiniButton}" 
+                    Margin="10 0 10 0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="40" Height="40" Background="DarkGray" BorderBrush="DarkGray" Click="CloseButton_Click">
+                <StackPanel>
+                    <materialDesign:PackIcon Kind="Close"/>
+                </StackPanel>
+            </Button>
+            <TextBox x:Name="TbBadgeNumber" VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Width="184"
+                materialDesign:HintAssist.Hint="Matrícula" Margin="19,144,0,0" MaxLength="15" IsUndoEnabled="False" UndoLimit="98"/>
+            <TextBox x:Name="TbUserName" VerticalAlignment="Top"
+                HorizontalAlignment="Left"
+                Width="278"
+                materialDesign:HintAssist.Hint="Nome" Margin="229,144,0,0" MaxLength="50" IsUndoEnabled="False" UndoLimit="98"/>
+            <ComboBox x:Name="Permissions" 
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                materialDesign:HintAssist.Hint="Atribuir Permissões"
+                Margin="528,144,30,0"
+                VerticalAlignment="Top"
+                >
+                <CheckBox x:Name="Operate" Content="Operar"/>
+                <CheckBox x:Name="CreatePartnumber" Content="Cadastrar partnumber"/>
+                <CheckBox x:Name="CreateUser" Content="Cadastrar usuários"/>
+                <CheckBox x:Name="ExportReports" Content="Exportar relatórios"/>
+            </ComboBox>
+            <Button x:Name="BtnSave" Content="Salvar" HorizontalAlignment="Center" Margin="0,262,0,0" VerticalAlignment="Top" Width="246" Click="BtnSave_Click"/>
+        </Grid>
+    </materialDesign:Card>
+</UserControl>
