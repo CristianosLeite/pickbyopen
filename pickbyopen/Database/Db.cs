@@ -36,7 +36,7 @@ namespace Pickbyopen.Database
                 connection.Open();
 
                 var createIndexCommand = new NpgsqlCommand(
-                    "CREATE TABLE IF NOT EXISTS public.partnumber_index ("
+                    "CREATE TABLE IF NOT EXISTS public.partnumbers_index ("
                         + "id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ("
                         + "INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1), "
                         + "partnumber character varying COLLATE pg_catalog.\"default\" NOT NULL, "
@@ -44,9 +44,9 @@ namespace Pickbyopen.Database
                         + "CONSTRAINT partnumber_index_pkey PRIMARY KEY (id), "
                         + "CONSTRAINT \"UQ_associateted\" UNIQUE (partnumber), "
                         + "CONSTRAINT partnumber_fk FOREIGN KEY (partnumber) "
-                        + "REFERENCES public.partnumber (partnumber)) "
+                        + "REFERENCES public.partnumbers (partnumber)) "
                         + "TABLESPACE pg_default; "
-                        + "ALTER TABLE IF EXISTS public.partnumber_index OWNER to postgres;",
+                        + "ALTER TABLE IF EXISTS public.partnumbers_index OWNER to postgres;",
                     connection
                 );
                 createIndexCommand.ExecuteNonQuery();
@@ -68,7 +68,7 @@ namespace Pickbyopen.Database
                 connection.Open();
 
                 var createTableCommand = new NpgsqlCommand(
-                    "CREATE TABLE IF NOT EXISTS public.partnumber ("
+                    "CREATE TABLE IF NOT EXISTS public.partnumbers ("
                         + "id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ("
                         + "INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1), "
                         + "partnumber character varying COLLATE pg_catalog.\"default\" NOT NULL, "
@@ -76,7 +76,7 @@ namespace Pickbyopen.Database
                         + "CONSTRAINT partnumber_pkey PRIMARY KEY (id), "
                         + "CONSTRAINT \"UQ_partnumber\" UNIQUE (partnumber)) "
                         + "TABLESPACE pg_default; "
-                        + "ALTER TABLE IF EXISTS public.partnumber OWNER to postgres;",
+                        + "ALTER TABLE IF EXISTS public.partnumbers OWNER to postgres;",
                     connection
                 );
 
@@ -119,7 +119,7 @@ namespace Pickbyopen.Database
         }
 
         // <summary>
-        // Insert a partnumber into the partnumber table or update it if it already exists
+        // Insert a partnumber into the partnumbers table or update it if it already exists
         // </summary>
         private static void InsertOrUpdatePartnumber(
             Partnumber partnumber,
@@ -129,7 +129,7 @@ namespace Pickbyopen.Database
             try
             {
                 var insertOrUpdateCommand = new NpgsqlCommand(
-                    "INSERT INTO public.partnumber (partnumber, description) "
+                    "INSERT INTO public.partnumbers (partnumber, description) "
                         + "VALUES (@partnumber, @description) "
                         + "ON CONFLICT (partnumber) DO UPDATE "
                         + "SET description = @description;",
@@ -159,7 +159,7 @@ namespace Pickbyopen.Database
             try
             {
                 var selectRecipe = new NpgsqlCommand(
-                    "SELECT 1 FROM public.partnumber_index WHERE partnumber = @partnumber;",
+                    "SELECT 1 FROM public.partnumbers_index WHERE partnumber = @partnumber;",
                     connection
                 );
                 selectRecipe.Parameters.AddWithValue("@partnumber", partnumber);
@@ -185,7 +185,7 @@ namespace Pickbyopen.Database
             try
             {
                 var insertOrUpdateAssociation = new NpgsqlCommand(
-                    "INSERT INTO public.partnumber_index (partnumber, door) "
+                    "INSERT INTO public.partnumbers_index (partnumber, door) "
                         + "VALUES (@partnumber, @door) "
                         + "ON CONFLICT (partnumber) DO UPDATE "
                         + "SET door = @door;",
@@ -203,7 +203,7 @@ namespace Pickbyopen.Database
         }
 
         // <summary>
-        // Insert a new partnumber into the partnumber table
+        // Insert a new partnumber into the partnumbers table
         // </summary>
         private static async Task InsertNewPartnumber(
             NpgsqlConnection connection,
@@ -214,7 +214,7 @@ namespace Pickbyopen.Database
             try
             {
                 var insertPartnumber = new NpgsqlCommand(
-                    "INSERT INTO public.partnumber (partnumber, description) VALUES (@partnumber, @description);",
+                    "INSERT INTO public.partnumbers (partnumber, description) VALUES (@partnumber, @description);",
                     connection
                 );
                 insertPartnumber.Parameters.AddWithValue("@partnumber", partnumber);
@@ -370,7 +370,7 @@ namespace Pickbyopen.Database
                 var partnumberList = new ObservableCollection<Partnumber>();
 
                 using var command = new NpgsqlCommand(
-                    "SELECT partnumber, description FROM public.partnumber;",
+                    "SELECT partnumber, description FROM public.partnumbers;",
                     connection
                 );
                 using var reader = command.ExecuteReader();
@@ -399,7 +399,7 @@ namespace Pickbyopen.Database
                 connection.Open();
 
                 var deleteCommand = new NpgsqlCommand(
-                    "DELETE FROM public.partnumber WHERE partnumber = @partnumber;",
+                    "DELETE FROM public.partnumbers WHERE partnumber = @partnumber;",
                     connection
                 );
                 deleteCommand.Parameters.AddWithValue("@partnumber", partnumber);
@@ -426,7 +426,7 @@ namespace Pickbyopen.Database
                 connection.Open();
 
                 var selectRecipeAssociated = new NpgsqlCommand(
-                    "SELECT door FROM public.partnumber_index WHERE partnumber = @partnumber LIMIT 1;",
+                    "SELECT door FROM public.partnumbers_index WHERE partnumber = @partnumber LIMIT 1;",
                     connection
                 );
                 selectRecipeAssociated.Parameters.AddWithValue("@partnumber", partnumber);
@@ -466,7 +466,7 @@ namespace Pickbyopen.Database
                 connection.Open();
 
                 var deleteCommand = new NpgsqlCommand(
-                    "DELETE FROM public.partnumber_index WHERE partnumber = @partnumber;",
+                    "DELETE FROM public.partnumbers_index WHERE partnumber = @partnumber;",
                     connection
                 );
                 deleteCommand.Parameters.AddWithValue("@partnumber", partnumber);
@@ -494,7 +494,7 @@ namespace Pickbyopen.Database
 
                 ObservableCollection<string> ptnList = [];
                 using var command = new NpgsqlCommand(
-                    "SELECT partnumber FROM public.partnumber WHERE partnumber NOT IN(SELECT partnumber FROM public.partnumber_index);",
+                    "SELECT partnumber FROM public.partnumbers WHERE partnumber NOT IN(SELECT partnumber FROM public.partnumbers_index);",
                     connection
                 );
                 using var reader = command.ExecuteReader();
@@ -529,7 +529,7 @@ namespace Pickbyopen.Database
                 ObservableCollection<string> ptnList = [];
 
                 using var command = new NpgsqlCommand(
-                    "SELECT partnumber FROM public.partnumber_index WHERE door = @door;",
+                    "SELECT partnumber FROM public.partnumbers_index WHERE door = @door;",
                     connection
                 );
                 command.Parameters.AddWithValue("@door", door);
