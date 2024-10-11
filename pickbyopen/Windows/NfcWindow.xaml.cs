@@ -112,7 +112,7 @@ namespace Pickbyopen.Windows
             if (uid != null)
             {
                 string id = BitConverter.ToString(uid).Replace("-", "");
-                User? user = await db.GetUser(id);
+                User? user = await db.GetUserById(id);
 
                 if (user != null)
                 {

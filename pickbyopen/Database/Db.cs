@@ -551,6 +551,9 @@ namespace Pickbyopen.Database
             }
         }
 
+        //<summary>
+        // Load a list of users from the database
+        //</summary>
         public ObservableCollection<User> LoadUsersList()
         {
             try
@@ -588,7 +591,10 @@ namespace Pickbyopen.Database
             }
         }
 
-        public async Task<User?> GetUser(string id)
+        //<summary>
+        // Get a user by id from the database
+        //</summary>
+        public async Task<User?> GetUserById(string id)
         {
             try
             {
@@ -628,6 +634,9 @@ namespace Pickbyopen.Database
             }
         }
 
+        //<summary>
+        // Save a user into the database
+        //</summary>
         public async Task<bool> SaveUser(User user)
         {
             try
@@ -658,6 +667,9 @@ namespace Pickbyopen.Database
             }
         }
 
+        //<summary>
+        // Find a user by badge number
+        //</summary>
         public async Task<User?> FindUserByBadgeNumber(string badgeNumber)
         {
             try
@@ -697,6 +709,9 @@ namespace Pickbyopen.Database
             }
         }
 
+        //<summary>
+        // Delete a user from the database
+        //</summary>
         public bool DeleteUser(string id)
         {
             try
