@@ -11,7 +11,7 @@ namespace Pickbyopen
             SetCulture();
         }
 
-        private void SetCulture()
+        private static void SetCulture()
         {
             CultureInfo culture = new("pt-BR");
             Thread.CurrentThread.CurrentCulture = culture;
