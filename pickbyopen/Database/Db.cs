@@ -784,10 +784,7 @@ namespace Pickbyopen.Database
                     command.Parameters.AddWithValue("Device", sysLog.Device);
                     break;
                 case UserLog userLog:
-                    if (userLog.User == null)
-                    {
-                        userLog.User = new User("0", "0", "0", []);
-                    }
+                    userLog.User ??= new("0", "0", "0", []); // Avoid null reference exception
                     command.Parameters.AddWithValue("UserId", userLog.User.Id);
                     break;
                 case Operation Operation:
