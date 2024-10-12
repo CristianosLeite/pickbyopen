@@ -1,10 +1,10 @@
-﻿using System.Text.RegularExpressions;
+﻿using Pickbyopen.Database;
+using Pickbyopen.Models;
+using Pickbyopen.Windows;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Pickbyopen.Database;
-using Pickbyopen.Models;
-using Pickbyopen.Windows;
 
 namespace Pickbyopen.Components
 {

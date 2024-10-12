@@ -79,7 +79,7 @@ namespace Pickbyopen.Windows
                     Main.Children.Add(login);
                     IsWorkDone = true;
                 });
-            else if (Context == "createUser")
+            else if (Context == "create")
                 Application.Current.Dispatcher.Invoke(async () =>
                 {
                     if (User != null)
@@ -138,12 +138,12 @@ namespace Pickbyopen.Windows
                     Close();
                 });
             }
-            else if (Context == "createUser")
+            else if (Context == "create")
             {
                 Dispatcher.Invoke(async () =>
                 {
                     await ShowLoadingAndError("Crachá de identificação já cadastrado");
-                    NfcStd nfcStd = new("createUser");
+                    NfcStd nfcStd = new("create");
                     Main.Children.Clear();
                     Main.Children.Add(nfcStd);
                 });
@@ -164,7 +164,7 @@ namespace Pickbyopen.Windows
                     Main.Children.Add(nfcStd);
                 });
             }
-            else if (Context == "createUser")
+            else if (Context == "create")
             {
                 Dispatcher.Invoke(async () =>
                 {
@@ -172,7 +172,7 @@ namespace Pickbyopen.Windows
                     {
                         User.Id = id;
 
-                        await SaveToDatabase(User, "create");
+                        IsWorkDone = await SaveToDatabase(User, "create");
 
                         Close();
                     }

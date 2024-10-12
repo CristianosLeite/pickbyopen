@@ -1,7 +1,7 @@
-﻿using System.Windows;
-using Pickbyopen.Components;
+﻿using Pickbyopen.Components;
 using Pickbyopen.Database;
 using Pickbyopen.Windows;
+using System.Windows;
 
 namespace Pickbyopen
 {

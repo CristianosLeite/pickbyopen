@@ -1,11 +1,11 @@
-﻿using System.Windows;
+﻿using Pickbyopen.Database;
+using Pickbyopen.Devices.Plc;
+using Pickbyopen.Windows;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Pickbyopen.Database;
-using Pickbyopen.Devices.Plc;
-using Pickbyopen.Windows;
 
 namespace Pickbyopen.Components
 {

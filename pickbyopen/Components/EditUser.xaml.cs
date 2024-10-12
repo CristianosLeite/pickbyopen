@@ -1,7 +1,6 @@
 ﻿using Pickbyopen.Database;
 using Pickbyopen.Models;
 using Pickbyopen.Windows;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -14,7 +13,7 @@ namespace Pickbyopen.Components
     {
         private readonly Db db = new(DatabaseConfig.ConnectionString!);
         private readonly string Context;
-        private readonly string UserId = string.Empty;
+        public string UserId { get; set; }
 
         public EditUser(User user, string context)
         {
@@ -22,6 +21,8 @@ namespace Pickbyopen.Components
 
             DataContext = this;
             Context = context;
+
+            UserId = user.Id;
 
             SetTitle(context);
 
@@ -80,12 +81,12 @@ namespace Pickbyopen.Components
 
                 List<string> permissions = GetSelectedPermissions();
 
-                User user = new("", TbBadgeNumber.Text, TbUserName.Text, permissions);
+                User user = new(UserId, TbBadgeNumber.Text, TbUserName.Text, permissions);
 
                 if (Context == "create")
-                    HandleCreateUser(user, Context);
+                    HandleCreateUser(user);
                 else if (Context == "update")
-                    SaveUser(UserId, permissions, Context);
+                    SaveUser(user.Id, permissions, Context);
             }
             catch (Exception ex)
             {
@@ -93,12 +94,12 @@ namespace Pickbyopen.Components
             }
         }
 
-        private void HandleCreateUser(User user, string context)
+        private void HandleCreateUser(User user)
         {
             Window parentWindow = Window.GetWindow(this);
             parentWindow.Hide();
 
-            NfcWindow nfc = new("createUser", user);
+            NfcWindow nfc = new("create", user);
             nfc.WorkDone += (sender, isWorkDone) =>
             {
                 if (isWorkDone)

@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using System.Data;
-using System.Windows;
-using Npgsql;
+﻿using Npgsql;
 using Pickbyopen.Models;
 using Pickbyopen.Services;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Windows;
 
 namespace Pickbyopen.Database
 {
@@ -743,6 +743,7 @@ namespace Pickbyopen.Database
                 var deleteUser = new NpgsqlCommand("DELETE FROM users WHERE id = @id;", connection);
                 deleteUser.Parameters.AddWithValue("@id", id);
 
+                await deleteUser.ExecuteNonQueryAsync();
                 await LogUserDeleteUser(Auth.LoggedInUser!, user.Username);
                 return true;
             }
