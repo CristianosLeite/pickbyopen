@@ -85,7 +85,7 @@ namespace Pickbyopen.Windows
                     if (User != null)
                     {
                         User.Id = GenerateRandomId();
-                        if (await SaveToDatabase(User))
+                        if (await SaveToDatabase(User, "create"))
                             Close();
                     }
                 });
@@ -172,7 +172,7 @@ namespace Pickbyopen.Windows
                     {
                         User.Id = id;
 
-                        await SaveToDatabase(User);
+                        await SaveToDatabase(User, "create");
 
                         Close();
                     }
@@ -182,9 +182,9 @@ namespace Pickbyopen.Windows
                 HandleContextError();
         }
 
-        private async Task<bool> SaveToDatabase(User user)
+        private async Task<bool> SaveToDatabase(User user, string context)
         {
-            bool isSaved = await db.SaveUser(user);
+            bool isSaved = await db.SaveUser(user, context);
             if (isSaved)
             {
                 IsWorkDone = true;

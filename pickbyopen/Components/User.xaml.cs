@@ -142,7 +142,7 @@ namespace Pickbyopen.Components
             Index = _usersList.IndexOf(user);
         }
 
-        private void DeleteUser(object sender, RoutedEventArgs e)
+        private async void DeleteUser(object sender, RoutedEventArgs e)
         {
             ChangeSelection(sender, e);
             MessageBoxResult result = MessageBox.Show(
@@ -152,13 +152,20 @@ namespace Pickbyopen.Components
             );
             if (result == MessageBoxResult.Yes)
             {
-                bool isDeleted = db.DeleteUser(_usersList[Index].Id);
-                if (!isDeleted)
-                    return;
+                try
+                {
+                    bool isDeleted = await db.DeleteUser(_usersList[Index].Id);
+                    if (!isDeleted)
+                        return;
 
-                _usersList.RemoveAt(Index);
+                    _usersList.RemoveAt(Index);
 
-                MessageBox.Show("Usuário excluído com sucesso!");
+                    MessageBox.Show("Usuário excluído com sucesso!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Erro inexperado ao excluir usuário. " + ex.Message, "Erro");
+                }
             }
 
             dgUser.Items.Refresh();

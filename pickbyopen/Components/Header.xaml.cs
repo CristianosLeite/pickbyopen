@@ -1,10 +1,11 @@
-﻿using Pickbyopen.Devices.Plc;
-using Pickbyopen.Windows;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Pickbyopen.Database;
+using Pickbyopen.Devices.Plc;
+using Pickbyopen.Windows;
 
 namespace Pickbyopen.Components
 {
@@ -13,8 +14,10 @@ namespace Pickbyopen.Components
     /// </summary>
     public partial class Header : UserControl
     {
+        private readonly Db db = new(DatabaseConfig.ConnectionString!);
         private readonly Plc _plc = new();
-        public bool isPlcConnected = false;
+        private bool IsPlcConnected = false;
+        private bool PreviousPlcStatus = false;
 
         public Header()
         {
@@ -51,13 +54,21 @@ namespace Pickbyopen.Components
 
         private void UpdateStatus()
         {
-            Task.Run(() =>
+            Task.Run(async () =>
             {
                 while (true)
                 {
-                    isPlcConnected = _plc.GetPlcStatus().Result;
+                    IsPlcConnected = _plc.GetPlcStatus().Result;
                     SetPlcMonitor();
                     Thread.Sleep(1000);
+
+                    if (IsPlcConnected != PreviousPlcStatus)
+                    {
+                        PreviousPlcStatus = IsPlcConnected;
+                        await db.LogSysPlcStatusChanged(
+                            IsPlcConnected ? "Conectado" : "Desconectado"
+                        );
+                    }
                 }
             });
         }
@@ -72,7 +83,7 @@ namespace Pickbyopen.Components
 
         public async void SetPlcMonitor()
         {
-            if (isPlcConnected)
+            if (IsPlcConnected)
             {
                 _ = PlcMonitor.Dispatcher.BeginInvoke(
                     new Action(() => PlcMonitor.Foreground = Brushes.Green)

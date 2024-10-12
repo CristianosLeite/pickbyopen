@@ -1,16 +1,19 @@
-﻿using Pickbyopen.Models;
+﻿using Pickbyopen.Database;
+using Pickbyopen.Models;
 using Pickbyopen.Windows;
 
 namespace Pickbyopen.Services
 {
     public static class Auth
     {
+        private static readonly Db db = new(DatabaseConfig.ConnectionString!);
         public static User? LoggedInUser { get; private set; }
         public static string? LoggedAt { get; private set; }
 
-        public static void SetLoggedInUser(User user)
+        public async static void SetLoggedInUser(User user)
         {
             LoggedInUser = user;
+            await db.LogUserLogin(user);
         }
 
         public static void SetLoggedAt(string time)
@@ -23,8 +26,9 @@ namespace Pickbyopen.Services
             return LoggedInUser?.HasPermission(permission) ?? false;
         }
 
-        public static void Logout()
+        public async static void Logout()
         {
+            await db.LogUserLogout(LoggedInUser!);
             LoggedInUser = null;
             LoggedAt = null;
 

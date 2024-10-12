@@ -40,13 +40,21 @@
                 <Setter Property="Height" Value="30"></Setter>
             </Style>
         </Grid.Resources>
-        <TextBlock Grid.Row="0" Text="PICK BY OPEN" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,52"/>
         <Button x:Name="ModeButton" Grid.Row="0" 
                 Style="{StaticResource MaterialDesignFloatingActionButton}" 
-                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,5,0" 
+                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,5,0" 
                 BorderBrush="{x:Null}" Background="{x:Null}" Foreground="LightGreen" ToolTip="Modo automático" Click="SwitchMode">
             <StackPanel Margin="5">
                 <materialDesign:PackIcon x:Name="ModeIcon" Kind="Automatic"/>
+            </StackPanel>
+        </Button>
+        <TextBlock Grid.Row="0" Text="PICK BY OPEN" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,52"/>
+        <Button x:Name="Logbutton" Grid.Row="0" 
+                Style="{StaticResource MaterialDesignFloatingActionButton}" 
+                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,5,0" 
+                BorderBrush="{x:Null}" Background="{x:Null}" Foreground="DarkGray" ToolTip="Exibir histórico de atividades" Click="ShowLogs">
+            <StackPanel Margin="5">
+                <materialDesign:PackIcon x:Name="LogIcon" Kind="History"/>
             </StackPanel>
         </Button>
         <materialDesign:Card Grid.Row="1" Margin="40,10,40,10" UniformCornerRadius="15" Background="#323131">

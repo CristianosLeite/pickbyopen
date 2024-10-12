@@ -1,10 +1,10 @@
-﻿using Pickbyopen.Database;
-using Pickbyopen.Models;
-using Pickbyopen.Windows;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Pickbyopen.Database;
+using Pickbyopen.Models;
+using Pickbyopen.Windows;
 
 namespace Pickbyopen.Components
 {
@@ -93,12 +93,7 @@ namespace Pickbyopen.Components
                     return;
                 }
 
-                bool result = false;
-
-                if (context == "update")
-                    result = await db.UpdateAssociation(TbPartnumber.Text, Description.Text, door);
-                else
-                    result = await db.InsertPartNumber(TbPartnumber.Text, Description.Text, door);
+                bool result = await db.SavePartnumber(TbPartnumber.Text, Description.Text, door);
 
                 if (!result)
                     return;

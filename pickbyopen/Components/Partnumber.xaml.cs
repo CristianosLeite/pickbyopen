@@ -100,7 +100,7 @@ namespace Pickbyopen.Components
             Index = _partnumberList.IndexOf(partnumber);
         }
 
-        private void DeletePartnumber(object sender, RoutedEventArgs e)
+        private async void DeletePartnumber(object sender, RoutedEventArgs e)
         {
             ChangeSelection(sender, e);
             MessageBoxResult result = MessageBox.Show(
@@ -110,7 +110,7 @@ namespace Pickbyopen.Components
             );
             if (result == MessageBoxResult.Yes)
             {
-                bool isDeleted = db.DeletePartnumber(_partnumberList[Index].Code);
+                bool isDeleted = await db.DeletePartnumber(_partnumberList[Index].Code);
                 if (!isDeleted)
                     return;
 

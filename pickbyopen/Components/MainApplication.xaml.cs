@@ -1,12 +1,13 @@
-﻿using Pickbyopen.Database;
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Threading;
+using Pickbyopen.Database;
 using Pickbyopen.Devices.CodebarsReader;
 using Pickbyopen.Devices.Plc;
 using Pickbyopen.Services;
 using Pickbyopen.Types;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Threading;
+using Pickbyopen.Windows;
 
 namespace Pickbyopen.Components
 {
@@ -230,7 +231,7 @@ namespace Pickbyopen.Components
                         return;
                     }
 
-                    await WriteToPlc(door);
+                    await WriteToPlc(door, partnumber, "Leitura");
                 }
                 catch (Exception e)
                 {
@@ -251,7 +252,7 @@ namespace Pickbyopen.Components
             return isPlcConnected;
         }
 
-        private async Task WriteToPlc(int door)
+        private async Task WriteToPlc(int door, string target, string context)
         {
             if (_subscriptions.Count == 0)
                 SubscribeDoors();
@@ -263,6 +264,12 @@ namespace Pickbyopen.Components
             }
 
             await _plc.WriteToPlc("DB1.INT0", door.ToString());
+            await db.LogUserOperate(
+                context,
+                target,
+                door.ToString(),
+                IsAutomatic ? "Automático" : "Manual"
+            );
         }
 
         private void StartFlashing(Control control, Command command)
@@ -348,7 +355,8 @@ namespace Pickbyopen.Components
             if (sender is Button button)
             {
                 int door = int.Parse(button.Content.ToString()!);
-                _ = WriteToPlc(door);
+                // In case of direct selection, there will be no partnumber, target will be port number
+                _ = WriteToPlc(door, door.ToString(), "Seleção direta");
                 OpenDoor(button, door);
             }
         }
@@ -412,7 +420,7 @@ namespace Pickbyopen.Components
             }
         }
 
-        private void SwitchMode(object sender, RoutedEventArgs e)
+        private async void SwitchMode(object sender, RoutedEventArgs e)
         {
             if (!Auth.UserHasPermission("O"))
             {
@@ -425,6 +433,13 @@ namespace Pickbyopen.Components
 
             IsAutomatic = !IsAutomatic;
             SetMode();
+            await db.LogSysSwitchedMode(IsAutomatic ? "Automático" : "Manual");
+        }
+
+        private void ShowLogs(object sender, RoutedEventArgs e)
+        {
+            LogsWindow logs = new();
+            logs.Show();
         }
     }
 }

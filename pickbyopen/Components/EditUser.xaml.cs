@@ -13,7 +13,7 @@ namespace Pickbyopen.Components
     public partial class EditUser : UserControl
     {
         private readonly Db db = new(DatabaseConfig.ConnectionString!);
-        private readonly string context;
+        private readonly string Context;
         private readonly string UserId = string.Empty;
 
         public EditUser(User user, string context)
@@ -21,7 +21,7 @@ namespace Pickbyopen.Components
             InitializeComponent();
 
             DataContext = this;
-            this.context = context;
+            Context = context;
 
             SetTitle(context);
 
@@ -82,10 +82,10 @@ namespace Pickbyopen.Components
 
                 User user = new("", TbBadgeNumber.Text, TbUserName.Text, permissions);
 
-                if (context == "create")
-                    HandleCreateUser(user);
-                else if (context == "update")
-                    SaveUser(UserId, permissions);
+                if (Context == "create")
+                    HandleCreateUser(user, Context);
+                else if (Context == "update")
+                    SaveUser(UserId, permissions, Context);
             }
             catch (Exception ex)
             {
@@ -93,7 +93,7 @@ namespace Pickbyopen.Components
             }
         }
 
-        private void HandleCreateUser(User user)
+        private void HandleCreateUser(User user, string context)
         {
             Window parentWindow = Window.GetWindow(this);
             parentWindow.Hide();
@@ -103,13 +103,13 @@ namespace Pickbyopen.Components
             {
                 if (isWorkDone)
                 {
-                    Debug.WriteLine("User created");
+                    // User created
                     ShowSuccessMessage();
                     parentWindow?.Close();
                 }
                 else
                 {
-                    Debug.WriteLine("User not created");
+                    // User already exists
                     parentWindow?.Show();
                 }
             };
@@ -124,7 +124,7 @@ namespace Pickbyopen.Components
         private void ShowSuccessMessage()
         {
             MessageBox.Show(
-                $"Usuário {TbUserName.Text} {(context == "create" ? "cadastrado" : "atualizado")} com sucesso.",
+                $"Usuário {TbUserName.Text} {(Context == "create" ? "cadastrado" : "atualizado")} com sucesso.",
                 "Sucesso"
             );
         }
@@ -178,10 +178,10 @@ namespace Pickbyopen.Components
             return permissions;
         }
 
-        private async void SaveUser(string id, List<string> permissions)
+        private async void SaveUser(string id, List<string> permissions, string context)
         {
             User newUser = new(id, TbBadgeNumber.Text, TbUserName.Text, permissions);
-            await db.SaveUser(newUser);
+            await db.SaveUser(newUser, context);
             ShowSuccessMessage();
         }
 

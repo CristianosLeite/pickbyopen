@@ -1,14 +1,27 @@
-﻿using Npgsql;
-using Pickbyopen.Models;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Data;
 using System.Windows;
+using Npgsql;
+using Pickbyopen.Models;
+using Pickbyopen.Services;
 
 namespace Pickbyopen.Database
 {
-    public class Db(string connectionString)
+    public partial class Db
     {
-        private readonly string _connectionString = connectionString;
+        private readonly string _connectionString;
+
+        public Db(string connectionString)
+        {
+            _connectionString = connectionString;
+
+            CreateUsersTable();
+            CreatePartnumberTable();
+            CreatePartnumberIndex();
+            CreateSysLogTable();
+            CreateUserLogTable();
+            CreateOperationTable();
+        }
 
         public NpgsqlConnection GetConnection()
         {
@@ -30,8 +43,6 @@ namespace Pickbyopen.Database
         {
             try
             {
-                CreatePartnumberTable();
-
                 using var connection = GetConnection();
                 connection.Open();
 
@@ -119,64 +130,106 @@ namespace Pickbyopen.Database
         }
 
         // <summary>
-        // Insert a partnumber into the partnumbers table or update it if it already exists
+        // Create SysLogs table
         // </summary>
-        private static void InsertOrUpdatePartnumber(
-            Partnumber partnumber,
-            NpgsqlConnection connection
-        )
+        private void CreateSysLogTable()
         {
             try
             {
-                var insertOrUpdateCommand = new NpgsqlCommand(
-                    "INSERT INTO public.partnumbers (partnumber, description) "
-                        + "VALUES (@partnumber, @description) "
-                        + "ON CONFLICT (partnumber) DO UPDATE "
-                        + "SET description = @description;",
+                using var connection = GetConnection();
+                connection.Open();
+
+                var createTableCommand = new NpgsqlCommand(
+                    "CREATE TABLE IF NOT EXISTS public.SysLogs ("
+                        + "id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ("
+                        + "INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1), "
+                        + "CreatedAt timestamp without time zone NOT NULL, "
+                        + "Event character varying COLLATE pg_catalog.\"default\" NOT NULL, "
+                        + "Target character varying COLLATE pg_catalog.\"default\" NOT NULL, "
+                        + "Device character varying COLLATE pg_catalog.\"default\", "
+                        + "CONSTRAINT SysLogs_pkey PRIMARY KEY (id)) "
+                        + "TABLESPACE pg_default; "
+                        + "ALTER TABLE IF EXISTS public.SysLogs OWNER to postgres;",
                     connection
                 );
-                insertOrUpdateCommand.Parameters.AddWithValue("@partnumber", partnumber.Code);
-                insertOrUpdateCommand.Parameters.AddWithValue(
-                    "@desciption",
-                    partnumber.Description
-                );
-                insertOrUpdateCommand.ExecuteNonQuery();
+
+                createTableCommand.ExecuteNonQuery();
             }
-            catch (PostgresException)
+            catch (PostgresException e)
             {
-                ShowErrorMessage("Não foi possível cadastrar o partnumber.");
+                ShowErrorMessage("Não foi possível criar a tabela de logs do sistema." + e);
             }
         }
 
         // <summary>
-        // Check if a partnumber already exists in the database
+        // Create UserLogs table
         // </summary>
-        private static async Task<bool> PartnumberExists(
-            NpgsqlConnection connection,
-            string partnumber
-        )
+        private void CreateUserLogTable()
         {
             try
             {
-                var selectRecipe = new NpgsqlCommand(
-                    "SELECT 1 FROM public.partnumbers_index WHERE partnumber = @partnumber;",
+                using var connection = GetConnection();
+                connection.Open();
+
+                var createTableCommand = new NpgsqlCommand(
+                    "CREATE TABLE IF NOT EXISTS public.UserLogs ("
+                        + "id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ("
+                        + "INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1), "
+                        + "CreatedAt timestamp without time zone NOT NULL, "
+                        + "Event character varying COLLATE pg_catalog.\"default\" NOT NULL, "
+                        + "Target character varying COLLATE pg_catalog.\"default\", "
+                        + "UserId character varying COLLATE pg_catalog.\"default\" NOT NULL, "
+                        + "CONSTRAINT UserLogs_pkey PRIMARY KEY (id)) "
+                        + "TABLESPACE pg_default; "
+                        + "ALTER TABLE IF EXISTS public.UserLogs OWNER to postgres;",
                     connection
                 );
-                selectRecipe.Parameters.AddWithValue("@partnumber", partnumber);
 
-                using var reader = await selectRecipe.ExecuteReaderAsync();
-                return reader.HasRows;
+                createTableCommand.ExecuteNonQuery();
             }
             catch (PostgresException e)
             {
-                throw new Exception("Erro ao verificar se o partnumber já existe." + e);
+                ShowErrorMessage("Não foi possível criar a tabela de logs de usuário." + e);
+            }
+        }
+
+        // <summary>
+        // Create operations table
+        // </summary>
+        private void CreateOperationTable()
+        {
+            try
+            {
+                using var connection = GetConnection();
+                connection.Open();
+
+                var createTableCommand = new NpgsqlCommand(
+                    "CREATE TABLE IF NOT EXISTS public.Operations ("
+                        + "id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ("
+                        + "INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1), "
+                        + "CreatedAt timestamp without time zone NOT NULL, "
+                        + "Event character varying COLLATE pg_catalog.\"default\" NOT NULL, "
+                        + "Target character varying COLLATE pg_catalog.\"default\", "
+                        + "Door character varying COLLATE pg_catalog.\"default\" NOT NULL, "
+                        + "Mode character varying COLLATE pg_catalog.\"default\" NOT NULL, "
+                        + "CONSTRAINT Operations_pkey PRIMARY KEY (id)) "
+                        + "TABLESPACE pg_default; "
+                        + "ALTER TABLE IF EXISTS public.Operations OWNER to postgres;",
+                    connection
+                );
+
+                createTableCommand.ExecuteNonQuery();
+            }
+            catch (PostgresException e)
+            {
+                ShowErrorMessage("Não foi possível criar a tabela de relatórios." + e);
             }
         }
 
         // <summary>
         // Insert or update an association between a partnumber and a door
         // </summary>
-        private static async Task InsertOrUpdateAssociation(
+        private async Task InsertOrUpdateAssociation(
             NpgsqlConnection connection,
             string partnumber,
             string door
@@ -195,6 +248,7 @@ namespace Pickbyopen.Database
                 insertOrUpdateAssociation.Parameters.AddWithValue("@door", door);
 
                 await insertOrUpdateAssociation.ExecuteNonQueryAsync();
+                await LogUserEditPartnumber(Auth.LoggedInUser!, partnumber, "update");
             }
             catch (PostgresException e)
             {
@@ -205,7 +259,7 @@ namespace Pickbyopen.Database
         // <summary>
         // Insert a new partnumber into the partnumbers table
         // </summary>
-        private static async Task InsertNewPartnumber(
+        private async Task InsertOrUpdatePartnumber(
             NpgsqlConnection connection,
             string partnumber,
             string description
@@ -214,46 +268,21 @@ namespace Pickbyopen.Database
             try
             {
                 var insertPartnumber = new NpgsqlCommand(
-                    "INSERT INTO public.partnumbers (partnumber, description) VALUES (@partnumber, @description);",
+                    "INSERT INTO public.partnumbers (partnumber, description) VALUES (@partnumber, @description) "
+                        + "ON CONFLICT (partnumber) DO UPDATE "
+                        + "SET description = @description;",
                     connection
                 );
                 insertPartnumber.Parameters.AddWithValue("@partnumber", partnumber);
                 insertPartnumber.Parameters.AddWithValue("@description", description);
 
                 await insertPartnumber.ExecuteNonQueryAsync();
+                await LogUserEditPartnumber(Auth.LoggedInUser!, partnumber, "create");
             }
             catch (PostgresException e)
             {
                 ShowErrorMessage("Não foi possível cadastrar o partnumber." + e);
             }
-        }
-
-        // <summary>
-        // Save a list of partnumbers into the database
-        // </summary>
-        public bool SavePartnumber(List<Partnumber> partnumberList)
-        {
-            if (partnumberList == null || partnumberList.Count == 0)
-            {
-                ShowErrorMessage("Nenhum partnumber foi informado.");
-                return false;
-            }
-
-            try
-            {
-                using var connection = GetConnection();
-                connection.Open();
-
-                foreach (var partnumber in partnumberList)
-                    InsertOrUpdatePartnumber(partnumber, connection);
-            }
-            catch (PostgresException)
-            {
-                ShowErrorMessage("Não foi possível cadastrar o partnumber.");
-                return false;
-            }
-
-            return true;
         }
 
         // <summary>
@@ -321,7 +350,7 @@ namespace Pickbyopen.Database
         // <summary>
         // Insert a new partnumber into the database
         // </summary>
-        public async Task<bool> InsertPartNumber(string partnumber, string description, string door)
+        public async Task<bool> SavePartnumber(string partnumber, string description, string door)
         {
             if (string.IsNullOrEmpty(partnumber))
                 throw new ArgumentNullException(nameof(partnumber));
@@ -335,19 +364,10 @@ namespace Pickbyopen.Database
             if (string.IsNullOrEmpty(description))
                 throw new ArgumentNullException(nameof(description));
 
-            CreatePartnumberIndex();
-
             using var connection = GetConnection();
             await connection.OpenAsync();
 
-            if (await PartnumberExists(connection, partnumber))
-            {
-                throw new Exception(
-                    "TbPartnumber já cadastrado, se quiser alterá-lo clique em editar"
-                );
-            }
-
-            await InsertNewPartnumber(connection, partnumber, description);
+            await InsertOrUpdatePartnumber(connection, partnumber, description);
 
             if (!string.IsNullOrEmpty(door))
                 await InsertOrUpdateAssociation(connection, partnumber, door);
@@ -362,8 +382,6 @@ namespace Pickbyopen.Database
         {
             try
             {
-                CreatePartnumberTable();
-
                 using var connection = GetConnection();
                 connection.Open();
 
@@ -391,7 +409,7 @@ namespace Pickbyopen.Database
         // <summary>
         // Delete a partnumber from the database
         // </summary>
-        public bool DeletePartnumber(string partnumber)
+        public async Task<bool> DeletePartnumber(string partnumber)
         {
             try
             {
@@ -404,6 +422,7 @@ namespace Pickbyopen.Database
                 );
                 deleteCommand.Parameters.AddWithValue("@partnumber", partnumber);
                 deleteCommand.ExecuteNonQuery();
+                await LogUserDeletePartnumber(Auth.LoggedInUser!, partnumber);
                 return true;
             }
             catch (PostgresException)
@@ -458,7 +477,7 @@ namespace Pickbyopen.Database
         // <summary>
         // Delete an association between a partnumber and a door
         // </summary>
-        public void DeletePartnumberIndex(string partnumber)
+        public async void DeletePartnumberIndex(string partnumber)
         {
             try
             {
@@ -471,6 +490,7 @@ namespace Pickbyopen.Database
                 );
                 deleteCommand.Parameters.AddWithValue("@partnumber", partnumber);
                 deleteCommand.ExecuteNonQuery();
+                await LogUserEditPartnumber(Auth.LoggedInUser!, partnumber, "update");
             }
             catch (PostgresException e)
             {
@@ -485,8 +505,6 @@ namespace Pickbyopen.Database
         {
             try
             {
-                CreatePartnumberIndex();
-
                 using var connection = GetConnection();
                 connection.Open();
 
@@ -558,8 +576,6 @@ namespace Pickbyopen.Database
         {
             try
             {
-                CreateUsersTable();
-
                 var usersList = new ObservableCollection<User>();
 
                 using (var connection = GetConnection())
@@ -637,7 +653,7 @@ namespace Pickbyopen.Database
         //<summary>
         // Save a user into the database
         //</summary>
-        public async Task<bool> SaveUser(User user)
+        public async Task<bool> SaveUser(User user, string context)
         {
             try
             {
@@ -657,6 +673,7 @@ namespace Pickbyopen.Database
                 insertUser.Parameters.AddWithValue("@permissions", user.Permissions);
 
                 await insertUser.ExecuteNonQueryAsync();
+                await LogUserEditUser(Auth.LoggedInUser!, user.Username, context);
 
                 return true;
             }
@@ -712,17 +729,21 @@ namespace Pickbyopen.Database
         //<summary>
         // Delete a user from the database
         //</summary>
-        public bool DeleteUser(string id)
+        public async Task<bool> DeleteUser(string id)
         {
             try
             {
                 using var connection = GetConnection();
                 connection.Open();
 
+                User? user =
+                    await GetUserById(id)
+                    ?? throw new InvalidOperationException("Usuário não encontrado");
+
                 var deleteUser = new NpgsqlCommand("DELETE FROM users WHERE id = @id;", connection);
                 deleteUser.Parameters.AddWithValue("@id", id);
 
-                deleteUser.ExecuteNonQuery();
+                await LogUserDeleteUser(Auth.LoggedInUser!, user.Username);
                 return true;
             }
             catch (PostgresException e)
@@ -730,6 +751,200 @@ namespace Pickbyopen.Database
                 ShowErrorMessage("Erro ao deletar o usuário." + e);
                 return false;
             }
+        }
+
+        // <summary>
+        // Save a log into the database
+        // </summary>
+        public async Task SaveLog(Log log)
+        {
+            using var connection = GetConnection();
+            await connection.OpenAsync();
+
+            string query = log switch
+            {
+                SysLog sysLog =>
+                    "INSERT INTO SysLogs (CreatedAt, Event, Target, Device) VALUES (@CreatedAt, @Event, @Target, @Device)",
+                UserLog userLog =>
+                    "INSERT INTO UserLogs (CreatedAt, Event, Target, UserId) VALUES (@CreatedAt, @Event, @Target, @UserId)",
+                Operation Operation =>
+                    "INSERT INTO Operations (CreatedAt, Event, Target, Door, Mode) VALUES (@CreatedAt, @Event, @Target, @Door, @Mode)",
+                _ => throw new InvalidOperationException("Tipo de log desconhecido"),
+            };
+
+            using var command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue("CreatedAt", log.CreatedAt);
+            command.Parameters.AddWithValue("Event", log.Event);
+            command.Parameters.AddWithValue("Target", log.Target);
+
+            switch (log)
+            {
+                case SysLog sysLog:
+                    command.Parameters.AddWithValue("Device", sysLog.Device);
+                    break;
+                case UserLog userLog:
+                    if (userLog.User == null)
+                    {
+                        userLog.User = new User("0", "0", "0", []);
+                    }
+                    command.Parameters.AddWithValue("UserId", userLog.User.Id);
+                    break;
+                case Operation Operation:
+                    command.Parameters.AddWithValue("Door", Operation.Door);
+                    command.Parameters.AddWithValue("Mode", Operation.Mode);
+                    break;
+            }
+
+            await command.ExecuteNonQueryAsync();
+        }
+
+        // <summary>
+        // Load logs from the database
+        // </summary>
+        public async Task<List<Log>> LoadLogs()
+        {
+            var logs = new List<Log>();
+            using var connection = GetConnection();
+            await connection.OpenAsync();
+
+            string[] queries =
+            {
+                "SELECT CreatedAt, Event, Target, Device FROM SysLogs ORDER BY CreatedAt DESC",
+                "SELECT CreatedAt, Event, Target, UserId FROM UserLogs ORDER BY CreatedAt DESC",
+                "SELECT CreatedAt, Event, Target, Door, Mode FROM Operations ORDER BY CreatedAt DESC",
+            };
+
+            foreach (var query in queries)
+            {
+                using var command = new NpgsqlCommand(query, connection);
+                using var reader = await command.ExecuteReaderAsync();
+                while (await reader.ReadAsync())
+                {
+                    Log log = query switch
+                    {
+                        "SELECT CreatedAt, Event, Target, Device FROM SysLogs ORDER BY CreatedAt DESC" =>
+                            new SysLog(
+                                reader.GetDateTime(0),
+                                reader.GetString(1),
+                                reader.GetString(2),
+                                reader.GetString(3)
+                            ),
+                        "SELECT CreatedAt, Event, Target, UserId FROM UserLogs ORDER BY CreatedAt DESC" =>
+                            new UserLog(
+                                reader.GetDateTime(0),
+                                reader.GetString(1),
+                                reader.GetString(2),
+                                await GetUserById(reader.GetString(3))
+                                    ?? new User("0", "0", "0", [])
+                            ),
+                        "SELECT CreatedAt, Event, Target, Door, Mode FROM Operations ORDER BY CreatedAt DESC" =>
+                            new Operation(
+                                reader.GetDateTime(0),
+                                reader.GetString(1),
+                                reader.GetString(2),
+                                reader.GetString(3),
+                                reader.GetString(4)
+                            ),
+                        _ => throw new InvalidOperationException("Tipo de log desconhecido"),
+                    };
+                    logs.Add(log);
+                }
+            }
+
+            return logs;
+        }
+
+        // <summary>
+        // Log a user login
+        // </summary>
+        public async Task LogUserLogin(User user)
+        {
+            UserLog userLog = new(DateTime.Now, "Usuário logado", user.Username, user);
+            await SaveLog(userLog);
+        }
+
+        // <summary>
+        // Log a user logout
+        // </summary>
+        public async Task LogUserLogout(User user)
+        {
+            UserLog userLog = new(DateTime.Now, "Usuário deslogado", user.Username, user);
+            await SaveLog(userLog);
+        }
+
+        // <summary>
+        // Log a user operation
+        // </summary>
+        public async Task LogUserOperate(string context, string target, string door, string mode)
+        {
+            Operation Operation = new(DateTime.Now, context, target, door, mode);
+            await SaveLog(Operation);
+        }
+
+        // <summary>
+        // Log a user create or update a partnumber
+        // </summary>
+        public async Task LogUserEditPartnumber(User user, string partnumber, string context)
+        {
+            string msg = context switch
+            {
+                "create" => "Partnumber cadastrado",
+                "update" => "Partnumber alterado",
+                _ => throw new InvalidOperationException("Contexto desconhecido"),
+            };
+            UserLog userLog = new(DateTime.Now, msg, partnumber, user);
+            await SaveLog(userLog);
+        }
+
+        // <summary>
+        // Log a user delete a partnumber
+        // </summary>
+        public async Task LogUserDeletePartnumber(User user, string partnumber)
+        {
+            UserLog userLog = new(DateTime.Now, "Partnumber deletado", partnumber, user);
+            await SaveLog(userLog);
+        }
+
+        // <sumary>
+        // Log a user create or update a user
+        // </sumary>
+        public async Task LogUserEditUser(User user, string target, string context)
+        {
+            string msg = context switch
+            {
+                "create" => "Usuário cadastrado",
+                "update" => "Usuário alterado",
+                _ => throw new InvalidOperationException("Contexto desconhecido"),
+            };
+            UserLog userLog = new(DateTime.Now, msg, target, user);
+            await SaveLog(userLog);
+        }
+
+        // <summary>
+        // Log a user delete a user
+        // </summary>
+        public async Task LogUserDeleteUser(User user, string target)
+        {
+            UserLog userLog = new(DateTime.Now, "Usuário deletado", target, user);
+            await SaveLog(userLog);
+        }
+
+        // <summary>
+        // Log a system operation mode change
+        // </summary>
+        public async Task LogSysSwitchedMode(string mode)
+        {
+            SysLog sysLog = new(DateTime.Now, "Modo alterado", mode, "");
+            await SaveLog(sysLog);
+        }
+
+        // <summary>
+        // Log a system PLC status change
+        // </summary>
+        public async Task LogSysPlcStatusChanged(string status)
+        {
+            SysLog sysLog = new(DateTime.Now, "Status do PLC alterado", status, "PLC");
+            await SaveLog(sysLog);
         }
     }
 }
