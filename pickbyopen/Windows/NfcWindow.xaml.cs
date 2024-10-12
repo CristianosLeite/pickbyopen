@@ -51,7 +51,7 @@ namespace Pickbyopen.Windows
 
             try
             {
-                acr122u.Init(false, 50, 4, 4, 200);
+                acr122u.Init(true);
                 acr122u.CardInserted += Acr122u_CardInserted;
                 acr122u.CardRemoved += Acr122u_CardRemoved;
 
