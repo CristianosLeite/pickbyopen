@@ -810,9 +810,9 @@ namespace Pickbyopen.Database
 
             string[] queries =
             {
-                "SELECT CreatedAt, Event, Target, Device FROM SysLogs ORDER BY CreatedAt DESC",
-                "SELECT CreatedAt, Event, Target, UserId FROM UserLogs ORDER BY CreatedAt DESC",
-                "SELECT CreatedAt, Event, Target, Door, Mode FROM Operations ORDER BY CreatedAt DESC",
+                "SELECT CreatedAt, Event, Target, Device FROM SysLogs ORDER BY CreatedAt DESC LIMIT 200",
+                "SELECT CreatedAt, Event, Target, UserId FROM UserLogs ORDER BY CreatedAt DESC LIMIT 200",
+                "SELECT CreatedAt, Event, Target, Door, Mode FROM Operations ORDER BY CreatedAt DESC LIMIT 200",
             };
 
             foreach (var query in queries)
@@ -823,14 +823,14 @@ namespace Pickbyopen.Database
                 {
                     Log log = query switch
                     {
-                        "SELECT CreatedAt, Event, Target, Device FROM SysLogs ORDER BY CreatedAt DESC" =>
+                        "SELECT CreatedAt, Event, Target, Device FROM SysLogs ORDER BY CreatedAt DESC LIMIT 200" =>
                             new SysLog(
                                 reader.GetDateTime(0),
                                 reader.GetString(1),
                                 reader.GetString(2),
                                 reader.GetString(3)
                             ),
-                        "SELECT CreatedAt, Event, Target, UserId FROM UserLogs ORDER BY CreatedAt DESC" =>
+                        "SELECT CreatedAt, Event, Target, UserId FROM UserLogs ORDER BY CreatedAt DESC LIMIT 200" =>
                             new UserLog(
                                 reader.GetDateTime(0),
                                 reader.GetString(1),
@@ -838,7 +838,7 @@ namespace Pickbyopen.Database
                                 await GetUserById(reader.GetString(3))
                                     ?? new User("0", "0", "0", [])
                             ),
-                        "SELECT CreatedAt, Event, Target, Door, Mode FROM Operations ORDER BY CreatedAt DESC" =>
+                        "SELECT CreatedAt, Event, Target, Door, Mode FROM Operations ORDER BY CreatedAt DESC LIMIT 200" =>
                             new Operation(
                                 reader.GetDateTime(0),
                                 reader.GetString(1),
