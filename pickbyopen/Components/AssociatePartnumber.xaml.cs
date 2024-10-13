@@ -7,7 +7,7 @@ namespace Pickbyopen.Components
 {
     public partial class AssociatePartnumber : UserControl
     {
-        readonly Db db = new(DatabaseConfig.ConnectionString!);
+        private readonly Db db;
 
         public string SelectedDoor { get; set; }
         public string SelectedPartnumber { get; set; }
@@ -21,6 +21,13 @@ namespace Pickbyopen.Components
         {
             InitializeComponent();
             DataContext = this;
+
+            DbConnectionFactory connectionFactory = new();
+            PartnumberRepository partnumberRepository = new(connectionFactory);
+            UserRepository userRepository = new(connectionFactory);
+            LogRepository logRepository = new(connectionFactory);
+
+            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
 
             SelectedDoor = "";
             SelectedPartnumber = "";
@@ -87,7 +94,7 @@ namespace Pickbyopen.Components
             }
         }
 
-        private void RemoveAssociation(object sender, RoutedEventArgs e)
+        private async void RemoveAssociation(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -102,7 +109,7 @@ namespace Pickbyopen.Components
                     return;
                 }
 
-                db.DeletePartnumberIndex(
+                await db.DeletePartnumberIndex(
                     AssociatedPartnumber[lbAssociatedPartnumbers.SelectedIndex]
                 );
 

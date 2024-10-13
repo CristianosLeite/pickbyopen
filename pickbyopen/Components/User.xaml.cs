@@ -11,13 +11,21 @@ namespace Pickbyopen.Components
     public partial class AppUser : UserControl
     {
         public int Index { get; set; }
-        private readonly Db db = new(DatabaseConfig.ConnectionString!);
+        private readonly Db db;
         public ObservableCollection<User> _usersList = [];
         public User User { get; set; }
 
         public AppUser()
         {
             InitializeComponent();
+
+            DbConnectionFactory connectionFactory = new();
+            PartnumberRepository partnumberRepository = new(connectionFactory);
+            UserRepository userRepository = new(connectionFactory);
+            LogRepository logRepository = new(connectionFactory);
+
+            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
+
             LoadUserList();
 
             User = new User("", "", "", []);
@@ -154,7 +162,7 @@ namespace Pickbyopen.Components
             {
                 try
                 {
-                    bool isDeleted = await db.DeleteUser(_usersList[Index].Id);
+                    bool isDeleted = await db.DeleteUser(_usersList[Index]);
                     if (!isDeleted)
                         return;
 

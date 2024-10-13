@@ -12,12 +12,19 @@ namespace Pickbyopen.Windows
     /// </summary>
     public partial class LogsWindow : Window
     {
-        private readonly Db db = new(DatabaseConfig.ConnectionString!);
+        private readonly Db db;
         public ObservableCollection<Log> Logs { get; set; }
 
         public LogsWindow()
         {
             InitializeComponent();
+
+            DbConnectionFactory connectionFactory = new();
+            PartnumberRepository partnumberRepository = new(connectionFactory);
+            UserRepository userRepository = new(connectionFactory);
+            LogRepository logRepository = new(connectionFactory);
+
+            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
 
             dgLogs.AutoGenerateColumns = false;
             dgLogs.CanUserAddRows = false;

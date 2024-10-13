@@ -13,7 +13,7 @@ namespace Pickbyopen.Components
     /// </summary>
     public partial class EditPartnumber : UserControl
     {
-        private readonly Db db = new(DatabaseConfig.ConnectionString!);
+        private readonly Db db;
         private readonly List<int> _doors;
         private readonly AppPartnumber _createPartNumber;
         private readonly string context;
@@ -29,6 +29,13 @@ namespace Pickbyopen.Components
             InitializeComponent();
             DataContext = this;
             this.context = context;
+
+            DbConnectionFactory connectionFactory = new();
+            PartnumberRepository partnumberRepository = new(connectionFactory);
+            UserRepository userRepository = new(connectionFactory);
+            LogRepository logRepository = new(connectionFactory);
+
+            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
 
             if (context == "update")
             {

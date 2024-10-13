@@ -13,12 +13,19 @@ namespace Pickbyopen.Components
     /// </summary>
     public partial class Login : UserControl
     {
-        private readonly Db db = new(DatabaseConfig.ConnectionString!);
+        private readonly Db db;
         public bool IsWorkDone { get; private set; }
 
         public Login()
         {
             InitializeComponent();
+
+            DbConnectionFactory connectionFactory = new();
+            PartnumberRepository partnumberRepository = new(connectionFactory);
+            UserRepository userRepository = new(connectionFactory);
+            LogRepository logRepository = new(connectionFactory);
+
+            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
         }
 
         private void ReloadWindow(object sernder, RoutedEventArgs e)

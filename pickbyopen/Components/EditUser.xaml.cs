@@ -11,13 +11,20 @@ namespace Pickbyopen.Components
     /// </summary>
     public partial class EditUser : UserControl
     {
-        private readonly Db db = new(DatabaseConfig.ConnectionString!);
+        private readonly Db db;
         private readonly string Context;
         public string UserId { get; set; }
 
         public EditUser(User user, string context)
         {
             InitializeComponent();
+
+            DbConnectionFactory connectionFactory = new();
+            PartnumberRepository partnumberRepository = new(connectionFactory);
+            UserRepository userRepository = new(connectionFactory);
+            LogRepository logRepository = new(connectionFactory);
+
+            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
 
             DataContext = this;
             Context = context;

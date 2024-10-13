@@ -18,7 +18,7 @@ namespace Pickbyopen.Components
     {
         private readonly List<IDisposable> _subscriptions = [];
         private readonly List<Button> _doors = [];
-        private readonly Db db = new(DatabaseConfig.ConnectionString!);
+        private readonly Db db;
         private readonly Dictionary<Control, DispatcherTimer> Timers = [];
         private readonly Dictionary<Control, bool> IsGreenStates = [];
         private readonly Dictionary<Control, bool> IsRedStates = [];
@@ -28,6 +28,13 @@ namespace Pickbyopen.Components
         public MainApplication()
         {
             InitializeComponent();
+
+            DbConnectionFactory connectionFactory = new();
+            PartnumberRepository partnumberRepository = new(connectionFactory);
+            UserRepository userRepository = new(connectionFactory);
+            LogRepository logRepository = new(connectionFactory);
+
+            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
 
             _doors.AddRange(
                 [

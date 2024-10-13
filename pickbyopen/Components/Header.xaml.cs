@@ -14,7 +14,7 @@ namespace Pickbyopen.Components
     /// </summary>
     public partial class Header : UserControl
     {
-        private readonly Db db = new(DatabaseConfig.ConnectionString!);
+        private readonly Db db;
         private readonly Plc _plc = new();
         private bool IsPlcConnected = false;
         private bool PreviousPlcStatus = false;
@@ -22,6 +22,13 @@ namespace Pickbyopen.Components
         public Header()
         {
             InitializeComponent();
+
+            DbConnectionFactory connectionFactory = new();
+            PartnumberRepository partnumberRepository = new(connectionFactory);
+            UserRepository userRepository = new(connectionFactory);
+            LogRepository logRepository = new(connectionFactory);
+
+            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
 
             SetTimer();
             SetLoggedUser();

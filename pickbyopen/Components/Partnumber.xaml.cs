@@ -11,13 +11,21 @@ namespace Pickbyopen.Components
 {
     public partial class AppPartnumber : UserControl
     {
-        private readonly Db db = new(DatabaseConfig.ConnectionString!);
+        private readonly Db db;
         public ObservableCollection<Partnumber> _partnumberList = [];
         public int Index { get; set; }
 
         public AppPartnumber()
         {
             InitializeComponent();
+
+            DbConnectionFactory connectionFactory = new();
+            PartnumberRepository partnumberRepository = new(connectionFactory);
+            UserRepository userRepository = new(connectionFactory);
+            LogRepository logRepository = new(connectionFactory);
+
+            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
+
             LoadPartnumberList();
 
             _partnumberList.CollectionChanged += (sender, e) =>

@@ -6,9 +6,19 @@ namespace Pickbyopen.Services
 {
     public static class Auth
     {
-        private static readonly Db db = new(DatabaseConfig.ConnectionString!);
+        private static readonly Db db;
         public static User? LoggedInUser { get; private set; }
         public static string? LoggedAt { get; private set; }
+
+        static Auth()
+        {
+            DbConnectionFactory connectionFactory = new();
+            PartnumberRepository partnumberRepository = new(connectionFactory);
+            UserRepository userRepository = new(connectionFactory);
+            LogRepository logRepository = new(connectionFactory);
+
+            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
+        }
 
         public async static void SetLoggedInUser(User user)
         {

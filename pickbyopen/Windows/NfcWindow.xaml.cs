@@ -14,7 +14,7 @@ namespace Pickbyopen.Windows
     /// </summary>
     public partial class NfcWindow : Window
     {
-        private readonly Db db = new(DatabaseConfig.ConnectionString!);
+        private readonly Db db;
         private readonly string Context;
         private readonly User? User = null;
         public event EventHandler<bool>? WorkDone;
@@ -23,6 +23,13 @@ namespace Pickbyopen.Windows
         public NfcWindow(string context, User? user = null)
         {
             InitializeComponent();
+
+            DbConnectionFactory connectionFactory = new();
+            PartnumberRepository partnumberRepository = new(connectionFactory);
+            UserRepository userRepository = new(connectionFactory);
+            LogRepository logRepository = new(connectionFactory);
+
+            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
 
             Context = context;
             User = user;
