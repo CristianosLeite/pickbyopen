@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using PCSC;
+﻿using PCSC;
 using PCSC.Monitoring;
+using System.Diagnostics;
 
 namespace Pickbyopen.Devices.Nfc
 {
