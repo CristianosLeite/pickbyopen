@@ -73,11 +73,11 @@ namespace Pickbyopen.Windows
             }
             catch (Exception e)
             {
-                HandleNfcInitializationError(e);
+                HandleNfcInitializationError();
             }
         }
 
-        private void HandleNfcInitializationError(Exception e)
+        private void HandleNfcInitializationError()
         {
             if (Context == "login")
                 Application.Current.Dispatcher.Invoke(() =>
