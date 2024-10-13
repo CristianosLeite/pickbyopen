@@ -19,7 +19,7 @@ namespace Pickbyopen.Components
 
         private void SetTitle()
         {
-            if (Context == "createUser")
+            if (Context == "create")
             {
                 Title.Text = "Cadastrar NFC";
                 Subtitle.Text =
