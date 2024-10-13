@@ -3,6 +3,7 @@ using Pickbyopen.Database;
 using Pickbyopen.Devices.Nfc;
 using Pickbyopen.Models;
 using Pickbyopen.Services;
+using Pickbyopen.Utils;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media.Effects;
@@ -209,10 +210,10 @@ namespace Pickbyopen.Windows
 
         private static void HandleContextError()
         {
-            MessageBox.Show("Contexto inválido");
+            ErrorMessage.Show("Contexto inválido.");
         }
 
-        private string GenerateRandomId()
+        private static string GenerateRandomId()
         {
             Random random = new();
             byte[] buffer = new byte[8];
