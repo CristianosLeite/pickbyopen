@@ -71,7 +71,7 @@ namespace Pickbyopen.Windows
                 acr122u.CardRemoved -= Acr122u_CardRemoved;
                 Thread.Sleep(1000);
             }
-            catch (Exception e)
+            catch
             {
                 HandleNfcInitializationError();
             }
