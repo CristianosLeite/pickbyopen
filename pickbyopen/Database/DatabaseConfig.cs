@@ -1,7 +1,10 @@
-﻿namespace Pickbyopen.Database
+﻿using Pickbyopen.Interfaces;
+
+namespace Pickbyopen.Database
 {
-    public class DatabaseConfig
+    public class DatabaseConfig : IDatabaseConfig
     {
-        public static string? ConnectionString { get; } = Environment.GetEnvironmentVariable("PICKBYOPEN_DB_CONNECTION");
+        public static string? ConnectionString { get; set; } =
+            Environment.GetEnvironmentVariable("PICKBYOPEN_DB_CONNECTION");
     }
 }

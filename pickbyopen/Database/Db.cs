@@ -7,13 +7,11 @@ using System.Windows;
 
 namespace Pickbyopen.Database
 {
-    public partial class Db
+    public partial class Db : DatabaseConfig
     {
-        private readonly string _connectionString;
-
         public Db(string connectionString)
         {
-            _connectionString = connectionString;
+            ConnectionString = connectionString;
 
             CreateUsersTable();
             CreatePartnumberTable();
@@ -23,9 +21,36 @@ namespace Pickbyopen.Database
             CreateOperationTable();
         }
 
-        public NpgsqlConnection GetConnection()
+        public static NpgsqlConnection GetConnection()
         {
-            return new NpgsqlConnection(_connectionString);
+            try
+            {
+                var connectionString = ConnectionString;
+                if (string.IsNullOrEmpty(connectionString))
+                {
+                    throw new InvalidOperationException("Database connection string is not configured.");
+                }
+
+                return new NpgsqlConnection(connectionString);
+            }
+            catch (ArgumentNullException ex)
+            {
+                ShowErrorMessage("Erro ao obter a string de conexão: " + ex.Message);
+                App.Current.Shutdown();
+                throw;
+            }
+            catch (InvalidOperationException ex)
+            {
+                ShowErrorMessage("Erro de configuração: " + ex.Message);
+                App.Current.Shutdown();
+                throw;
+            }
+            catch (Exception ex)
+            {
+                ShowErrorMessage("Erro ao criar a conexão com o banco de dados: " + ex.Message);
+                App.Current.Shutdown();
+                throw;
+            }
         }
 
         // <summary>
@@ -39,7 +64,7 @@ namespace Pickbyopen.Database
         // <summary>
         // Create an index table for partnumber and doors association
         // </summary>
-        private void CreatePartnumberIndex()
+        private static void CreatePartnumberIndex()
         {
             try
             {
@@ -71,7 +96,7 @@ namespace Pickbyopen.Database
         // <summary>
         // Create a table for partnumber
         // </summary>
-        private void CreatePartnumberTable()
+        private static void CreatePartnumberTable()
         {
             try
             {
@@ -102,7 +127,7 @@ namespace Pickbyopen.Database
         // <summary>
         //Create a table for users
         // </summary>
-        private void CreateUsersTable()
+        private static void CreateUsersTable()
         {
             try
             {
@@ -132,7 +157,7 @@ namespace Pickbyopen.Database
         // <summary>
         // Create SysLogs table
         // </summary>
-        private void CreateSysLogTable()
+        private static void CreateSysLogTable()
         {
             try
             {
@@ -164,7 +189,7 @@ namespace Pickbyopen.Database
         // <summary>
         // Create UserLogs table
         // </summary>
-        private void CreateUserLogTable()
+        private static void CreateUserLogTable()
         {
             try
             {
@@ -196,7 +221,7 @@ namespace Pickbyopen.Database
         // <summary>
         // Create operations table
         // </summary>
-        private void CreateOperationTable()
+        private static void CreateOperationTable()
         {
             try
             {
