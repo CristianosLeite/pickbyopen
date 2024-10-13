@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using Pickbyopen.Types;
 
 namespace Pickbyopen.Components
 {
@@ -7,8 +8,8 @@ namespace Pickbyopen.Components
     /// </summary>
     public partial class NfcStd : UserControl
     {
-        public string Context;
-        public NfcStd(string context)
+        public Context Context;
+        public NfcStd(Context context)
         {
             InitializeComponent();
 
@@ -19,7 +20,7 @@ namespace Pickbyopen.Components
 
         private void SetTitle()
         {
-            if (Context == "create")
+            if (Context == Context.Create)
             {
                 Title.Text = "Cadastrar NFC";
                 Subtitle.Text =

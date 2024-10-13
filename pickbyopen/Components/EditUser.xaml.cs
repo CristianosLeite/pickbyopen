@@ -3,6 +3,7 @@ using Pickbyopen.Models;
 using Pickbyopen.Windows;
 using System.Windows;
 using System.Windows.Controls;
+using Pickbyopen.Types;
 
 namespace Pickbyopen.Components
 {
@@ -12,10 +13,10 @@ namespace Pickbyopen.Components
     public partial class EditUser : UserControl
     {
         private readonly Db db;
-        private readonly string Context;
+        private readonly Context Context;
         public string UserId { get; set; }
 
-        public EditUser(User user, string context)
+        public EditUser(User user, Context context)
         {
             InitializeComponent();
 
@@ -39,9 +40,9 @@ namespace Pickbyopen.Components
             CheckPermissions(user.Permissions);
         }
 
-        private void SetTitle(string context)
+        private void SetTitle(Context context)
         {
-            if (context == "create")
+            if (context == Context.Create)
             {
                 Title.Content = "Cadastrar novo usuário";
             }
@@ -90,9 +91,9 @@ namespace Pickbyopen.Components
 
                 User user = new(UserId, TbBadgeNumber.Text, TbUserName.Text, permissions);
 
-                if (Context == "create")
+                if (Context == Context.Create)
                     HandleCreateUser(user);
-                else if (Context == "update")
+                else if (Context == Context.Update)
                     SaveUser(user.Id, permissions, Context);
             }
             catch (Exception ex)
@@ -106,7 +107,7 @@ namespace Pickbyopen.Components
             Window parentWindow = Window.GetWindow(this);
             parentWindow.Hide();
 
-            NfcWindow nfc = new("create", user);
+            NfcWindow nfc = new(Context.Create, user);
             nfc.WorkDone += (sender, isWorkDone) =>
             {
                 if (isWorkDone)
@@ -132,7 +133,7 @@ namespace Pickbyopen.Components
         private void ShowSuccessMessage()
         {
             MessageBox.Show(
-                $"Usuário {TbUserName.Text} {(Context == "create" ? "cadastrado" : "atualizado")} com sucesso.",
+                $"Usuário {TbUserName.Text} {(Context == Context.Create ? "cadastrado" : "atualizado")} com sucesso.",
                 "Sucesso"
             );
         }
@@ -186,7 +187,7 @@ namespace Pickbyopen.Components
             return permissions;
         }
 
-        private async void SaveUser(string id, List<string> permissions, string context)
+        private async void SaveUser(string id, List<string> permissions, Context context)
         {
             User newUser = new(id, TbBadgeNumber.Text, TbUserName.Text, permissions);
             await db.SaveUser(newUser, context);

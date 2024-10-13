@@ -34,7 +34,7 @@ namespace Pickbyopen.Components
                 Dispatcher.Invoke(() =>
                 {
                     App.Current.MainWindow.Effect = new BlurEffect();
-                    NfcWindow nfcWindow = new("login", new("", "", "", []));
+                    NfcWindow nfcWindow = new(Types.Context.Login, new("", "", "", []));
                     nfcWindow.Show();
                 });
             App.Current.MainWindow.IsEnabled = true;

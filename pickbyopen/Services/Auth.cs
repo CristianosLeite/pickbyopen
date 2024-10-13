@@ -1,5 +1,6 @@
 ﻿using Pickbyopen.Database;
 using Pickbyopen.Models;
+using Pickbyopen.Types;
 using Pickbyopen.Windows;
 
 namespace Pickbyopen.Services
@@ -42,7 +43,7 @@ namespace Pickbyopen.Services
             LoggedInUser = null;
             LoggedAt = null;
 
-            NfcWindow nfcWindow = new("login");
+            NfcWindow nfcWindow = new(Context.Login);
             nfcWindow.ShowDialog();
         }
     }

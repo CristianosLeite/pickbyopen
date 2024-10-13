@@ -1,5 +1,6 @@
 ﻿using Pickbyopen.Database;
 using Pickbyopen.Models;
+using Pickbyopen.Types;
 using Pickbyopen.Windows;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -140,7 +141,7 @@ namespace Pickbyopen.Components
                 {
                     var door = await db.GetAssociatedDoor(parnumberObj.Code);
 
-                    EditPartnumber editPartnumber = new(this, parnumberObj, door, "update");
+                    EditPartnumber editPartnumber = new(this, parnumberObj, door, Context.Update);
                     var parentWindow = Window.GetWindow(this) as PartnumberWindow;
                     parentWindow?.Main?.Children.Clear();
                     parentWindow?.Main.Children.Add(editPartnumber);
@@ -171,7 +172,7 @@ namespace Pickbyopen.Components
 
         private void CreatePartnumber(object sender, RoutedEventArgs e)
         {
-            EditPartnumber editPartnumber = new(this, new Partnumber("", ""), 0, "create");
+            EditPartnumber editPartnumber = new(this, new Partnumber("", ""), 0, Context.Create);
             var parentWindow = Window.GetWindow(this) as PartnumberWindow;
             parentWindow?.Main?.Children.Clear();
             parentWindow?.Main.Children.Add(editPartnumber);

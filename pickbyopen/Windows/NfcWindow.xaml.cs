@@ -7,6 +7,7 @@ using Pickbyopen.Utils;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media.Effects;
+using Pickbyopen.Types;
 
 namespace Pickbyopen.Windows
 {
@@ -16,12 +17,12 @@ namespace Pickbyopen.Windows
     public partial class NfcWindow : Window
     {
         private readonly Db db;
-        private readonly string Context;
+        private readonly Context context;
         private readonly User? User = null;
         public event EventHandler<bool>? WorkDone;
         public bool IsWorkDone { get; private set; }
 
-        public NfcWindow(string context, User? user = null)
+        public NfcWindow(Context context, User? user = null)
         {
             InitializeComponent();
 
@@ -32,10 +33,10 @@ namespace Pickbyopen.Windows
 
             db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
 
-            Context = context;
+            this.context = context;
             User = user;
 
-            Main.Children.Add(new NfcStd(Context));
+            Main.Children.Add(new NfcStd(this.context));
             InitializeNfc();
 
             SetProperties();
@@ -79,7 +80,7 @@ namespace Pickbyopen.Windows
 
         private void HandleNfcInitializationError()
         {
-            if (Context == "login")
+            if (context == Context.Login)
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     Login login = new();
@@ -87,13 +88,13 @@ namespace Pickbyopen.Windows
                     Main.Children.Add(login);
                     IsWorkDone = true;
                 });
-            else if (Context == "create")
+            else if (context == Context.Create)
                 Application.Current.Dispatcher.Invoke(async () =>
                 {
                     if (User != null)
                     {
                         User.Id = GenerateRandomId();
-                        if (await SaveToDatabase(User, "create"))
+                        if (await SaveToDatabase(User, Context.Create))
                             Close();
                     }
                 });
@@ -107,7 +108,7 @@ namespace Pickbyopen.Windows
                 Dispatcher.Invoke(() =>
                 {
                     App.Current.MainWindow.Effect = new BlurEffect();
-                    NfcWindow nfcWindow = new(Context, User);
+                    NfcWindow nfcWindow = new(context, User);
                     nfcWindow.Show();
                 });
             App.Current.MainWindow.IsEnabled = true;
@@ -135,7 +136,7 @@ namespace Pickbyopen.Windows
 
         private void HandleExistingUser(User user)
         {
-            if (Context == "login")
+            if (context == Context.Login)
             {
                 Dispatcher.Invoke(async () =>
                 {
@@ -146,12 +147,12 @@ namespace Pickbyopen.Windows
                     Close();
                 });
             }
-            else if (Context == "create")
+            else if (context == Context.Create)
             {
                 Dispatcher.Invoke(async () =>
                 {
                     await ShowLoadingAndError("Crachá de identificação já cadastrado");
-                    NfcStd nfcStd = new("create");
+                    NfcStd nfcStd = new(Context.Create);
                     Main.Children.Clear();
                     Main.Children.Add(nfcStd);
                 });
@@ -162,17 +163,17 @@ namespace Pickbyopen.Windows
 
         private void HandleNewUser(string id)
         {
-            if (Context == "login")
+            if (context == Context.Login)
             {
                 Dispatcher.Invoke(async () =>
                 {
                     await ShowLoadingAndUserNotFound();
-                    NfcStd nfcStd = new("login");
+                    NfcStd nfcStd = new(Context.Login);
                     Main.Children.Clear();
                     Main.Children.Add(nfcStd);
                 });
             }
-            else if (Context == "create")
+            else if (context == Context.Create)
             {
                 Dispatcher.Invoke(async () =>
                 {
@@ -180,7 +181,7 @@ namespace Pickbyopen.Windows
                     {
                         User.Id = id;
 
-                        IsWorkDone = await SaveToDatabase(User, "create");
+                        IsWorkDone = await SaveToDatabase(User, Context.Create);
 
                         Close();
                     }
@@ -190,7 +191,7 @@ namespace Pickbyopen.Windows
                 HandleContextError();
         }
 
-        private async Task<bool> SaveToDatabase(User user, string context)
+        private async Task<bool> SaveToDatabase(User user, Context context)
         {
             bool isSaved = await db.SaveUser(user, context);
             if (isSaved)

@@ -4,6 +4,7 @@ using Pickbyopen.Models;
 using Pickbyopen.Services;
 using System.Collections.ObjectModel;
 using System.Windows;
+using Pickbyopen.Types;
 
 namespace Pickbyopen.Database
 {
@@ -268,7 +269,7 @@ namespace Pickbyopen.Database
 
         public async Task<bool> SavePartnumber(string partnumber, string description, string door)
         {
-            await _logRepository.LogUserEditPartnumber(Auth.LoggedInUser!, partnumber, "create");
+            await _logRepository.LogUserEditPartnumber(Auth.LoggedInUser!, partnumber, Context.Create);
             return await _partnumberRepository.SavePartnumber(partnumber, description, door);
         }
 
@@ -300,13 +301,13 @@ namespace Pickbyopen.Database
 
         public async Task<bool> CreateAssociation(string partnumber, string door)
         {
-            await _logRepository.LogUserEditPartnumber(Auth.LoggedInUser!, partnumber, "update");
+            await _logRepository.LogUserEditPartnumber(Auth.LoggedInUser!, partnumber, Context.Update);
             return await _partnumberRepository.CreateAssociation(partnumber, door);
         }
 
         public async Task<bool> DeletePartnumberIndex(string partnumber)
         {
-            await _logRepository.LogUserEditPartnumber(Auth.LoggedInUser!, partnumber, "update");
+            await _logRepository.LogUserEditPartnumber(Auth.LoggedInUser!, partnumber, Context.Update);
             return await _partnumberRepository.DeletePartnumberIndex(partnumber);
         }
 
@@ -325,7 +326,7 @@ namespace Pickbyopen.Database
             return await _userRepository.GetUserById(id);
         }
 
-        public async Task<bool> SaveUser(User user, string context)
+        public async Task<bool> SaveUser(User user, Context context)
         {
             await _logRepository.LogUserEditUser(Auth.LoggedInUser!, user.Username, context);
             return await _userRepository.SaveUser(user, context);

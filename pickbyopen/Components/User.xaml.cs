@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Pickbyopen.Types;
 
 namespace Pickbyopen.Components
 {
@@ -42,7 +43,7 @@ namespace Pickbyopen.Components
 
         private void CreateUser(object sender, RoutedEventArgs e)
         {
-            EditUser editUser = new(User, "create");
+            EditUser editUser = new(User, Context.Create);
             var parentWindow = Window.GetWindow(this) as UserWindow;
             parentWindow?.Main?.Children.Clear();
             parentWindow?.Main?.Children.Add(editUser);
@@ -130,7 +131,7 @@ namespace Pickbyopen.Components
 
                 if (pnindex.DataContext is User user)
                 {
-                    EditUser editUser = new(user, "update");
+                    EditUser editUser = new(user, Context.Update);
                     var parentWindow = Window.GetWindow(this) as UserWindow;
                     parentWindow?.Main?.Children.Clear();
                     parentWindow?.Main.Children.Add(editUser);

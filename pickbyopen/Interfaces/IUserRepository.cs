@@ -1,4 +1,5 @@
 ﻿using Pickbyopen.Models;
+using Pickbyopen.Types;
 using System.Collections.ObjectModel;
 
 namespace Pickbyopen.Interfaces
@@ -7,7 +8,7 @@ namespace Pickbyopen.Interfaces
     {
         ObservableCollection<User> LoadUsersList();
         Task<User?> GetUserById(string id);
-        Task<bool> SaveUser(User user, string context);
+        Task<bool> SaveUser(User user, Context context);
         Task<User?> FindUserByBadgeNumber(string badgeNumber);
         Task<bool> DeleteUser(User user);
     }

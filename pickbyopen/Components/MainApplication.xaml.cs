@@ -127,38 +127,38 @@ namespace Pickbyopen.Components
         private void SubscribeDoors()
         {
             // Open doors
-            DoorSubscription("DB1.DBX2.0", door1, "open");
-            DoorSubscription("DB1.DBX2.1", door2, "open");
-            DoorSubscription("DB1.DBX2.2", door3, "open");
-            DoorSubscription("DB1.DBX2.3", door4, "open");
-            DoorSubscription("DB1.DBX2.4", door5, "open");
-            DoorSubscription("DB1.DBX2.5", door6, "open");
-            DoorSubscription("DB1.DBX2.6", door7, "open");
-            DoorSubscription("DB1.DBX2.7", door8, "open");
-            DoorSubscription("DB1.DBX3.0", door9, "open");
-            DoorSubscription("DB1.DBX3.1", door10, "open");
-            DoorSubscription("DB1.DBX3.2", door11, "open");
-            DoorSubscription("DB1.DBX3.3", door12, "open");
-            DoorSubscription("DB1.DBX3.4", door13, "open");
-            DoorSubscription("DB1.DBX3.5", door14, "open");
-            DoorSubscription("DB1.DBX3.6", door15, "open");
-            DoorSubscription("DB1.DBX3.7", door16, "open");
-            DoorSubscription("DB1.DBX4.0", door17, "open");
-            DoorSubscription("DB1.DBX4.1", door18, "open");
+            DoorSubscription("DB1.DBX2.0", door1, Context.Open);
+            DoorSubscription("DB1.DBX2.1", door2, Context.Open);
+            DoorSubscription("DB1.DBX2.2", door3, Context.Open);
+            DoorSubscription("DB1.DBX2.3", door4, Context.Open);
+            DoorSubscription("DB1.DBX2.4", door5, Context.Open);
+            DoorSubscription("DB1.DBX2.5", door6, Context.Open);
+            DoorSubscription("DB1.DBX2.6", door7, Context.Open);
+            DoorSubscription("DB1.DBX2.7", door8, Context.Open);
+            DoorSubscription("DB1.DBX3.0", door9, Context.Open);
+            DoorSubscription("DB1.DBX3.1", door10, Context.Open);
+            DoorSubscription("DB1.DBX3.2", door11, Context.Open);
+            DoorSubscription("DB1.DBX3.3", door12, Context.Open);
+            DoorSubscription("DB1.DBX3.4", door13, Context.Open);
+            DoorSubscription("DB1.DBX3.5", door14, Context.Open);
+            DoorSubscription("DB1.DBX3.6", door15, Context.Open);
+            DoorSubscription("DB1.DBX3.7", door16, Context.Open);
+            DoorSubscription("DB1.DBX4.0", door17, Context.Open);
+            DoorSubscription("DB1.DBX4.1", door18, Context.Open);
 
             // Refill doors
-            DoorSubscription("DB1.DBX4.2", door10, "refill");
-            DoorSubscription("DB1.DBX4.3", door11, "refill");
-            DoorSubscription("DB1.DBX4.4", door12, "refill");
-            DoorSubscription("DB1.DBX4.5", door13, "refill");
-            DoorSubscription("DB1.DBX4.6", door14, "refill");
-            DoorSubscription("DB1.DBX4.7", door15, "refill");
-            DoorSubscription("DB1.DBX5.0", door16, "refill");
-            DoorSubscription("DB1.DBX5.1", door17, "refill");
-            DoorSubscription("DB1.DBX5.2", door18, "refill");
+            DoorSubscription("DB1.DBX4.2", door10, Context.Refill);
+            DoorSubscription("DB1.DBX4.3", door11, Context.Refill);
+            DoorSubscription("DB1.DBX4.4", door12, Context.Refill);
+            DoorSubscription("DB1.DBX4.5", door13, Context.Refill);
+            DoorSubscription("DB1.DBX4.6", door14, Context.Refill);
+            DoorSubscription("DB1.DBX4.7", door15, Context.Refill);
+            DoorSubscription("DB1.DBX5.0", door16, Context.Refill);
+            DoorSubscription("DB1.DBX5.1", door17, Context.Refill);
+            DoorSubscription("DB1.DBX5.2", door18, Context.Refill);
         }
 
-        private void DoorSubscription(string address, Button associatedDoor, string context)
+        private void DoorSubscription(string address, Button associatedDoor, Context context)
         {
             _subscriptions.Add(
                 _plc.SubscribeAddress<bool>(
@@ -181,12 +181,12 @@ namespace Pickbyopen.Components
                         Dispatcher.BeginInvoke(
                             new Action(() =>
                             {
-                                if (context == "open")
+                                if (context == Context.Open)
                                     OpenDoor(
                                         associatedDoor,
                                         int.Parse(associatedDoor.Content.ToString()!)
                                     );
-                                else if (context == "refill")
+                                else if (context == Context.Refill)
                                     Refill(associatedDoor);
                                 else
                                     Empty(associatedDoor);
@@ -238,7 +238,7 @@ namespace Pickbyopen.Components
                         return;
                     }
 
-                    await WriteToPlc(door, partnumber, "Leitura");
+                    await WriteToPlc(door, partnumber, Event.Reading);
                 }
                 catch (Exception e)
                 {
@@ -259,7 +259,7 @@ namespace Pickbyopen.Components
             return isPlcConnected;
         }
 
-        private async Task WriteToPlc(int door, string target, string context)
+        private async Task WriteToPlc(int door, string target, Event @event)
         {
             if (_subscriptions.Count == 0)
                 SubscribeDoors();
@@ -272,7 +272,7 @@ namespace Pickbyopen.Components
 
             await _plc.WriteToPlc("DB1.INT0", door.ToString());
             await db.LogUserOperate(
-                context,
+                @event == Event.Reading ? "Leitura" : "Seleção",
                 target,
                 door.ToString(),
                 IsAutomatic ? "Automático" : "Manual"
@@ -363,7 +363,7 @@ namespace Pickbyopen.Components
             {
                 int door = int.Parse(button.Content.ToString()!);
                 // In case of direct selection, there will be no partnumber, target will be port number
-                _ = WriteToPlc(door, door.ToString(), "Seleção direta");
+                _ = WriteToPlc(door, door.ToString(), Event.Selection);
                 OpenDoor(button, door);
             }
         }

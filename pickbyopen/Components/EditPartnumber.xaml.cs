@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Pickbyopen.Types;
 
 namespace Pickbyopen.Components
 {
@@ -16,14 +17,14 @@ namespace Pickbyopen.Components
         private readonly Db db;
         private readonly List<int> _doors;
         private readonly AppPartnumber _createPartNumber;
-        private readonly string context;
+        private readonly Context context;
         public readonly int _selectedDoor;
 
         public EditPartnumber(
             AppPartnumber createPartnumber,
             Partnumber partnumber,
             int door,
-            string context
+            Context context
         )
         {
             InitializeComponent();
@@ -37,7 +38,7 @@ namespace Pickbyopen.Components
 
             db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
 
-            if (context == "update")
+            if (context == Context.Update)
             {
                 Title.Content = "Editar Partnumber";
             }
@@ -106,7 +107,7 @@ namespace Pickbyopen.Components
                     return;
 
                 MessageBox.Show(
-                    $"Desenho {TbPartnumber.Text} {(context == "create" ? "cadastrado" : "atualizado")} com sucesso.",
+                    $"Desenho {TbPartnumber.Text} {(context == Context.Create ? "cadastrado" : "atualizado")} com sucesso.",
                     "Sucesso"
                 );
 

@@ -3,6 +3,7 @@ using Pickbyopen.Interfaces;
 using Pickbyopen.Models;
 using System.Collections.ObjectModel;
 using Pickbyopen.Utils;
+using Pickbyopen.Types;
 
 namespace Pickbyopen.Database
 {
@@ -94,7 +95,7 @@ namespace Pickbyopen.Database
         //<summary>
         // Save a user into the database
         //</summary>
-        public async Task<bool> SaveUser(User user, string context)
+        public async Task<bool> SaveUser(User user, Context context)
         {
             try
             {

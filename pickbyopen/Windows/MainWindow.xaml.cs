@@ -1,5 +1,6 @@
 ﻿using Pickbyopen.Components;
 using Pickbyopen.Database;
+using Pickbyopen.Types;
 using Pickbyopen.Windows;
 using System.Windows;
 
@@ -31,7 +32,7 @@ namespace Pickbyopen
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        NfcWindow nfcWindow = new("login");
+                        NfcWindow nfcWindow = new(Context.Login);
                         nfcWindow.ShowDialog();
                     });
                 }
@@ -40,12 +41,12 @@ namespace Pickbyopen
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         UserWindow userWindow = new();
-                        EditUser editUser = new(new("", "", "", []), "create");
+                        EditUser editUser = new(new("", "", "", []), Context.Create);
                         userWindow.Main.Children.Clear();
                         userWindow.Main.Children.Add(editUser);
                         userWindow.ShowDialog();
 
-                        NfcWindow nfcWindow = new("login");
+                        NfcWindow nfcWindow = new(Context.Login);
                         nfcWindow.ShowDialog();
                     });
                 }

@@ -1,6 +1,7 @@
 ﻿using Npgsql;
 using Pickbyopen.Interfaces;
 using Pickbyopen.Models;
+using Pickbyopen.Types;
 
 namespace Pickbyopen.Database
 {
@@ -130,21 +131,21 @@ namespace Pickbyopen.Database
         // <summary>
         // Log a user operation
         // </summary>
-        public async Task LogUserOperate(string context, string target, string door, string mode)
+        public async Task LogUserOperate(string @event, string target, string door, string mode)
         {
-            Operation Operation = new(DateTime.Now, context, target, door, mode);
+            Operation Operation = new(DateTime.Now, @event, target, door, mode);
             await SaveLog(Operation);
         }
 
         // <summary>
         // Log a user create or update a partnumber
         // </summary>
-        public async Task LogUserEditPartnumber(User user, string partnumber, string context)
+        public async Task LogUserEditPartnumber(User user, string partnumber, Context context)
         {
             string msg = context switch
             {
-                "create" => "Partnumber cadastrado",
-                "update" => "Partnumber alterado",
+                Context.Create => "Partnumber cadastrado",
+                Context.Update => "Partnumber alterado",
                 _ => throw new InvalidOperationException("Contexto desconhecido"),
             };
             UserLog userLog = new(DateTime.Now, msg, partnumber, user);
@@ -163,12 +164,12 @@ namespace Pickbyopen.Database
         // <sumary>
         // Log a user create or update a user
         // </sumary>
-        public async Task LogUserEditUser(User user, string target, string context)
+        public async Task LogUserEditUser(User user, string target, Context context)
         {
             string msg = context switch
             {
-                "create" => "Usuário cadastrado",
-                "update" => "Usuário alterado",
+                Context.Create => "Usuário cadastrado",
+                Context.Update => "Usuário alterado",
                 _ => throw new InvalidOperationException("Contexto desconhecido"),
             };
             UserLog userLog = new(DateTime.Now, msg, target, user);
