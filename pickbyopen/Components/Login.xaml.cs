@@ -49,6 +49,7 @@ namespace Pickbyopen.Components
             {
                 IsWorkDone = true;
                 Auth.SetLoggedInUser(user);
+                Auth.SetLoggedAt(DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"));
                 Window.GetWindow(this)!.Close();
             }
             else
