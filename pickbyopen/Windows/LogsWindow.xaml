@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Pickbyopen.Windows"
         mc:Ignorable="d"
-        Title="Histórico de atividades" Height="400" Width="550"
+        Title="Histórico de atividades" Height="400" Width="580"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Medium"
