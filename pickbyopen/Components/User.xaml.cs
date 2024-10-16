@@ -94,7 +94,7 @@ namespace Pickbyopen.Components
             GetUser();
         }
 
-        private async void UpdateUsersList()
+        private void UpdateUsersList()
         {
             try
             {

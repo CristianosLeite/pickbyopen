@@ -18,7 +18,7 @@ namespace Pickbyopen.Windows
     {
         private readonly Db db;
         private readonly Context context;
-        private readonly User? User = null;
+        private User? User = null;
         public event EventHandler<bool>? WorkDone;
         public bool IsWorkDone { get; private set; }
 
@@ -178,6 +178,7 @@ namespace Pickbyopen.Windows
                         User.Id = id;
 
                         IsWorkDone = await SaveToDatabase(User, Context.Create);
+                        User = null; // Avoid saving the same user twice
 
                         Close();
                     }
