@@ -28,10 +28,10 @@ namespace Pickbyopen.Components
             User = new User("", "", "", []);
         }
 
-        private async void LoadUserList()
+        private void LoadUserList()
         {
             _usersList.Clear();
-            _usersList = await db.LoadUsersList();
+            _usersList = db.LoadUsersList();
             dgUser.ItemsSource ??= _usersList;
 
             DataContext = this;
@@ -99,7 +99,7 @@ namespace Pickbyopen.Components
             try
             {
                 _usersList.Clear();
-                _usersList = await db.LoadUsersList();
+                _usersList = db.LoadUsersList();
 
                 dgUser.ItemsSource = _usersList;
                 dgUser.Items.Refresh();

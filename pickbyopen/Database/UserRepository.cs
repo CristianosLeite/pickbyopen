@@ -14,7 +14,7 @@ namespace Pickbyopen.Database
         //<summary>
         // Load a list of users from the database
         //</summary>
-        public async Task<ObservableCollection<User>> LoadUsersList()
+        public ObservableCollection<User> LoadUsersList()
         {
             try
             {
@@ -27,7 +27,7 @@ namespace Pickbyopen.Database
                         "SELECT id, badge_number, username, permissions FROM users",
                         connection
                     );
-                    using var reader = await command.ExecuteReaderAsync();
+                    using var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
                         var id = reader.GetString(0);

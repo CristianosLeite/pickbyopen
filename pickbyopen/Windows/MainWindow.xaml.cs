@@ -22,7 +22,7 @@ namespace Pickbyopen
 
             Task.Run(async () =>
             {
-                var existingUsers = await db.LoadUsersList();
+                var existingUsers = db.LoadUsersList();
 
                 if (existingUsers.Count > 0)
                 {

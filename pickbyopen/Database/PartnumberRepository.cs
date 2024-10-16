@@ -150,7 +150,7 @@ namespace Pickbyopen.Database
             return true;
         }
 
-        public async Task<ObservableCollection<Partnumber>> LoadPartnumberList()
+        public ObservableCollection<Partnumber> LoadPartnumberList()
         {
             try
             {
@@ -163,7 +163,7 @@ namespace Pickbyopen.Database
                     "SELECT partnumber, description FROM public.partnumbers;",
                     connection
                 );
-                using var reader = await command.ExecuteReaderAsync();
+                using var reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {

@@ -280,9 +280,9 @@ namespace Pickbyopen.Database
             return await _partnumberRepository.DeletePartnumber(partnumber);
         }
 
-        public async Task<ObservableCollection<Partnumber>> LoadPartnumberList()
+        public ObservableCollection<Partnumber> LoadPartnumberList()
         {
-            return await _partnumberRepository.LoadPartnumberList();
+            return _partnumberRepository.LoadPartnumberList();
         }
 
         public async Task<ObservableCollection<string>> LoadAvailablePartnumbers()
@@ -312,9 +312,9 @@ namespace Pickbyopen.Database
             return await _partnumberRepository.DeletePartnumberIndex(partnumber);
         }
 
-        public async Task<ObservableCollection<User>> LoadUsersList()
+        public ObservableCollection<User> LoadUsersList()
         {
-            return await _userRepository.LoadUsersList();
+            return _userRepository.LoadUsersList();
         }
 
         public Task<User?> FindUserByBadgeNumber(string badgeNumber)

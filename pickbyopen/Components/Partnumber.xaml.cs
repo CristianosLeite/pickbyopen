@@ -32,21 +32,21 @@ namespace Pickbyopen.Components
             };
         }
 
-        private async void LoadPartnumberList()
+        private void LoadPartnumberList()
         {
             _partnumberList.Clear();
-            _partnumberList = await db.LoadPartnumberList();
+            _partnumberList = db.LoadPartnumberList();
             dgPartnumber.ItemsSource ??= _partnumberList;
 
             DataContext = this;
         }
 
-        public async void UpdatePartnumberList()
+        public void UpdatePartnumberList()
         {
             try
             {
                 _partnumberList.Clear();
-                _partnumberList = await db.LoadPartnumberList();
+                _partnumberList = db.LoadPartnumberList();
 
                 dgPartnumber.ItemsSource = _partnumberList;
                 dgPartnumber.Items.Refresh();
