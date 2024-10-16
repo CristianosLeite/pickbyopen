@@ -1,9 +1,9 @@
 ﻿using Pickbyopen.Database;
 using Pickbyopen.Models;
+using Pickbyopen.Types;
 using Pickbyopen.Windows;
 using System.Windows;
 using System.Windows.Controls;
-using Pickbyopen.Types;
 
 namespace Pickbyopen.Components
 {
@@ -21,11 +21,7 @@ namespace Pickbyopen.Components
             InitializeComponent();
 
             DbConnectionFactory connectionFactory = new();
-            PartnumberRepository partnumberRepository = new(connectionFactory);
-            UserRepository userRepository = new(connectionFactory);
-            LogRepository logRepository = new(connectionFactory);
-
-            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
+            db = new(connectionFactory);
 
             DataContext = this;
             Context = context;

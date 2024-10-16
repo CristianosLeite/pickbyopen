@@ -2,9 +2,9 @@
 using Pickbyopen.Interfaces;
 using Pickbyopen.Models;
 using Pickbyopen.Services;
+using Pickbyopen.Types;
 using System.Collections.ObjectModel;
 using System.Windows;
-using Pickbyopen.Types;
 
 namespace Pickbyopen.Database
 {
@@ -14,18 +14,18 @@ namespace Pickbyopen.Database
         protected readonly IPartnumberRepository _partnumberRepository;
         protected readonly IUserRepository _userRepository;
         protected readonly ILogRepository _logRepository;
+        protected readonly IOperationRepository _operationRepository;
 
         public Db(
-            IDbConnectionFactory connectionFactory,
-            IPartnumberRepository partnumberRepository,
-            IUserRepository userRepository,
-            ILogRepository logRepository
+            IDbConnectionFactory connectionFactory
         )
         {
             _connectionFactory = connectionFactory;
-            _partnumberRepository = partnumberRepository;
-            _userRepository = userRepository;
-            _logRepository = logRepository;
+
+            _partnumberRepository = new PartnumberRepository(connectionFactory);
+            _userRepository = new UserRepository(connectionFactory);
+            _logRepository = new LogRepository(connectionFactory);
+            _operationRepository = new OperationRepository(connectionFactory);
 
             CreateUsersTable();
             CreatePartnumberTable();
@@ -253,6 +253,7 @@ namespace Pickbyopen.Database
                         + "Target character varying COLLATE pg_catalog.\"default\", "
                         + "Door character varying COLLATE pg_catalog.\"default\" NOT NULL, "
                         + "Mode character varying COLLATE pg_catalog.\"default\" NOT NULL, "
+                        + "UserId character varying COLLATE pg_catalog.\"default\" NOT NULL, "
                         + "CONSTRAINT Operations_pkey PRIMARY KEY (id)) "
                         + "TABLESPACE pg_default; "
                         + "ALTER TABLE IF EXISTS public.Operations OWNER to postgres;",
@@ -279,19 +280,19 @@ namespace Pickbyopen.Database
             return await _partnumberRepository.DeletePartnumber(partnumber);
         }
 
-        public ObservableCollection<Partnumber> LoadPartnumberList()
+        public async Task<ObservableCollection<Partnumber>> LoadPartnumberList()
         {
-            return _partnumberRepository.LoadPartnumberList();
+            return await _partnumberRepository.LoadPartnumberList();
         }
 
-        public ObservableCollection<string> LoadAvailablePartnumbers()
+        public async Task<ObservableCollection<string>> LoadAvailablePartnumbers()
         {
-            return _partnumberRepository.LoadAvailablePartnumbers();
+            return await _partnumberRepository.LoadAvailablePartnumbers();
         }
 
-        public ObservableCollection<string> LoadAssociatedPartnumbers(string door)
+        public async Task<ObservableCollection<string>> LoadAssociatedPartnumbers(string door)
         {
-            return _partnumberRepository.LoadAssociatedPartnumbers(door);
+            return await _partnumberRepository.LoadAssociatedPartnumbers(door);
         }
 
         public async Task<int> GetAssociatedDoor(string partnumber)
@@ -311,9 +312,9 @@ namespace Pickbyopen.Database
             return await _partnumberRepository.DeletePartnumberIndex(partnumber);
         }
 
-        public ObservableCollection<User> LoadUsersList()
+        public async Task<ObservableCollection<User>> LoadUsersList()
         {
-            return _userRepository.LoadUsersList();
+            return await _userRepository.LoadUsersList();
         }
 
         public Task<User?> FindUserByBadgeNumber(string badgeNumber)
@@ -353,9 +354,9 @@ namespace Pickbyopen.Database
             await _logRepository.LogUserLogout(user);
         }
 
-        public async Task LogUserOperate(string context, string target, string door, string mode)
+        public async Task LogUserOperate(string context, string target, string door, string mode, string userId)
         {
-            await _logRepository.LogUserOperate(context, target, door, mode);
+            await _logRepository.LogUserOperate(context, target, door, mode, userId);
         }
 
         public async Task LogSysPlcStatusChanged(string status)
@@ -366,6 +367,16 @@ namespace Pickbyopen.Database
         public async Task LogSysSwitchedMode(string mode)
         {
             await _logRepository.LogSysSwitchedMode(mode);
+        }
+
+        public async Task<ObservableCollection<Operation>> LoadOperations()
+        {
+            return await _operationRepository.LoadOperations();
+        }
+
+        public async Task<List<Operation>> GetOperationsByDate(string partnumber, string door, string initialDate, string finalDate)
+        {
+            return await _operationRepository.GetOperationsByDate(partnumber, door, initialDate, finalDate);
         }
     }
 }

@@ -14,11 +14,7 @@ namespace Pickbyopen.Services
         static Auth()
         {
             DbConnectionFactory connectionFactory = new();
-            PartnumberRepository partnumberRepository = new(connectionFactory);
-            UserRepository userRepository = new(connectionFactory);
-            LogRepository logRepository = new(connectionFactory);
-
-            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
+            db = new(connectionFactory);
         }
 
         public async static void SetLoggedInUser(User user)
@@ -30,6 +26,11 @@ namespace Pickbyopen.Services
         public static void SetLoggedAt(string time)
         {
             LoggedAt = time;
+        }
+
+        public static string GetUserId()
+        {
+            return LoggedInUser?.Id ?? "0";
         }
 
         public static bool UserHasPermission(string permission)

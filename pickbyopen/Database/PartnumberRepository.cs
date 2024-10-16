@@ -150,7 +150,7 @@ namespace Pickbyopen.Database
             return true;
         }
 
-        public ObservableCollection<Partnumber> LoadPartnumberList()
+        public async Task<ObservableCollection<Partnumber>> LoadPartnumberList()
         {
             try
             {
@@ -163,7 +163,7 @@ namespace Pickbyopen.Database
                     "SELECT partnumber, description FROM public.partnumbers;",
                     connection
                 );
-                using var reader = command.ExecuteReader();
+                using var reader = await command.ExecuteReaderAsync();
 
                 while (reader.Read())
                 {
@@ -250,7 +250,7 @@ namespace Pickbyopen.Database
         // <summary>
         // Load a list of partnumbers without associations
         // </summary>
-        public ObservableCollection<string> LoadAvailablePartnumbers()
+        public async Task<ObservableCollection<string>> LoadAvailablePartnumbers()
         {
             try
             {
@@ -264,7 +264,7 @@ namespace Pickbyopen.Database
                     "SELECT partnumber FROM public.partnumbers WHERE partnumber NOT IN(SELECT partnumber FROM public.partnumbers_index);",
                     connection
                 );
-                using var reader = command.ExecuteReader();
+                using var reader = await command.ExecuteReaderAsync();
                 dt.Load(reader);
 
                 foreach (DataRow row in dt.Rows)
@@ -284,7 +284,7 @@ namespace Pickbyopen.Database
         // <summary>
         // Load a list of partnumbers associated with a door
         // </summary>
-        public ObservableCollection<string> LoadAssociatedPartnumbers(string door)
+        public async Task<ObservableCollection<string>> LoadAssociatedPartnumbers(string door)
         {
             try
             {
@@ -300,7 +300,7 @@ namespace Pickbyopen.Database
                     connection
                 );
                 command.Parameters.AddWithValue("@door", door);
-                using var reader = command.ExecuteReader();
+                using var reader = await command.ExecuteReaderAsync();
 
                 dt.Load(reader);
 

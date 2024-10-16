@@ -9,7 +9,7 @@ namespace Pickbyopen.Interfaces
         Task<List<Log>> LoadLogs();
         Task LogUserLogin(User user);
         Task LogUserLogout(User user);
-        Task LogUserOperate(string @event, string target, string door, string mode);
+        Task LogUserOperate(string @event, string target, string door, string mode, string UserId);
         Task LogUserEditPartnumber(User user, string partnumber, Context context);
         Task LogUserDeletePartnumber(User user, string partnumber);
         Task LogUserEditUser(User user, string target, Context context);

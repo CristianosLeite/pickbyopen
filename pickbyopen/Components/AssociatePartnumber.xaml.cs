@@ -23,11 +23,7 @@ namespace Pickbyopen.Components
             DataContext = this;
 
             DbConnectionFactory connectionFactory = new();
-            PartnumberRepository partnumberRepository = new(connectionFactory);
-            UserRepository userRepository = new(connectionFactory);
-            LogRepository logRepository = new(connectionFactory);
-
-            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
+            db = new(connectionFactory);
 
             SelectedDoor = "";
             SelectedPartnumber = "";
@@ -35,15 +31,15 @@ namespace Pickbyopen.Components
             Doors.ItemsSource = _doors;
         }
 
-        public void LoadAvailablePartnumbers()
+        public async void LoadAvailablePartnumbers()
         {
-            AvailablePartnumbers = db.LoadAvailablePartnumbers();
+            AvailablePartnumbers = await db.LoadAvailablePartnumbers();
             lbAvailablePartnumbers.ItemsSource ??= AvailablePartnumbers;
         }
 
-        public void LoadAssociatedPartnumbers()
+        public async void LoadAssociatedPartnumbers()
         {
-            AssociatedPartnumber = db.LoadAssociatedPartnumbers(SelectedDoor);
+            AssociatedPartnumber = await db.LoadAssociatedPartnumbers(SelectedDoor);
             lbAssociatedPartnumbers.ItemsSource ??= AssociatedPartnumber;
         }
 

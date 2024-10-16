@@ -12,12 +12,12 @@ namespace Pickbyopen.Interfaces
             string description
         );
         Task<bool> SavePartnumber(string partnumber, string description, string door);
-        ObservableCollection<Partnumber> LoadPartnumberList();
+        Task<ObservableCollection<Partnumber>> LoadPartnumberList();
         Task<bool> DeletePartnumber(string partnumber);
         Task<bool> DeletePartnumberIndex(string partnumber);
         Task<bool> CreateAssociation(string partnumber, string door);
         Task<int> GetAssociatedDoor(string partnumber);
-        ObservableCollection<string> LoadAvailablePartnumbers();
-        ObservableCollection<string> LoadAssociatedPartnumbers(string door);
+        Task<ObservableCollection<string>> LoadAvailablePartnumbers();
+        Task<ObservableCollection<string>> LoadAssociatedPartnumbers(string door);
     }
 }

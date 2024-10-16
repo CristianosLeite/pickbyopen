@@ -1,0 +1,90 @@
+﻿<UserControl x:Class="Pickbyopen.Components.ReportOperations"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Pickbyopen.Components"
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Medium"
+             TextElement.FontSize="12"
+             FontFamily="{materialDesign:MaterialDesignFont}"
+             Height="430" Width="820" Background="{x:Null}"
+             HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            
+        <TextBox x:Name="TbPartnumber" VerticalAlignment="Top"
+             HorizontalAlignment="Left"
+             Width="184"
+             materialDesign:HintAssist.Hint="Desenho do motor"
+             MaxLength="15"
+             IsUndoEnabled="False"
+             Margin="5 5 20 5"
+             UndoLimit="98"
+             SelectionChanged="OnTbFilterChange"
+        />
+
+        <TextBox x:Name="TbDoor" VerticalAlignment="Top"
+             HorizontalAlignment="Left"
+             Width="50"
+             materialDesign:HintAssist.Hint="Porta"
+             MaxLength="2"
+             IsUndoEnabled="False"
+             Margin="5 5 20 5"
+             UndoLimit="98"
+             SelectionChanged="OnTbFilterChange"
+        />
+
+            <Button x:Name="BtnFind" Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Left"
+                    BorderBrush="{x:Null}" Background="{x:Null}" Foreground="DarkGray" Click="Search" ToolTip="Buscar Partnumber" Height="40" Width="40">
+                <StackPanel>
+                    <materialDesign:PackIcon Kind="FolderSearchOutline"/>
+                </StackPanel>
+            </Button>
+
+            <Button x:Name="BtnRemoveFilter" Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Left"
+                    BorderBrush="{x:Null}" Background="{x:Null}" Foreground="DarkGray" Click="ClearFilter" ToolTip="Remover filtro" Height="40" Width="40" IsEnabled="False" Margin="0 0 40 0">
+                <StackPanel>
+                    <materialDesign:PackIcon Kind="FilterRemove"/>
+                </StackPanel>
+            </Button>
+
+            <DatePicker x:Name="InitialDate" HorizontalAlignment="Left" 
+            VerticalAlignment="Top" 
+            Width="138"
+            materialDesign:HintAssist.Foreground="#FF4CB950"
+            materialDesign:TextFieldAssist.UnderlineBrush="#FF4CB950"
+            materialDesign:HintAssist.Hint="Data inicial"
+            Language="pt-BR"
+            Margin="5 5 20 5"
+            SelectedDateChanged="Search"
+            />
+
+            <DatePicker x:Name="FinalDate" HorizontalAlignment="Left" 
+            VerticalAlignment="Top" 
+            Width="138"
+            materialDesign:HintAssist.Foreground="#FF4CB950"
+            materialDesign:TextFieldAssist.UnderlineBrush="#FF4CB950"
+            materialDesign:HintAssist.Hint="Data final"
+            Language="pt-BR"
+            Margin="5 5 45 5"
+            SelectedDateChanged="Search"
+            />
+
+            <Button x:Name="BtnSave" Style="{StaticResource MaterialDesignFloatingActionButton}" VerticalAlignment="Top" HorizontalAlignment="Right"
+                    BorderBrush="{x:Null}" Background="{x:Null}" Foreground="DarkGray" Click="Export" ToolTip="Exportar relatório" Height="40" Width="40">
+                <StackPanel>
+                    <materialDesign:PackIcon Kind="Download"/>
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+        <DataGrid Grid.Row="1" x:Name="DgOperations" ItemsSource="{Binding Operations}" AutoGenerateColumns="True"/>
+    </Grid>
+</UserControl>

@@ -6,7 +6,7 @@ namespace Pickbyopen.Interfaces
 {
     public interface IUserRepository
     {
-        ObservableCollection<User> LoadUsersList();
+        Task<ObservableCollection<User>> LoadUsersList();
         Task<User?> GetUserById(string id);
         Task<bool> SaveUser(User user, Context context);
         Task<User?> FindUserByBadgeNumber(string badgeNumber);

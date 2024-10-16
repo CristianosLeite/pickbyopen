@@ -3,11 +3,11 @@ using Pickbyopen.Database;
 using Pickbyopen.Devices.Nfc;
 using Pickbyopen.Models;
 using Pickbyopen.Services;
+using Pickbyopen.Types;
 using Pickbyopen.Utils;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media.Effects;
-using Pickbyopen.Types;
 
 namespace Pickbyopen.Windows
 {
@@ -27,11 +27,7 @@ namespace Pickbyopen.Windows
             InitializeComponent();
 
             DbConnectionFactory connectionFactory = new();
-            PartnumberRepository partnumberRepository = new(connectionFactory);
-            UserRepository userRepository = new(connectionFactory);
-            LogRepository logRepository = new(connectionFactory);
-
-            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
+            db = new(connectionFactory);
 
             this.context = context;
             User = user;

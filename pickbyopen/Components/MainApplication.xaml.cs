@@ -30,11 +30,7 @@ namespace Pickbyopen.Components
             InitializeComponent();
 
             DbConnectionFactory connectionFactory = new();
-            PartnumberRepository partnumberRepository = new(connectionFactory);
-            UserRepository userRepository = new(connectionFactory);
-            LogRepository logRepository = new(connectionFactory);
-
-            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
+            db = new(connectionFactory);
 
             _doors.AddRange(
                 [
@@ -275,7 +271,8 @@ namespace Pickbyopen.Components
                 @event == Event.Reading ? "Leitura" : "Seleção",
                 target,
                 door.ToString(),
-                IsAutomatic ? "Automático" : "Manual"
+                IsAutomatic ? "Automático" : "Manual",
+                Auth.GetUserId()
             );
         }
 

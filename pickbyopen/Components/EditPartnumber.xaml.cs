@@ -1,11 +1,11 @@
 ﻿using Pickbyopen.Database;
 using Pickbyopen.Models;
+using Pickbyopen.Types;
 using Pickbyopen.Windows;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Pickbyopen.Types;
 
 namespace Pickbyopen.Components
 {
@@ -32,11 +32,7 @@ namespace Pickbyopen.Components
             this.context = context;
 
             DbConnectionFactory connectionFactory = new();
-            PartnumberRepository partnumberRepository = new(connectionFactory);
-            UserRepository userRepository = new(connectionFactory);
-            LogRepository logRepository = new(connectionFactory);
-
-            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
+            db = new(connectionFactory);
 
             if (context == Context.Update)
             {

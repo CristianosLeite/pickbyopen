@@ -1,11 +1,11 @@
 ﻿using Pickbyopen.Database;
 using Pickbyopen.Models;
+using Pickbyopen.Types;
 using Pickbyopen.Windows;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Pickbyopen.Types;
 
 namespace Pickbyopen.Components
 {
@@ -21,21 +21,17 @@ namespace Pickbyopen.Components
             InitializeComponent();
 
             DbConnectionFactory connectionFactory = new();
-            PartnumberRepository partnumberRepository = new(connectionFactory);
-            UserRepository userRepository = new(connectionFactory);
-            LogRepository logRepository = new(connectionFactory);
-
-            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
+            db = new(connectionFactory);
 
             LoadUserList();
 
             User = new User("", "", "", []);
         }
 
-        private void LoadUserList()
+        private async void LoadUserList()
         {
             _usersList.Clear();
-            _usersList = db.LoadUsersList();
+            _usersList = await db.LoadUsersList();
             dgUser.ItemsSource ??= _usersList;
 
             DataContext = this;
@@ -98,12 +94,12 @@ namespace Pickbyopen.Components
             GetUser();
         }
 
-        private void UpdateUsersList()
+        private async void UpdateUsersList()
         {
             try
             {
                 _usersList.Clear();
-                _usersList = db.LoadUsersList();
+                _usersList = await db.LoadUsersList();
 
                 dgUser.ItemsSource = _usersList;
                 dgUser.Items.Refresh();

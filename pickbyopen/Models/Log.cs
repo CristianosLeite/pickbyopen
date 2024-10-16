@@ -1,6 +1,4 @@
-﻿using Pickbyopen.Types;
-
-namespace Pickbyopen.Models
+﻿namespace Pickbyopen.Models
 {
     public abstract class Log(DateTime createdAt, string @event, string @target)
     {

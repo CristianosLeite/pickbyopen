@@ -21,11 +21,7 @@ namespace Pickbyopen.Components
             InitializeComponent();
 
             DbConnectionFactory connectionFactory = new();
-            PartnumberRepository partnumberRepository = new(connectionFactory);
-            UserRepository userRepository = new(connectionFactory);
-            LogRepository logRepository = new(connectionFactory);
-
-            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
+            db = new(connectionFactory);
 
             LoadPartnumberList();
 
@@ -36,21 +32,21 @@ namespace Pickbyopen.Components
             };
         }
 
-        private void LoadPartnumberList()
+        private async void LoadPartnumberList()
         {
             _partnumberList.Clear();
-            _partnumberList = db.LoadPartnumberList();
+            _partnumberList = await db.LoadPartnumberList();
             dgPartnumber.ItemsSource ??= _partnumberList;
 
             DataContext = this;
         }
 
-        public void UpdatePartnumberList()
+        public async void UpdatePartnumberList()
         {
             try
             {
                 _partnumberList.Clear();
-                _partnumberList = db.LoadPartnumberList();
+                _partnumberList = await db.LoadPartnumberList();
 
                 dgPartnumber.ItemsSource = _partnumberList;
                 dgPartnumber.Items.Refresh();

@@ -17,6 +17,40 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="1" x:Name="Main"/>
+        <TabControl x:Name="TcData" SelectionChanged="LoadChildren">
+            <TabItem>
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="CircleArrows" Margin="0 0 8 0"/>
+                            <TextBlock Text="Operações"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <Grid x:Name="Operations" Background="Transparent"/>
+            </TabItem>
+            <TabItem Header="Logs de sistema">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Monitor" Margin="0 0 8 0"/>
+                            <TextBlock Text="Logs de sistema"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <Grid x:Name="SysLogs" Background="Transparent"/>
+            </TabItem>
+            <TabItem Header="Logs de usuário">
+                <TabItem.HeaderTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="UserOutline" Margin="0 0 8 0"/>
+                            <TextBlock Text="Logs de usuário"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabItem.HeaderTemplate>
+                <Grid x:Name="UserLogs" Background="Transparent"/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

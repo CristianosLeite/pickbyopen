@@ -18,15 +18,11 @@ namespace Pickbyopen
             InitializeComponent();
 
             DbConnectionFactory connectionFactory = new();
-            PartnumberRepository partnumberRepository = new(connectionFactory);
-            UserRepository userRepository = new(connectionFactory);
-            LogRepository logRepository = new(connectionFactory);
+            db = new(connectionFactory);
 
-            db = new(connectionFactory, partnumberRepository, userRepository, logRepository);
-
-            Task.Run(() =>
+            Task.Run(async () =>
             {
-                var existingUsers = db.LoadUsersList();
+                var existingUsers = await db.LoadUsersList();
 
                 if (existingUsers.Count > 0)
                 {

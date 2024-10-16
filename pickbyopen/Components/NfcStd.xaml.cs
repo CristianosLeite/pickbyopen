@@ -1,5 +1,5 @@
-﻿using System.Windows.Controls;
-using Pickbyopen.Types;
+﻿using Pickbyopen.Types;
+using System.Windows.Controls;
 
 namespace Pickbyopen.Components
 {

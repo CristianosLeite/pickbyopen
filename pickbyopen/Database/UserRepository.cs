@@ -1,9 +1,9 @@
 ﻿using Npgsql;
 using Pickbyopen.Interfaces;
 using Pickbyopen.Models;
-using System.Collections.ObjectModel;
-using Pickbyopen.Utils;
 using Pickbyopen.Types;
+using Pickbyopen.Utils;
+using System.Collections.ObjectModel;
 
 namespace Pickbyopen.Database
 {
@@ -14,7 +14,7 @@ namespace Pickbyopen.Database
         //<summary>
         // Load a list of users from the database
         //</summary>
-        public ObservableCollection<User> LoadUsersList()
+        public async Task<ObservableCollection<User>> LoadUsersList()
         {
             try
             {
@@ -27,7 +27,7 @@ namespace Pickbyopen.Database
                         "SELECT id, badge_number, username, permissions FROM users",
                         connection
                     );
-                    using var reader = command.ExecuteReader();
+                    using var reader = await command.ExecuteReaderAsync();
                     while (reader.Read())
                     {
                         var id = reader.GetString(0);
