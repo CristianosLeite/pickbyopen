@@ -181,23 +181,24 @@ namespace Pickbyopen.Components
             if (sender is Button button)
             {
                 // Cria a Tooltip
-                ToolTip toolTip = new()
-                {
-                    Content = new StackPanel
+                ToolTip toolTip =
+                    new()
                     {
-                        Children =
-                {
-                    new TextBlock { Text = "O - Operar" },
-                    new TextBlock { Text = "P - Cadastrar Partnumbers" },
-                    new TextBlock { Text = "U - Cadastrar Usuários" },
-                    new TextBlock { Text = "R - Exportar relatórios" },
-                },
-                    },
-                    IsOpen = true,
-                    StaysOpen = false,
-                    PlacementTarget = button,
-                    Placement = System.Windows.Controls.Primitives.PlacementMode.Right,
-                };
+                        Content = new StackPanel
+                        {
+                            Children =
+                            {
+                                new TextBlock { Text = "O - Operar" },
+                                new TextBlock { Text = "P - Cadastrar Partnumbers" },
+                                new TextBlock { Text = "U - Cadastrar Usuários" },
+                                new TextBlock { Text = "R - Exportar relatórios" },
+                            },
+                        },
+                        IsOpen = true,
+                        StaysOpen = false,
+                        PlacementTarget = button,
+                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right,
+                    };
 
                 // Add event handler to remove the tooltip when it closes
                 toolTip.Closed += (s, args) =>
