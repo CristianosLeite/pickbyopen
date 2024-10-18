@@ -73,16 +73,8 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="{Binding StringPermissions}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,5,0"/>
-                                    <Button x:Name="btnQuestion" Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="0 0 5 0" Padding="0"
-                                        BorderBrush="{x:Null}" Background="{x:Null}" Width="17" Height="17" Visibility="Visible" HorizontalAlignment="Right" Cursor="Arrow">
-                                        <Button.ToolTip>
-                                            <StackPanel>
-                                                <TextBlock Text="O - Operar"/>
-                                                <TextBlock Text="P - Cadastrar Partnumbers"/>
-                                                <TextBlock Text="U - Cadastrar Usuários"/>
-                                                <TextBlock Text="R - Exportar relatórios"/>
-                                            </StackPanel>
-                                        </Button.ToolTip>
+                                    <Button x:Name="BtnQuestion" Style="{StaticResource MaterialDesignFloatingActionButton}" Margin="0 0 5 0" Padding="0"
+                                        BorderBrush="{x:Null}" Background="{x:Null}" Width="17" Height="17" Visibility="Visible" HorizontalAlignment="Right" Cursor="Arrow" Click="TooltipDisplay">
                                         <StackPanel Orientation="Horizontal" Margin="0" Width="16" Height="16">
                                             <materialDesign:PackIcon Kind="QuestionMarkCircle" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="GhostWhite"/>
                                         </StackPanel>

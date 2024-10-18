@@ -1,11 +1,12 @@
-﻿using Pickbyopen.Database;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Media;
+using Pickbyopen.Database;
 using Pickbyopen.Models;
 using Pickbyopen.Types;
 using Pickbyopen.Windows;
-using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace Pickbyopen.Components
 {
@@ -44,7 +45,6 @@ namespace Pickbyopen.Components
             parentWindow?.Main?.Children.Clear();
             parentWindow?.Main?.Children.Add(editUser);
         }
-
 
         private void OnTbFilterChange(object sender, TextChangedEventArgs e)
         {
@@ -174,6 +174,43 @@ namespace Pickbyopen.Components
             }
 
             dgUser.Items.Refresh();
+        }
+
+        private void TooltipDisplay(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                // Cria a Tooltip
+                ToolTip toolTip = new()
+                {
+                    Content = new StackPanel
+                    {
+                        Children =
+                {
+                    new TextBlock { Text = "O - Operar" },
+                    new TextBlock { Text = "P - Cadastrar Partnumbers" },
+                    new TextBlock { Text = "U - Cadastrar Usuários" },
+                    new TextBlock { Text = "R - Exportar relatórios" },
+                },
+                    },
+                    IsOpen = true,
+                    StaysOpen = false,
+                    PlacementTarget = button,
+                    Placement = System.Windows.Controls.Primitives.PlacementMode.Right,
+                };
+
+                // Add event handler to remove the tooltip when it closes
+                toolTip.Closed += (s, args) =>
+                {
+                    button.ToolTip = null;
+                };
+
+                // Associate the tooltip with the button
+                button.ToolTip = toolTip;
+
+                // Open the tooltip
+                toolTip.IsOpen = true;
+            }
         }
     }
 }
