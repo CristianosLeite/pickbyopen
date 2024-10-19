@@ -14,6 +14,6 @@
         WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" AllowsTransparency="False"
         Background="#323131">
     <Grid>
-        <DataGrid x:Name="dgLogs" ItemsSource="{Binding Logs}" AutoGenerateColumns="True"/>
+        <DataGrid x:Name="dgLogs" ItemsSource="{Binding Logs}" AutoGenerateColumns="True" Language="pt-br"/>
     </Grid>
 </Window>

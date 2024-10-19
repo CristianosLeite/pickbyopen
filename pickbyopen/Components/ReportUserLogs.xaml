@@ -49,6 +49,6 @@
             </Button>
 
         </StackPanel>
-        <DataGrid Grid.Row="1" x:Name="DgUserLogs" ItemsSource="{Binding UserLogs}" AutoGenerateColumns="True"/>
+        <DataGrid Grid.Row="1" x:Name="DgUserLogs" ItemsSource="{Binding UserLogs}" AutoGenerateColumns="True" Language="pt-br"/>
     </Grid>
 </UserControl>
