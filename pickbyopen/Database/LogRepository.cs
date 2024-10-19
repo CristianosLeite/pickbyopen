@@ -113,6 +113,98 @@ namespace Pickbyopen.Database
         }
 
         // <summary>
+        // Get user logs by date
+        // </summary>
+        public async Task<List<UserLog>> GetUserLogsByDate(string initialDate, string finalDate)
+        {
+            var userLogs = new List<UserLog>();
+
+            using var connection = _connectionFactory.GetConnection();
+            connection.Open();
+
+            var query =
+                @"SELECT userlogs.*, users.username
+                    FROM UserLogs
+                    JOIN Users ON userlogs.userid = users.id
+                    WHERE CreatedAt BETWEEN @initialDate::timestamp AND @finalDate::timestamp
+                    ORDER BY CreatedAt DESC";
+
+            using var command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue(
+                "@initialDate",
+                NpgsqlTypes.NpgsqlDbType.Timestamp,
+                DateTime.Parse(initialDate)
+            );
+            command.Parameters.AddWithValue(
+                "@finalDate",
+                NpgsqlTypes.NpgsqlDbType.Timestamp,
+                DateTime.Parse(finalDate)
+            );
+            command.ExecuteNonQuery();
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            while (reader.Read())
+            {
+                var createdAt = reader.GetDateTime(1);
+                var @event = reader.GetString(2);
+                var target = reader.GetString(3);
+                var userId = reader.GetString(4);
+                var username = reader.GetString(5);
+
+                userLogs.Add(
+                    new UserLog(createdAt, @event, target, new User(userId, "0", username, []))
+                );
+            }
+
+            return userLogs;
+        }
+
+        // <summary>
+        // Get system logs by date
+        // </summary>
+        public async Task<List<SysLog>> GetSysLogsByDate(string initialDate, string finalDate)
+        {
+            var sysLogs = new List<SysLog>();
+
+            using var connection = _connectionFactory.GetConnection();
+            connection.Open();
+
+            var query =
+                @"SELECT *
+                    FROM SysLogs
+                    WHERE CreatedAt BETWEEN @initialDate::timestamp AND @finalDate::timestamp
+                    ORDER BY CreatedAt DESC";
+
+            using var command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue(
+                "@initialDate",
+                NpgsqlTypes.NpgsqlDbType.Timestamp,
+                DateTime.Parse(initialDate)
+            );
+            command.Parameters.AddWithValue(
+                "@finalDate",
+                NpgsqlTypes.NpgsqlDbType.Timestamp,
+                DateTime.Parse(finalDate)
+            );
+            command.ExecuteNonQuery();
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            while (reader.Read())
+            {
+                var createdAt = reader.GetDateTime(1);
+                var @event = reader.GetString(2);
+                var target = reader.GetString(3);
+                var device = reader.GetString(4);
+
+                sysLogs.Add(new SysLog(createdAt, @event, target, device));
+            }
+
+            return sysLogs;
+        }
+
+        // <summary>
         // Log a user login
         // </summary>
         public async Task LogUserLogin(User user)
@@ -133,7 +225,13 @@ namespace Pickbyopen.Database
         // <summary>
         // Log a user operation
         // </summary>
-        public async Task LogUserOperate(string @event, string target, string door, string mode, string userId)
+        public async Task LogUserOperate(
+            string @event,
+            string target,
+            string door,
+            string mode,
+            string userId
+        )
         {
             Operation Operation = new(DateTime.Now, @event, target, door, mode, userId);
             await SaveLog(Operation);

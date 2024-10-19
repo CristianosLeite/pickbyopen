@@ -203,7 +203,7 @@ namespace Pickbyopen.Database
         }
 
         // <summary>
-        // Create UserLogs table
+        // Create SysLogs table
         // </summary>
         private static void CreateUserLogTable()
         {
@@ -359,6 +359,11 @@ namespace Pickbyopen.Database
             await _logRepository.LogUserOperate(context, target, door, mode, userId);
         }
 
+        public async Task<List<UserLog>> GetUserLogsByDate(string initialDate, string finalDate)
+        {
+            return await _logRepository.GetUserLogsByDate(initialDate, finalDate);
+        }
+
         public async Task LogSysPlcStatusChanged(string status)
         {
             await _logRepository.LogSysPlcStatusChanged(status);
@@ -367,6 +372,11 @@ namespace Pickbyopen.Database
         public async Task LogSysSwitchedMode(string mode)
         {
             await _logRepository.LogSysSwitchedMode(mode);
+        }
+
+        public async Task<List<SysLog>> GetSysLogsByDate(string initialDate, string finalDate)
+        {
+            return await _logRepository.GetSysLogsByDate(initialDate, finalDate);
         }
 
         public async Task<ObservableCollection<Operation>> LoadOperations()

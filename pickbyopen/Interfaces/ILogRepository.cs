@@ -7,6 +7,8 @@ namespace Pickbyopen.Interfaces
     {
         Task SaveLog(Log log);
         Task<List<Log>> LoadLogs();
+        Task<List<UserLog>> GetUserLogsByDate(string initialDate, string finalDate);
+        Task<List<SysLog>> GetSysLogsByDate(string initialDate, string finalDate);
         Task LogUserLogin(User user);
         Task LogUserLogout(User user);
         Task LogUserOperate(string @event, string target, string door, string mode, string UserId);

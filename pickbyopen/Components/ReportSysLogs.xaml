@@ -10,9 +10,45 @@
              TextElement.FontWeight="Medium"
              TextElement.FontSize="12"
              FontFamily="{materialDesign:MaterialDesignFont}"
-             Height="512" Width="820" Background="{x:Null}"
+             Height="430" Width="820" Background="{x:Null}"
              HorizontalAlignment="Center" VerticalAlignment="Center">
-    <Grid>
-            
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+            <DatePicker x:Name="InitialDate" HorizontalAlignment="Left" 
+            VerticalAlignment="Top" 
+            Width="138"
+            materialDesign:HintAssist.Foreground="#FF4CB950"
+            materialDesign:TextFieldAssist.UnderlineBrush="#FF4CB950"
+            materialDesign:HintAssist.Hint="Data inicial"
+            Language="pt-BR"
+            Margin="5 5 20 5"
+            SelectedDateChanged="Search"
+            />
+
+            <DatePicker x:Name="FinalDate" HorizontalAlignment="Left" 
+            VerticalAlignment="Top" 
+            Width="138"
+            materialDesign:HintAssist.Foreground="#FF4CB950"
+            materialDesign:TextFieldAssist.UnderlineBrush="#FF4CB950"
+            materialDesign:HintAssist.Hint="Data final"
+            Language="pt-BR"
+            Margin="5 5 45 5"
+            SelectedDateChanged="Search"
+            />
+
+            <Button x:Name="BtnSave" Style="{StaticResource MaterialDesignFloatingActionButton}" VerticalAlignment="Top" HorizontalAlignment="Right"
+                    BorderBrush="{x:Null}" Background="{x:Null}" Foreground="DarkGray" Click="Export" ToolTip="Exportar relatório" Height="40" Width="40">
+                <StackPanel>
+                    <materialDesign:PackIcon Kind="Download"/>
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+        <DataGrid Grid.Row="1" x:Name="DgSysLogs" ItemsSource="{Binding SysLogs}" AutoGenerateColumns="True"/>
     </Grid>
 </UserControl>
