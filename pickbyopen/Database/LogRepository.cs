@@ -130,16 +130,8 @@ namespace Pickbyopen.Database
                     ORDER BY CreatedAt DESC";
 
             using var command = new NpgsqlCommand(query, connection);
-            command.Parameters.AddWithValue(
-                "@initialDate",
-                NpgsqlTypes.NpgsqlDbType.Timestamp,
-                DateTime.Parse(initialDate)
-            );
-            command.Parameters.AddWithValue(
-                "@finalDate",
-                NpgsqlTypes.NpgsqlDbType.Timestamp,
-                DateTime.Parse(finalDate)
-            );
+            command.Parameters.AddWithValue("@initialDate", DateTime.Parse(initialDate));
+            command.Parameters.AddWithValue("@finalDate", DateTime.Parse(finalDate).AddDays(1.0));
             command.ExecuteNonQuery();
 
             using var reader = await command.ExecuteReaderAsync();
@@ -177,16 +169,8 @@ namespace Pickbyopen.Database
                     ORDER BY CreatedAt DESC";
 
             using var command = new NpgsqlCommand(query, connection);
-            command.Parameters.AddWithValue(
-                "@initialDate",
-                NpgsqlTypes.NpgsqlDbType.Timestamp,
-                DateTime.Parse(initialDate)
-            );
-            command.Parameters.AddWithValue(
-                "@finalDate",
-                NpgsqlTypes.NpgsqlDbType.Timestamp,
-                DateTime.Parse(finalDate)
-            );
+            command.Parameters.AddWithValue("@initialDate", DateTime.Parse(initialDate));
+            command.Parameters.AddWithValue("@finalDate", DateTime.Parse(finalDate).AddDays(1.0));
             command.ExecuteNonQuery();
 
             using var reader = await command.ExecuteReaderAsync();
