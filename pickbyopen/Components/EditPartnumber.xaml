@@ -25,7 +25,7 @@
                 PreviewTextInput="NumberValidationTextBox"
                 HorizontalAlignment="Left"
                 Width="184"
-                materialDesign:HintAssist.Hint="Desenho" Margin="19,144,0,0" MaxLength="15" IsUndoEnabled="False" UndoLimit="98"/>
+                materialDesign:HintAssist.Hint="Desenho" Margin="19,144,0,0" MaxLength="10" IsUndoEnabled="False" UndoLimit="98"/>
             <TextBox x:Name="Description" VerticalAlignment="Top"
                 HorizontalAlignment="Left"
                 Width="278"

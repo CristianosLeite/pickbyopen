@@ -32,7 +32,7 @@
                         <TextBlock Text="Novo" Margin="0 0 0 0" FontSize="10" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Button>
-                <TextBox x:Name="tbFilter" HorizontalAlignment="Left" Height="24" Margin="10,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="140" MaxLength="15" TextChanged="OnTbFilterChange"/>
+                <TextBox x:Name="tbFilter" HorizontalAlignment="Left" Height="24" Margin="10,0,0,0" TextWrapping="Wrap" VerticalAlignment="Center" Width="140" MaxLength="10" TextChanged="OnTbFilterChange"/>
                 <Button x:Name="BtnFindPartnumber" Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Left" Margin="160 0 0 0"
                     BorderBrush="{x:Null}" Background="{x:Null}" Foreground="DarkGray" Click="SearchPartnumber" ToolTip="Buscar Partnumber" Height="40" Width="40">
                     <StackPanel>

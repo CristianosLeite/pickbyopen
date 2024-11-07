@@ -21,7 +21,7 @@ namespace Pickbyopen.Components
         private readonly Db db;
         private readonly Dictionary<Control, DispatcherTimer> Timers = [];
         private readonly Dictionary<Control, bool> IsGreenStates = [];
-        private readonly Dictionary<Control, bool> IsRedStates = [];
+        private readonly Dictionary<Control, bool> IsOrangeStates = [];
         private bool IsAutomatic = true;
         private readonly Plc _plc = new();
 
@@ -156,6 +156,7 @@ namespace Pickbyopen.Components
 
         private void DoorSubscription(string address, Button associatedDoor, Context context)
         {
+            int intDoor = int.Parse(associatedDoor.Content.ToString()!);
             _subscriptions.Add(
                 _plc.SubscribeAddress<bool>(
                     address,
@@ -166,7 +167,7 @@ namespace Pickbyopen.Components
                             Dispatcher.BeginInvoke(
                                 new Action(() =>
                                 {
-                                    CloseDoor(associatedDoor);
+                                    CloseDoor(associatedDoor, intDoor);
                                     DoorInput.Text = "0";
                                     StatusInput.Text = "Aguardando leitura";
                                 })
@@ -178,14 +179,11 @@ namespace Pickbyopen.Components
                             new Action(() =>
                             {
                                 if (context == Context.Open)
-                                    OpenDoor(
-                                        associatedDoor,
-                                        int.Parse(associatedDoor.Content.ToString()!)
-                                    );
+                                    SetOpen(associatedDoor, intDoor);
                                 else if (context == Context.Refill)
-                                    Refill(associatedDoor);
+                                    Refill(associatedDoor, intDoor);
                                 else
-                                    Empty(associatedDoor);
+                                    MessageBox.Show("Comando não reconhecido.", "Erro");
                             })
                         );
                     }
@@ -206,7 +204,7 @@ namespace Pickbyopen.Components
         {
             if (PartnumberInput.Text is string content)
             {
-                if (content.Length == 15)
+                if (content.Length == 10)
                     PartnumberChanged(content);
             }
         }
@@ -220,7 +218,7 @@ namespace Pickbyopen.Components
 
             if (isPlcConnected)
             {
-                if (partnumber.Length < 15)
+                if (partnumber.Length < 10)
                 {
                     StatusInput.Text = "Leitura inválida";
                     return;
@@ -266,7 +264,11 @@ namespace Pickbyopen.Components
                 return;
             }
 
-            await _plc.WriteToPlc("DB1.INT0", door.ToString());
+            if (door < 10)
+                await _plc.WriteToPlc("DB1.BYTE0", door.ToString()); // Frontside intDoor
+            else
+                await _plc.WriteToPlc("DB1.BYTE1", door.ToString()); // Backside intDoor
+
             await db.LogUserOperate(
                 @event == Event.Reading ? "Leitura" : "Seleção",
                 target,
@@ -276,7 +278,7 @@ namespace Pickbyopen.Components
             );
         }
 
-        private void StartFlashing(Control control, Command command)
+        private void StartFlashing(Control control, Command command, int door)
         {
             if (Timers.TryGetValue(control, out DispatcherTimer? value))
             {
@@ -289,18 +291,27 @@ namespace Pickbyopen.Components
             switch (command)
             {
                 case Command c when c.Open:
-                    timer.Tick += (sender, e) => FlashGreen(control);
+                    {
+                        if (door < 10) // Frontside intDoor
+                        {
+                            timer.Tick += (sender, e) => FlashGreen(control);
+                        }
+                        else
+                        {
+                            timer.Tick += (sender, e) => FlashOrange(control);
+                        }
+                    }
                     break;
                 case Command c when c.Refill:
                     timer.Tick += (sender, e) => SetOrange(control);
                     break;
                 case Command c when c.Empty:
-                    timer.Tick += (sender, e) => FlashRed(control);
+                    timer.Tick += (sender, e) => FlashOrange(control);
                     break;
             }
             Timers[control] = timer;
             IsGreenStates[control] = false;
-            IsRedStates[control] = false;
+            IsOrangeStates[control] = false;
             timer.Start();
         }
 
@@ -319,19 +330,19 @@ namespace Pickbyopen.Components
             IsGreenStates[control] = !IsGreenStates[control];
         }
 
-        private void FlashRed(Control control)
+        private void FlashOrange(Control control)
         {
-            if (IsRedStates[control])
+            if (IsOrangeStates[control])
             {
                 control.Background = Brushes.Transparent;
                 control.Foreground = Brushes.White;
             }
             else
             {
-                control.Background = Brushes.Red;
+                control.Background = Brushes.Orange;
                 control.Foreground = Brushes.Black;
             }
-            IsRedStates[control] = !IsRedStates[control];
+            IsOrangeStates[control] = !IsOrangeStates[control];
         }
 
         private static void SetOrange(Control control)
@@ -359,22 +370,45 @@ namespace Pickbyopen.Components
             if (sender is Button button)
             {
                 int door = int.Parse(button.Content.ToString()!);
+
+                if (door < 10)
+                {
+                    List<int> doors = Enumerable.Range(1, 9).ToList();
+                    if (await CheckForOpenDoors(doors))
+                        return;
+                }
                 // In case of direct selection, there will be no partnumber, target will be port number
                 _ = WriteToPlc(door, door.ToString(), Event.Selection);
-                OpenDoor(button, door);
+                SetOpen(button, door);
             }
         }
 
-        private void OpenDoor(Control control, int door)
+        private async Task<bool> CheckForOpenDoors(List<int> doors)
         {
+            foreach (int i in doors)
+            {
+                if (await IsDoorOpen(i))
+                {
+                    MessageBox.Show("Necessário fechar todas as portas antes de solicitar uma nova abertura.", "Porta aberta");
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private async void SetOpen(Control control, int door)
+        {
+            if (!await IsDoorOpen(door))
+                return;
+
             var command = new Command();
             command.SetOpen();
-            StartFlashing(control, command);
+            StartFlashing(control, command, door);
             DoorInput.Text = door.ToString();
             StatusInput.Text = "Aberta";
         }
 
-        private void CloseDoor(Control control)
+        private void CloseDoor(Control control, int door)
         {
             if (Timers.TryGetValue(control, out DispatcherTimer? value))
             {
@@ -383,20 +417,61 @@ namespace Pickbyopen.Components
             }
             control.Background = Brushes.LightGray;
             control.Foreground = Brushes.White;
+
+            Task.Run(async () =>
+            {
+                await NeedsReffil(door);
+            });
         }
 
-        private void Refill(Control control)
+        private void Refill(Control control, int door)
         {
             var command = new Command();
             command.SetRefill();
-            StartFlashing(control, command);
+            StartFlashing(control, command, door);
         }
 
-        private void Empty(Control control)
+        private async Task<bool> IsDoorOpen(int door)
         {
-            var command = new Command();
-            command.SetEmpty();
-            StartFlashing(control, command);
+            return door switch
+            {
+                1 => (bool)await _plc.ReadFromPlc("DB1.DBX2.0"),
+                2 => (bool)await _plc.ReadFromPlc("DB1.DBX2.1"),
+                3 => (bool)await _plc.ReadFromPlc("DB1.DBX2.2"),
+                4 => (bool)await _plc.ReadFromPlc("DB1.DBX2.3"),
+                5 => (bool)await _plc.ReadFromPlc("DB1.DBX2.4"),
+                6 => (bool)await _plc.ReadFromPlc("DB1.DBX2.5"),
+                7 => (bool)await _plc.ReadFromPlc("DB1.DBX2.6"),
+                8 => (bool)await _plc.ReadFromPlc("DB1.DBX2.7"),
+                9 => (bool)await _plc.ReadFromPlc("DB1.DBX3.0"),
+                10 => (bool)await _plc.ReadFromPlc("DB1.DBX3.1"),
+                11 => (bool)await _plc.ReadFromPlc("DB1.DBX3.2"),
+                12 => (bool)await _plc.ReadFromPlc("DB1.DBX3.3"),
+                13 => (bool)await _plc.ReadFromPlc("DB1.DBX3.4"),
+                14 => (bool)await _plc.ReadFromPlc("DB1.DBX3.5"),
+                15 => (bool)await _plc.ReadFromPlc("DB1.DBX3.6"),
+                16 => (bool)await _plc.ReadFromPlc("DB1.DBX3.7"),
+                17 => (bool)await _plc.ReadFromPlc("DB1.DBX4.0"),
+                18 => (bool)await _plc.ReadFromPlc("DB1.DBX4.1"),
+                _ => false,
+            };
+        }
+
+        private async Task<bool> NeedsReffil(int door)
+        {
+            return door switch
+            {
+                10 => (bool)await _plc.ReadFromPlc("DB1.DBX4.2"),
+                11 => (bool)await _plc.ReadFromPlc("DB1.DBX4.3"),
+                12 => (bool)await _plc.ReadFromPlc("DB1.DBX4.4"),
+                13 => (bool)await _plc.ReadFromPlc("DB1.DBX4.5"),
+                14 => (bool)await _plc.ReadFromPlc("DB1.DBX4.6"),
+                15 => (bool)await _plc.ReadFromPlc("DB1.DBX4.7"),
+                16 => (bool)await _plc.ReadFromPlc("DB1.DBX5.0"),
+                17 => (bool)await _plc.ReadFromPlc("DB1.DBX5.1"),
+                18 => (bool)await _plc.ReadFromPlc("DB1.DBX5.2"),
+                _ => false,
+            };
         }
 
         private void SetMode()

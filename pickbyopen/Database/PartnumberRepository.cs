@@ -130,9 +130,9 @@ namespace Pickbyopen.Database
             if (string.IsNullOrEmpty(partnumber))
                 throw new ArgumentNullException(nameof(partnumber));
 
-            if (partnumber.Length != 15)
+            if (partnumber.Length != 10)
                 throw new ArgumentException(
-                    "TbPartnumber deve ter 15 caracteres.",
+                    "O Partnumber deve conter 10 caracteres.",
                     nameof(partnumber)
                 );
 

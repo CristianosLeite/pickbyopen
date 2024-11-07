@@ -10,7 +10,7 @@ namespace Pickbyopen.Devices.Plc
         private readonly Sharp7Plc _client;
         private readonly string _ip = "192.168.68.102";
         private readonly int _rack = 0;
-        private readonly int _slot = 2;
+        private readonly int _slot = 1;
 
         public Plc()
         {
@@ -81,7 +81,7 @@ namespace Pickbyopen.Devices.Plc
             }
             else
             {
-                await _client.SetValue(tag, (short)value);
+                await _client.SetValue(tag, value);
             }
         }
 
@@ -128,6 +128,10 @@ namespace Pickbyopen.Devices.Plc
             else if (tag.Contains("DBX"))
             {
                 await _client.SetValue(tag, bool.Parse(value));
+            }
+            else if (tag.Contains("BYTE"))
+            {
+                await _client.SetValue(tag, byte.Parse(value));
             }
             else
             {
