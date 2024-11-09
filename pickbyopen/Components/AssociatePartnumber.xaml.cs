@@ -27,7 +27,7 @@ namespace Pickbyopen.Components
 
             SelectedDoor = "";
             SelectedPartnumber = "";
-            _doors = Enumerable.Range(1, 18).ToList();
+            _doors = Enumerable.Range(1, 9).ToList();
             Doors.ItemsSource = _doors;
         }
 

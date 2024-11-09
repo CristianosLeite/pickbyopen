@@ -46,7 +46,7 @@ namespace Pickbyopen.Components
             _createPartNumber = createPartnumber;
             _selectedDoor = door;
 
-            _doors = Enumerable.Range(1, 18).ToList();
+            _doors = Enumerable.Range(1, 9).ToList();
             Doors.ItemsSource = _doors;
 
             TbPartnumber.Text = partnumber.Code;
