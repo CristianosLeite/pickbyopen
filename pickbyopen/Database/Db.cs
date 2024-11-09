@@ -15,10 +15,9 @@ namespace Pickbyopen.Database
         protected readonly IUserRepository _userRepository;
         protected readonly ILogRepository _logRepository;
         protected readonly IOperationRepository _operationRepository;
+        protected readonly IRecipeRepository _recipeRepository;
 
-        public Db(
-            IDbConnectionFactory connectionFactory
-        )
+        public Db(IDbConnectionFactory connectionFactory)
         {
             _connectionFactory = connectionFactory;
 
@@ -26,6 +25,7 @@ namespace Pickbyopen.Database
             _userRepository = new UserRepository(connectionFactory);
             _logRepository = new LogRepository(connectionFactory);
             _operationRepository = new OperationRepository(connectionFactory);
+            _recipeRepository = new RecipeRepository(connectionFactory);
 
             CreateUsersTable();
             CreatePartnumberTable();
@@ -33,6 +33,8 @@ namespace Pickbyopen.Database
             CreateSysLogTable();
             CreateUserLogTable();
             CreateOperationTable();
+            CreateRecipeTable();
+            CreateRecipePartnumberTable();
         }
 
         public static NpgsqlConnection GetConnection()
@@ -121,7 +123,7 @@ namespace Pickbyopen.Database
 
                 var createTableCommand = new NpgsqlCommand(
                     "CREATE TABLE IF NOT EXISTS public.partnumbers ("
-                        + "id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ("
+                        + "partnumber_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ("
                         + "INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1), "
                         + "partnumber character varying COLLATE pg_catalog.\"default\" NOT NULL, "
                         + "description character varying COLLATE pg_catalog.\"default\" NOT NULL, "
@@ -268,9 +270,78 @@ namespace Pickbyopen.Database
             }
         }
 
+        // <summary>
+        // Create recipe table
+        // </summary>
+        private static void CreateRecipeTable()
+        {
+            try
+            {
+                using var connection = GetConnection();
+                connection.Open();
+
+                var createTableCommand = new NpgsqlCommand(
+                    "CREATE TABLE IF NOT EXISTS public.Recipes ("
+                        + "recipe_id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ("
+                        + "INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1), "
+                        + "vp character varying COLLATE pg_catalog.\"default\" NOT NULL, "
+                        + "description character varying COLLATE pg_catalog.\"default\" NOT NULL, "
+                        + "CONSTRAINT Recipes_pkey PRIMARY KEY (recipe_id)) "
+                        + "TABLESPACE pg_default; "
+                        + "ALTER TABLE IF EXISTS public.Recipes OWNER to postgres;",
+                    connection
+                );
+
+                createTableCommand.ExecuteNonQuery();
+            }
+            catch (PostgresException e)
+            {
+                ShowErrorMessage("Não foi possível criar a tabela de receitas." + e);
+            }
+        }
+
+        // <summary>
+        // Create recipe partnumber table
+        // </summary>
+        private static void CreateRecipePartnumberTable()
+        {
+            try
+            {
+                using var connection = GetConnection();
+                connection.Open();
+
+                var createTableCommand = new NpgsqlCommand(
+                    "CREATE TABLE IF NOT EXISTS public.RecipePartnumber ("
+                        + "id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ("
+                        + "INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1), "
+                        + "vp character varying COLLATE pg_catalog.\"default\" NOT NULL, "
+                        + "partnumber_id bigint NOT NULL, "
+                        + "recipe_id bigint NOT NULL, "
+                        + "CONSTRAINT RecipePartnumber_pkey PRIMARY KEY (id), "
+                        + "CONSTRAINT RecipePartnumber_fk FOREIGN KEY (partnumber_id) "
+                        + "REFERENCES public.partnumbers (partnumber_id) ON DELETE CASCADE, "
+                        + "CONSTRAINT RecipePartnumber_fk_1 FOREIGN KEY (recipe_id) "
+                        + "REFERENCES public.recipes (recipe_id) ON DELETE CASCADE) "
+                        + "TABLESPACE pg_default; "
+                        + "ALTER TABLE IF EXISTS public.RecipePartnumber OWNER to postgres;",
+                    connection
+                );
+
+                createTableCommand.ExecuteNonQuery();
+            }
+            catch (PostgresException e)
+            {
+                ShowErrorMessage("Não foi possível criar a tabela de receitas de partnumber." + e);
+            }
+        }
+
         public async Task<bool> SavePartnumber(string partnumber, string description, string door)
         {
-            await _logRepository.LogUserEditPartnumber(Auth.LoggedInUser!, partnumber, Context.Create);
+            await _logRepository.LogUserEditPartnumber(
+                Auth.LoggedInUser!,
+                partnumber,
+                Context.Create
+            );
             return await _partnumberRepository.SavePartnumber(partnumber, description, door);
         }
 
@@ -302,13 +373,21 @@ namespace Pickbyopen.Database
 
         public async Task<bool> CreateAssociation(string partnumber, string door)
         {
-            await _logRepository.LogUserEditPartnumber(Auth.LoggedInUser!, partnumber, Context.Update);
+            await _logRepository.LogUserEditPartnumber(
+                Auth.LoggedInUser!,
+                partnumber,
+                Context.Update
+            );
             return await _partnumberRepository.CreateAssociation(partnumber, door);
         }
 
         public async Task<bool> DeletePartnumberIndex(string partnumber)
         {
-            await _logRepository.LogUserEditPartnumber(Auth.LoggedInUser!, partnumber, Context.Update);
+            await _logRepository.LogUserEditPartnumber(
+                Auth.LoggedInUser!,
+                partnumber,
+                Context.Update
+            );
             return await _partnumberRepository.DeletePartnumberIndex(partnumber);
         }
 
@@ -354,7 +433,13 @@ namespace Pickbyopen.Database
             await _logRepository.LogUserLogout(user);
         }
 
-        public async Task LogUserOperate(string context, string target, string door, string mode, string userId)
+        public async Task LogUserOperate(
+            string context,
+            string target,
+            string door,
+            string mode,
+            string userId
+        )
         {
             await _logRepository.LogUserOperate(context, target, door, mode, userId);
         }
@@ -384,9 +469,56 @@ namespace Pickbyopen.Database
             return await _operationRepository.LoadOperations();
         }
 
-        public async Task<List<Operation>> GetOperationsByDate(string partnumber, string door, string initialDate, string finalDate)
+        public async Task<List<Operation>> GetOperationsByDate(
+            string partnumber,
+            string door,
+            string initialDate,
+            string finalDate
+        )
         {
-            return await _operationRepository.GetOperationsByDate(partnumber, door, initialDate, finalDate);
+            return await _operationRepository.GetOperationsByDate(
+                partnumber,
+                door,
+                initialDate,
+                finalDate
+            );
+        }
+
+        public async Task<bool> SaveRecipe(
+            Recipe recipe,
+            List<Partnumber> partnumbers,
+            Context context
+        )
+        {
+            return await _recipeRepository.SaveRecipe(recipe, partnumbers, context);
+        }
+
+        public async Task<bool> CreateRecipePartnumberAssociation(
+            string vp,
+            int partnumberId,
+            int recipeId
+        )
+        {
+            return await _recipeRepository.CreateRecipePartnumberAssociation(
+                vp,
+                partnumberId,
+                recipeId
+            );
+        }
+
+        public ObservableCollection<Recipe> LoadRecipeList()
+        {
+            return _recipeRepository.LoadRecipeList();
+        }
+
+        public async Task<bool> DeleteRecipePartnumberAssociation(string vp)
+        {
+            return await _recipeRepository.DeleteRecipePartnumberAssociation(vp);
+        }
+
+        public async Task<bool> DeleteRecipe(string vp)
+        {
+            return await _recipeRepository.DeleteRecipe(vp);
         }
     }
 }

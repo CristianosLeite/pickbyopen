@@ -168,7 +168,7 @@ namespace Pickbyopen.Components
 
         private void CreatePartnumber(object sender, RoutedEventArgs e)
         {
-            EditPartnumber editPartnumber = new(this, new Partnumber("", ""), 0, Context.Create);
+            EditPartnumber editPartnumber = new(this, new Partnumber(0, "", ""), 0, Context.Create);
             var parentWindow = Window.GetWindow(this) as PartnumberWindow;
             parentWindow?.Main?.Children.Clear();
             parentWindow?.Main.Children.Add(editPartnumber);

@@ -160,14 +160,20 @@ namespace Pickbyopen.Database
                 var partnumberList = new ObservableCollection<Partnumber>();
 
                 using var command = new NpgsqlCommand(
-                    "SELECT partnumber, description FROM public.partnumbers;",
+                    "SELECT partnumber_id, partnumber, description FROM public.partnumbers;",
                     connection
                 );
                 using var reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
-                    partnumberList.Add(new Partnumber(reader.GetString(0), reader.GetString(1)));
+                    partnumberList.Add(
+                        new Partnumber(
+                        reader.GetInt32(0),
+                        reader.GetString(1),
+                        reader.GetString(2)
+                        )
+                    );
                 }
 
                 return partnumberList;

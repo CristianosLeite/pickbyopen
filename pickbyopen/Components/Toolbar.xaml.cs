@@ -79,5 +79,21 @@ namespace Pickbyopen.Components
             ReportWindow reports = new();
             reports.Show();
         }
+
+        private void Recipe_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Auth.UserHasPermission("R"))
+            {
+                MessageBox.Show(
+                    "Você não tem permissão para acessar essa funcionalidade.",
+                    "Acesso negado",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+                return;
+            }
+            RecipeWindow recipe = new();
+            recipe.Show();
+        }
     }
 }
