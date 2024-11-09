@@ -127,7 +127,7 @@ namespace Pickbyopen.Database
                         + "INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1), "
                         + "partnumber character varying COLLATE pg_catalog.\"default\" NOT NULL, "
                         + "description character varying COLLATE pg_catalog.\"default\" NOT NULL, "
-                        + "CONSTRAINT partnumber_pkey PRIMARY KEY (id), "
+                        + "CONSTRAINT partnumber_pkey PRIMARY KEY (partnumber_id), "
                         + "CONSTRAINT \"UQ_partnumber\" UNIQUE (partnumber)) "
                         + "TABLESPACE pg_default; "
                         + "ALTER TABLE IF EXISTS public.partnumbers OWNER to postgres;",
@@ -509,6 +509,16 @@ namespace Pickbyopen.Database
         public ObservableCollection<Recipe> LoadRecipeList()
         {
             return _recipeRepository.LoadRecipeList();
+        }
+
+        public async Task<Recipe?> GetRecipeByVp(string vp)
+        {
+            return await _recipeRepository.GetRecipeByVp(vp);
+        }
+
+        public async Task<List<int>> GetRecipeAssociatedDoors(string vp)
+        {
+            return await _recipeRepository.GetRecipeAssociatedDoors(vp);
         }
 
         public async Task<bool> DeleteRecipePartnumberAssociation(string vp)

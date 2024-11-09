@@ -1,13 +1,14 @@
-﻿using Pickbyopen.Database;
-using Pickbyopen.Devices.CodebarsReader;
-using Pickbyopen.Devices.Plc;
-using Pickbyopen.Services;
-using Pickbyopen.Types;
-using Pickbyopen.Windows;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Pickbyopen.Database;
+using Pickbyopen.Devices.CodebarsReader;
+using Pickbyopen.Devices.Plc;
+using Pickbyopen.Models;
+using Pickbyopen.Services;
+using Pickbyopen.Types;
+using Pickbyopen.Windows;
 
 namespace Pickbyopen.Components
 {
@@ -69,9 +70,6 @@ namespace Pickbyopen.Components
             {
                 await ConnectPlc();
             });
-
-            DoorInput.Text = "0";
-            StatusInput.Text = "Aguardando leitura";
         }
 
         private void InitializeCodeBarsReader()
@@ -84,10 +82,18 @@ namespace Pickbyopen.Components
                 var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
                 timer.Tick += (sender, e) =>
                 {
-                    string data = codebarsReader.GetData();
+                    string data = codebarsReader.GetData().TrimEnd();
                     if (!string.IsNullOrEmpty(data))
                     {
-                        PartnumberChanged(data);
+                        if (data.Length == 10)
+                            PartnumberChanged(data);
+                        else if (data.Length == 14)
+                            VPOrChassiChanged(data, "");
+                        else if (data.Length == 17)
+                            VPOrChassiChanged("", data);
+                        else
+                            StatusInput.Text = "Leitura inválida.";
+
                         codebarsReader.ClearComPort();
                     }
                 };
@@ -169,7 +175,7 @@ namespace Pickbyopen.Components
                                 {
                                     CloseDoor(associatedDoor, intDoor);
                                     DoorInput.Text = "0";
-                                    StatusInput.Text = "Aguardando leitura";
+                                    StatusInput.Text = "Aguardando leitura.";
                                 })
                             );
                             return;
@@ -202,16 +208,17 @@ namespace Pickbyopen.Components
 
         private void SelectionChanged(object sender, RoutedEventArgs e)
         {
-            if (PartnumberInput.Text is string content)
-            {
-                if (content.Length == 10)
-                    PartnumberChanged(content);
-            }
+            string vp = VPInput.Text;
+            string chassi = ChassiInput.Text;
+
+            if (PartnumberInput.Text is string partnumber && partnumber.Length == 10)
+                PartnumberChanged(partnumber);
+            else if (vp.Length == 14 || chassi.Length == 17)
+                VPOrChassiChanged(vp, chassi);
         }
 
         private async void PartnumberChanged(string partnumber)
         {
-            partnumber = partnumber.TrimEnd();
             PartnumberInput.Text = partnumber;
 
             bool isPlcConnected = await EnsurePlcConnection();
@@ -220,7 +227,7 @@ namespace Pickbyopen.Components
             {
                 if (partnumber.Length < 10)
                 {
-                    StatusInput.Text = "Leitura inválida";
+                    StatusInput.Text = "Leitura inválida.";
                     return;
                 }
                 try
@@ -228,9 +235,23 @@ namespace Pickbyopen.Components
                     int door = await db.GetAssociatedDoor(partnumber);
                     if (door == 0)
                     {
-                        StatusInput.Text = "Desenho não encontrado";
+                        StatusInput.Text = "Desenho não encontrado.";
                         return;
                     }
+
+                    _ = door switch
+                    {
+                        1 => door = 10,
+                        2 => door = 11,
+                        3 => door = 12,
+                        4 => door = 13,
+                        5 => door = 14,
+                        6 => door = 15,
+                        7 => door = 16,
+                        8 => door = 17,
+                        9 => door = 18,
+                        _ => door = 0,
+                    };
 
                     await WriteToPlc(door, partnumber, Event.Reading);
                 }
@@ -239,6 +260,59 @@ namespace Pickbyopen.Components
                     MessageBox.Show("Erro ao interagir com o PLC. " + e, "Erro");
                 }
             }
+        }
+
+        private async void VPOrChassiChanged(string vp, string chassi)
+        {
+            if (string.IsNullOrEmpty(vp))
+            {
+                ChassiInput.Text = chassi;
+                StatusInput.Text = "Aguardando leitura do VP.";
+                return;
+            }
+
+            if (string.IsNullOrEmpty(chassi))
+            {
+                VPInput.Text = vp;
+                StatusInput.Text = "Aguardando leitura do chassi.";
+                return;
+            }
+
+            if (vp.Length != 0 && vp.Length != 14)
+            {
+                StatusInput.Text = "Leitura inválida.";
+                return;
+            }
+
+            if (chassi.Length != 0 && chassi.Length != 17)
+            {
+                StatusInput.Text = "Leitura inválida.";
+                return;
+            }
+
+            List<int> doors = Enumerable.Range(1, 9).ToList();
+            if (await CheckForOpenDoors(doors))
+            {
+                StatusInput.Text = "Aguardando fechamento das portas.";
+                return;
+            }
+
+            Recipe recipe = await db.GetRecipeByVp(vp);
+
+            if (recipe == null) {
+                StatusInput.Text = "Receita não cadastrada.";
+                return;
+            }
+
+            RecipeInput.Text = recipe.Description;
+
+            var doorsToOpen = await db.GetRecipeAssociatedDoors(vp);
+            foreach (var door in doorsToOpen)
+            {
+                await WriteToPlc(door, vp, Event.Reading);
+            }
+
+            StatusInput.Text = "Receita carregada com sucesso!";
         }
 
         private async Task<bool> EnsurePlcConnection()
@@ -353,7 +427,10 @@ namespace Pickbyopen.Components
         private async void ManualDoorOpen(object sender, RoutedEventArgs e)
         {
             if (IsAutomatic)
+            {
+                MessageBox.Show("Operação não permitida em modo automático.", "Atenção");
                 return;
+            }
 
             if (!Auth.UserHasPermission("O"))
             {
@@ -389,7 +466,10 @@ namespace Pickbyopen.Components
             {
                 if (await IsDoorOpen(i))
                 {
-                    MessageBox.Show("Necessário fechar todas as portas antes de solicitar uma nova abertura.", "Porta aberta");
+                    MessageBox.Show(
+                        "Necessário fechar todas as portas antes de solicitar uma nova abertura.",
+                        "Porta aberta"
+                    );
                     return true;
                 }
             }
@@ -482,6 +562,8 @@ namespace Pickbyopen.Components
                 ModeButton.ToolTip = "Modo manual";
                 ModeIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.Hand;
                 PartnumberInput.IsEnabled = true;
+                VPInput.IsEnabled = true;
+                ChassiInput.IsEnabled = true;
                 return;
             }
             try
@@ -491,6 +573,8 @@ namespace Pickbyopen.Components
                 ModeButton.ToolTip = "Modo automático";
                 ModeIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.Automatic;
                 PartnumberInput.IsEnabled = false;
+                VPInput.IsEnabled = false;
+                ChassiInput.IsEnabled = false;
             }
             catch
             {

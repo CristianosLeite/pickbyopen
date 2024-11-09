@@ -26,6 +26,23 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" 
+                                    BorderBrush="YellowGreen" 
+                                    BorderThickness="3" 
+                                    CornerRadius="10"
+                                    Cursor="Hand">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </UserControl.Resources>
     <Grid Margin="0,0,0,0">
@@ -57,36 +74,53 @@
                 <materialDesign:PackIcon x:Name="LogIcon" Kind="History"/>
             </StackPanel>
         </Button>
-        <materialDesign:Card Grid.Row="1" Margin="40,10,40,10" UniformCornerRadius="15" Background="#323131">
-            <Grid VerticalAlignment="Center" Height="158">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
+        <materialDesign:Card Grid.Row="1" Margin="40,10,40,10" UniformCornerRadius="15" Background="DarkGray">
+            <Grid>
+                <materialDesign:Card Margin="2" Padding="5" UniformCornerRadius="15" Background="#323131"/>
+                <Grid VerticalAlignment="Center" Height="158">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120"/>
-                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                <TextBlock x:Name="PartnumberLabel" Grid.Column="0" FontSize="24" Text="Desenho: " VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"/>
-                    <TextBox x:Name="PartnumberInput" MaxLength="10" Grid.Column="1" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0" Width="220" IsEnabled="False" SelectionChanged="SelectionChanged"/>
-                </Grid>
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="220"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="DoorLabel" Grid.Column="0" FontSize="24" Text="Porta selecionada: " VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"/>
-                    <TextBlock x:Name="DoorInput" Grid.Column="1" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"/>
-                </Grid>
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="StatusLabel" Grid.Column="0" FontSize="24" Text="Status: " VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"/>
-                    <TextBlock x:Name="StatusInput" Grid.Column="1" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"/>
+
+                    <TextBlock FontSize="14" Text="OPERAÇÃO" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10, 0" FontWeight="Bold"/>
+                    <TextBlock Grid.Column="1" FontSize="14" Text="LOGÍSTICA" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10, 0" FontWeight="Bold"/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" Margin="10, 0">
+                            <TextBlock x:Name="VPLabel" FontSize="24" Text="VP: " VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="VPInput" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left"  Margin="10, 0" Width="200" IsEnabled="False" MaxLength="14" SelectionChanged="SelectionChanged"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="100, 0">
+                            <TextBlock x:Name="ChassiLabel" FontSize="24" Text="Chassi: " VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            <TextBox x:Name="ChassiInput" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10, 0" Width="240" IsEnabled="False" MaxLength="17" SelectionChanged="SelectionChanged"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0">
+                        <TextBlock x:Name="RecipeLabel" Grid.Column="0" FontSize="24" Text="Receita: " VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock x:Name="RecipeInput" FontSize="24" Text="Nenhuma receita selecionada" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="10,0">
+                        <TextBlock x:Name="StatusLabel" Grid.Column="0" FontSize="24" Text="Status: " VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock x:Name="StatusInput" FontSize="24" Text="Aguardando leitura" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+                        <TextBlock x:Name="PartnumberLabel" FontSize="24" Text="Desenho: " VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0"/>
+                        <TextBox x:Name="PartnumberInput" MaxLength="10" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0" Width="150" IsEnabled="False" SelectionChanged="SelectionChanged"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="10,0">
+                        <TextBlock x:Name="DoorLabel" Grid.Column="0" FontSize="24" Text="Porta selecionada: " VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock x:Name="DoorInput" FontSize="24" Text="0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </materialDesign:Card>

@@ -98,6 +98,78 @@ namespace Pickbyopen.Database
             }
         }
 
+        public async Task<Recipe?> GetRecipeByVp(string vp)
+        {
+            try
+            {
+                using var conn = _connectionFactory.GetConnection();
+                conn.Open();
+
+                using var command = new NpgsqlCommand(
+                    "SELECT recipe_id, vp, description FROM public.recipes WHERE vp = @vp;",
+                    conn
+                );
+
+                command.Parameters.AddWithValue("@vp", vp);
+
+                using var reader = await command.ExecuteReaderAsync();
+
+                if (!reader.Read())
+                    return null;
+
+                var recipe = new Recipe(
+                    reader.GetInt32(0), // RecipeId
+                    reader.GetString(1), // VP
+                    reader.GetString(2) // Description
+                )
+                {
+                    RecipePartnumbers = [],
+                };
+
+                return recipe;
+            }
+            catch (PostgresException e)
+            {
+                ErrorMessage.Show("Erro ao carregar a receita." + e);
+                throw;
+            }
+        }
+
+        public async Task<List<int>> GetRecipeAssociatedDoors(string vp)
+        {
+            try
+            {
+                using var connection = _connectionFactory.GetConnection();
+                connection.Open();
+
+                var doors = new List<int>();
+
+                using var command = new NpgsqlCommand(
+                    "SELECT partnumbers_index.door "
+                        + "FROM public.partnumbers "
+                        + "LEFT JOIN public.recipepartnumber "
+                        + "ON partnumbers.partnumber_id = recipepartnumber.partnumber_id "
+                        + "LEFT JOIN public.partnumbers_index "
+                        + "ON partnumbers.partnumber = partnumbers_index.partnumber "
+                        + "WHERE recipepartnumber.recipe_id = ("
+                        + "    SELECT recipe_id FROM public.recipes WHERE vp = @vp"
+                        + ");",
+                    connection
+                );
+                command.Parameters.AddWithValue("@vp", vp);
+                using var reader = await command.ExecuteReaderAsync();
+
+                while (reader.Read())
+                    doors.Add(int.Parse(reader.GetString(0)));
+
+                return doors;
+            }
+            catch (PostgresException e)
+            {
+                throw new Exception("Erro ao carregar a lista de portas associadas." + e);
+            }
+        }
+
         public async Task<bool> SaveRecipe(
             Recipe recipe,
             List<Partnumber> partnumbers,
