@@ -29,7 +29,7 @@
             <TextBox x:Name="Description" VerticalAlignment="Top"
                 HorizontalAlignment="Left"
                 Width="278"
-                materialDesign:HintAssist.Hint="Decrição" Margin="229,144,0,0" MaxLength="50" IsUndoEnabled="False" UndoLimit="98"/>
+                materialDesign:HintAssist.Hint="Descrição" Margin="229,144,0,0" MaxLength="50" IsUndoEnabled="False" UndoLimit="98"/>
             <ComboBox x:Name="Doors" 
                 ItemsSource="{Binding _doors}"
                 ScrollViewer.VerticalScrollBarVisibility="Auto"
