@@ -1,11 +1,11 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using Pickbyopen.Database;
+﻿using Pickbyopen.Database;
 using Pickbyopen.Devices.Plc;
 using Pickbyopen.Services;
 using Pickbyopen.Types;
 using Pickbyopen.Utils;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Pickbyopen.Components
 {
@@ -33,6 +33,27 @@ namespace Pickbyopen.Components
             _doorService = new DoorService(this, _modeService, _plc, _plcService);
             _codeBarsReaderService = new CodeBarsReaderService();
 
+            _codeBarsReaderService.SubscribeReader(OnDataReceived);
+
+            SetDoors();
+
+            try
+            {
+                InitializeCodeBarsReader();
+            }
+            catch
+            {
+                // Do not throw on constructor
+            }
+
+            if (!IsCodeBarsReaderConnected())
+                SetMode(); // Manual mode will be set
+
+            InitializePlc();
+        }
+
+        private void SetDoors()
+        {
             _doorService.SetDoors(
                 [
                     door1,
@@ -55,19 +76,26 @@ namespace Pickbyopen.Components
                     door18,
                 ]
             );
+        }
 
+        public void InitializeCodeBarsReader()
+        {
             try
             {
-                InitializeCodeBarsReader();
+                _codeBarsReaderService.InitializeCodeBarsReader();
             }
             catch (Exception e)
             {
-                ErrorMessage.Show("Erro ao conectar o leitor de código de barras. " + e);
+                ErrorMessage.Show(
+                    "Erro ao conectar o leitor de código de barras. Operação será executada em modo manual.\n"
+                        + e
+                );
+                throw; // Throw exception on ModeService
             }
+        }
 
-            if (!IsCodeBarsReaderConnected())
-                SetMode();
-
+        private void InitializePlc()
+        {
             Task.Run(async () =>
                 {
                     if (!await ConnectPlc())
@@ -79,6 +107,29 @@ namespace Pickbyopen.Components
                         if (await IsPlcConnected())
                             SubscribeDoors();
                 });
+        }
+
+        private void OnDataReceived(object? sender, string data)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                if (data.Length == 14)
+                {
+                    VPInput.Text = data;
+                }
+                else if (data.Length == 17)
+                {
+                    ChassiInput.Text = data;
+                }
+                else if (data.Length == 10)
+                {
+                    PartnumberInput.Text = data;
+                }
+                else
+                {
+                    StatusInput.Text = "Leitura inválida.";
+                }
+            });
         }
 
         private void SelectionChanged(object sender, RoutedEventArgs e)
@@ -194,11 +245,6 @@ namespace Pickbyopen.Components
             {
                 await WriteToPlc(door, vp, Event.Reading);
             }
-        }
-
-        public void InitializeCodeBarsReader()
-        {
-            _codeBarsReaderService.InitializeCodeBarsReader();
         }
 
         private bool IsCodeBarsReaderConnected() =>

@@ -52,13 +52,8 @@ namespace Pickbyopen.Services
                 MainApplication.ChassiInput.IsEnabled = false;
                 IsMaintenance = false;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                ErrorMessage.Show(
-                    "Erro ao conectar o leitor de código de barras. Operação será executada em modo manual.\n"
-                        + e
-                );
-
                 IsAutomatic = false;
 
                 if (!IsMaintenance)
