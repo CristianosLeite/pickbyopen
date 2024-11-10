@@ -1,8 +1,8 @@
-﻿using Npgsql;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Npgsql;
 using Pickbyopen.Interfaces;
 using Pickbyopen.Models;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 
 namespace Pickbyopen.Database
 {
@@ -90,21 +90,20 @@ namespace Pickbyopen.Database
 
             if (!string.IsNullOrEmpty(target) && !string.IsNullOrEmpty(door))
             {
-                Debug.WriteLine("target and door");
-                return baseQuery + " AND target = @target AND door = @door";
+                return baseQuery + " AND target = @target AND door = @door ORDER BY id DESC";
             }
             else if (!string.IsNullOrEmpty(target))
             {
-                Debug.WriteLine("target");
-                return baseQuery + " AND target = @target";
+                return baseQuery + " AND target = @target ORDER BY id DESC";
             }
             else if (!string.IsNullOrEmpty(door))
             {
-                Debug.WriteLine("door");
-                return baseQuery + " AND door = @door";
+                return baseQuery + " AND door = @door ORDER BY id DESC";
             }
-
-            return baseQuery;
+            else
+            {
+                return baseQuery + " ORDER BY id DESC";
+            }
         }
 
         private static void AddParameters(
