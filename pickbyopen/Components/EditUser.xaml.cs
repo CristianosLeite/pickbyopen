@@ -1,9 +1,9 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using Pickbyopen.Database;
+﻿using Pickbyopen.Database;
 using Pickbyopen.Models;
 using Pickbyopen.Types;
 using Pickbyopen.Windows;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Pickbyopen.Components
 {

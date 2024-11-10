@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using Npgsql;
+﻿using Npgsql;
 using Pickbyopen.Interfaces;
 using Pickbyopen.Models;
 using Pickbyopen.Types;
 using Pickbyopen.Utils;
+using System.Collections.ObjectModel;
 
 namespace Pickbyopen.Database
 {
