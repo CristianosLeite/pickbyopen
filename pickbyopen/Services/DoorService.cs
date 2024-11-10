@@ -1,15 +1,20 @@
-﻿using Pickbyopen.Components;
-using Pickbyopen.Devices.Plc;
-using Pickbyopen.Interfaces;
-using Pickbyopen.Types;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Pickbyopen.Components;
+using Pickbyopen.Devices.Plc;
+using Pickbyopen.Interfaces;
+using Pickbyopen.Types;
 
 namespace Pickbyopen.Services
 {
-    public class DoorService(MainApplication mainApplication, ModeService modeService, Plc plc, PlcService plcService) : IDoorService
+    public class DoorService(
+        MainApplication mainApplication,
+        ModeService modeService,
+        Plc plc,
+        PlcService plcService
+    ) : IDoorService
     {
         private readonly ModeService _modeService = modeService;
         private readonly Plc _plc = plc;
@@ -245,8 +250,9 @@ namespace Pickbyopen.Services
             var command = new Command();
             command.SetOpen();
             StartFlashing(control, command, door);
-            MainApplication.DoorInput.Text = door.ToString();
-            MainApplication.StatusInput.Text = "Aberta";
+
+            if (door > 10)
+                MainApplication.DoorInput.Text = door.ToString();
         }
 
         public void CloseDoor(Control control, int door)
