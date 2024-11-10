@@ -1,10 +1,10 @@
 ﻿using Pickbyopen.Database;
 using Pickbyopen.Models;
 using Pickbyopen.Types;
+using Pickbyopen.Utils;
 using Pickbyopen.Windows;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -142,8 +142,10 @@ namespace Pickbyopen.Components
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-            Regex regex = new("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
+            if (ValidateNumberInput.IsValideInput(e.Text))
+                e.Handled = false;
+            else
+                e.Handled = true;
         }
 
         private async void BtnSave_Click(object sender, RoutedEventArgs e)

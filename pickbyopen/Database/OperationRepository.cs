@@ -1,8 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using Npgsql;
+﻿using Npgsql;
 using Pickbyopen.Interfaces;
 using Pickbyopen.Models;
+using System.Collections.ObjectModel;
 
 namespace Pickbyopen.Database
 {
@@ -123,7 +122,8 @@ namespace Pickbyopen.Database
                 command.Parameters.AddWithValue("@target", target);
             }
 
-            if (chassi != null) { 
+            if (chassi != null)
+            {
                 command.Parameters.AddWithValue("@chassi", chassi);
             }
 

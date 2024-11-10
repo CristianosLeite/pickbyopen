@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Performance", "SYSLIB1045:Converter em 'GeneratedRegexAttribute'.", Justification = "Has accessibility modifiers", Scope = "member", Target = "~M:Pickbyopen.Components.EditPartnumber.NumberValidationTextBox(System.Object,System.Windows.Input.TextCompositionEventArgs)")]
-[assembly: SuppressMessage("Style", "IDE0060:Remover o parâmetro não utilizado", Justification = "Do not remove", Scope = "member", Target = "~M:Pickbyopen.Devices.Rfid.ACR122U.Authenticate(PCSC.ICardReader,System.Int32,System.Byte,System.Byte[])~System.Boolean")]
+[assembly: SuppressMessage("Performance", "SYSLIB1045:Converter em 'GeneratedRegexAttribute'.", Justification = "Necessary validation", Scope = "member", Target = "~M:Pickbyopen.Utils.ValidateNumberInput.IsValideInput(System.String)~System.Boolean")]
