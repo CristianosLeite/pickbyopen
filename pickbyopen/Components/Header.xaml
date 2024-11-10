@@ -25,7 +25,7 @@
                 <Setter Property="Height" Value="40"></Setter>
             </Style>
         </Grid.Resources>
-        <Image x:Name="LogoImage" Source="/Assets/logo-conecsa.png" Panel.ZIndex="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Image x:Name="LogoImage" Source="/Assets/logo-conecsa.png" Panel.ZIndex="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="429" Margin="30,0,0,0" Height="130"/>
         <Button x:Name="UserButton" Grid.Column="1" Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Left"
                 BorderBrush="{x:Null}" Background="{x:Null}" Foreground="DarkGray" Margin="70 0 0 0" Click="UserButton_Click">
             <StackPanel>
