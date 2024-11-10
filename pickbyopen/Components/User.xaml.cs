@@ -191,6 +191,7 @@ namespace Pickbyopen.Components
                                 new TextBlock { Text = "P - Cadastrar Partnumbers" },
                                 new TextBlock { Text = "U - Cadastrar Usuários" },
                                 new TextBlock { Text = "R - Exportar relatórios" },
+                                new TextBlock { Text = "M - Manutenção" },
                             },
                         },
                         IsOpen = true,

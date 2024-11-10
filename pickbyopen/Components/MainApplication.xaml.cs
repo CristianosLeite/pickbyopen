@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Pickbyopen.Database;
@@ -24,7 +25,10 @@ namespace Pickbyopen.Components
         private readonly Dictionary<Control, bool> IsGreenStates = [];
         private readonly Dictionary<Control, bool> IsOrangeStates = [];
         private bool IsAutomatic = true;
+        private bool IsMaintenance = true;
         private readonly Plc _plc = new();
+        private readonly DispatcherTimer _buttonPressTimer;
+        private bool _isButtonPressed;
 
         public MainApplication()
         {
@@ -70,6 +74,9 @@ namespace Pickbyopen.Components
             {
                 await ConnectPlc();
             });
+
+            _buttonPressTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(3) };
+            _buttonPressTimer.Tick += ButtonPressTimer_Tick;
         }
 
         private void InitializeCodeBarsReader()
@@ -299,7 +306,8 @@ namespace Pickbyopen.Components
 
             Recipe recipe = await db.GetRecipeByVp(vp);
 
-            if (recipe == null) {
+            if (recipe == null)
+            {
                 StatusInput.Text = "Receita não cadastrada.";
                 return;
             }
@@ -343,13 +351,14 @@ namespace Pickbyopen.Components
             else
                 await _plc.WriteToPlc("DB1.BYTE1", door.ToString()); // Backside intDoor
 
-            await db.LogUserOperate(
-                @event == Event.Reading ? "Leitura" : "Seleção",
-                target,
-                door.ToString(),
-                IsAutomatic ? "Automático" : "Manual",
-                Auth.GetUserId()
-            );
+            if (!IsMaintenance)
+                await db.LogUserOperate(
+                    @event == Event.Reading ? "Leitura" : "Seleção",
+                    target,
+                    door.ToString(),
+                    IsAutomatic ? "Automático" : "Manual",
+                    Auth.GetUserId()
+                );
         }
 
         private void StartFlashing(Control control, Command command, int door)
@@ -448,11 +457,14 @@ namespace Pickbyopen.Components
             {
                 int door = int.Parse(button.Content.ToString()!);
 
-                if (door < 10)
+                if (!IsMaintenance) // Bypass verification in maintenance mode
                 {
-                    List<int> doors = Enumerable.Range(1, 9).ToList();
-                    if (await CheckForOpenDoors(doors))
-                        return;
+                    if (door < 10)
+                    {
+                        List<int> doors = Enumerable.Range(1, 9).ToList();
+                        if (await CheckForOpenDoors(doors))
+                            return;
+                    }
                 }
                 // In case of direct selection, there will be no partnumber, target will be port number
                 _ = WriteToPlc(door, door.ToString(), Event.Selection);
@@ -564,6 +576,7 @@ namespace Pickbyopen.Components
                 PartnumberInput.IsEnabled = true;
                 VPInput.IsEnabled = true;
                 ChassiInput.IsEnabled = true;
+                IsMaintenance = false;
                 return;
             }
             try
@@ -575,17 +588,22 @@ namespace Pickbyopen.Components
                 PartnumberInput.IsEnabled = false;
                 VPInput.IsEnabled = false;
                 ChassiInput.IsEnabled = false;
+                IsMaintenance = false;
             }
             catch
             {
                 IsAutomatic = false;
+
+                if (!IsMaintenance)
+                    SetMode();
+
                 return;
             }
         }
 
         private async void SwitchMode(object sender, RoutedEventArgs e)
         {
-            if (!Auth.UserHasPermission("O"))
+            if (!Auth.UserHasPermission("M"))
             {
                 MessageBox.Show(
                     "Usuário não tem permissão para alterar o modo de operação.",
@@ -594,7 +612,9 @@ namespace Pickbyopen.Components
                 return;
             }
 
-            IsAutomatic = !IsAutomatic;
+            if (!IsMaintenance)
+                IsAutomatic = !IsAutomatic;
+
             SetMode();
             await db.LogSysSwitchedMode(IsAutomatic ? "Automático" : "Manual");
         }
@@ -603,6 +623,48 @@ namespace Pickbyopen.Components
         {
             LogsWindow logs = new();
             logs.Show();
+        }
+
+        private void ModeButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            _isButtonPressed = true;
+            _buttonPressTimer.Start();
+        }
+
+        private void ModeButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _isButtonPressed = false;
+            _buttonPressTimer.Stop();
+        }
+
+        private void ButtonPressTimer_Tick(object? sender, EventArgs e)
+        {
+            if (_isButtonPressed)
+            {
+                _buttonPressTimer.Stop();
+                EnterMaintenanceMode();
+            }
+        }
+
+        private void EnterMaintenanceMode()
+        {
+            SetMaitenanceMode();
+        }
+
+        private void SetMaitenanceMode()
+        {
+            ModeIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.Tools;
+            ModeButton.Foreground = Brushes.Orange;
+            ModeButton.ToolTip = "Modo de manutenção";
+            PartnumberInput.IsEnabled = true;
+            VPInput.IsEnabled = true;
+            ChassiInput.IsEnabled = true;
+            IsAutomatic = false;
+            IsMaintenance = true;
+            MessageBox.Show(
+                "Modo de manutenção ativado. Logs e registros de operações não serão salvos.",
+                "Aviso!"
+            );
         }
     }
 }

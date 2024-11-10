@@ -39,6 +39,7 @@
                 <CheckBox x:Name="CreatePartnumber" Content="Cadastrar partnumber"/>
                 <CheckBox x:Name="CreateUser" Content="Cadastrar usuários"/>
                 <CheckBox x:Name="ExportReports" Content="Exportar relatórios"/>
+                <CheckBox x:Name="Maintenance" Content="Manutenção"/>
             </ComboBox>
             <Button x:Name="BtnSave" Content="Salvar" HorizontalAlignment="Center" Margin="0,262,0,0" VerticalAlignment="Top" Width="246" Click="BtnSave_Click"/>
         </Grid>

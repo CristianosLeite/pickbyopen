@@ -58,9 +58,12 @@
             </Style>
         </Grid.Resources>
         <Button x:Name="ModeButton" Grid.Row="0" 
-                Style="{StaticResource MaterialDesignFloatingActionButton}" 
-                HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,5,0" 
-                BorderBrush="{x:Null}" Background="{x:Null}" Foreground="LightGreen" ToolTip="Modo automático" Click="SwitchMode">
+            Style="{StaticResource MaterialDesignFloatingActionButton}" 
+            HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,5,5,0" 
+            BorderBrush="{x:Null}" Background="{x:Null}" Foreground="LightGreen" ToolTip="Modo automático" 
+            Click="SwitchMode"
+            PreviewMouseLeftButtonDown="ModeButton_MouseLeftButtonDown"
+            PreviewMouseLeftButtonUp="ModeButton_MouseLeftButtonUp">
             <StackPanel Margin="5">
                 <materialDesign:PackIcon x:Name="ModeIcon" Kind="Automatic"/>
             </StackPanel>

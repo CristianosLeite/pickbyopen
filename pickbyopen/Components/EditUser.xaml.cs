@@ -1,9 +1,9 @@
-﻿using Pickbyopen.Database;
+﻿using System.Windows;
+using System.Windows.Controls;
+using Pickbyopen.Database;
 using Pickbyopen.Models;
 using Pickbyopen.Types;
 using Pickbyopen.Windows;
-using System.Windows;
-using System.Windows.Controls;
 
 namespace Pickbyopen.Components
 {
@@ -69,6 +69,10 @@ namespace Pickbyopen.Components
                     else if (permission == "R")
                     {
                         ExportReports.IsChecked = true;
+                    }
+                    else if (permission == "M")
+                    {
+                        Maintenance.IsChecked = true;
                     }
                 }
             }
@@ -178,6 +182,11 @@ namespace Pickbyopen.Components
             if (ExportReports.IsChecked == true)
             {
                 permissions.Add("R");
+            }
+
+            if (Maintenance.IsChecked == true)
+            {
+                permissions.Add("M");
             }
 
             return permissions;
