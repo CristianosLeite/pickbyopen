@@ -651,7 +651,7 @@ namespace Pickbyopen.Components
             SetMaitenanceMode();
         }
 
-        private void SetMaitenanceMode()
+        private async void SetMaitenanceMode()
         {
             ModeIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.Tools;
             ModeButton.Foreground = Brushes.Orange;
@@ -661,10 +661,13 @@ namespace Pickbyopen.Components
             ChassiInput.IsEnabled = true;
             IsAutomatic = false;
             IsMaintenance = true;
+
             MessageBox.Show(
                 "Modo de manutenção ativado. Logs e registros de operações não serão salvos.",
                 "Aviso!"
             );
+
+            await db.LogSysSwitchedMode("Manutenção");
         }
     }
 }
