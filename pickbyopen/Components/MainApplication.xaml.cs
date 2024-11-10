@@ -179,7 +179,7 @@ namespace Pickbyopen.Components
                         _ => door = 0,
                     };
 
-                    await WriteToPlc(door, partnumber, Event.Reading);
+                    await WriteToPlc(door, partnumber, string.Empty, Event.Reading);
                 }
                 catch (Exception e)
                 {
@@ -224,7 +224,7 @@ namespace Pickbyopen.Components
             }
 
             RecipeInput.Text = recipe.Description;
-            await OpenDoorsForRecipe(vp);
+            await OpenDoorsForRecipe(vp, chassi);
             StatusInput.Text = "Receita carregada com sucesso!";
         }
 
@@ -238,12 +238,12 @@ namespace Pickbyopen.Components
             return await CheckForOpenDoors(doors);
         }
 
-        private async Task OpenDoorsForRecipe(string vp)
+        private async Task OpenDoorsForRecipe(string vp, string chassi)
         {
             var doorsToOpen = await _db.GetRecipeAssociatedDoors(vp);
             foreach (var door in doorsToOpen)
             {
-                await WriteToPlc(door, vp, Event.Reading);
+                await WriteToPlc(door, vp, chassi, Event.Reading);
             }
         }
 
@@ -261,7 +261,7 @@ namespace Pickbyopen.Components
 
         private async Task<bool> IsPlcConnected() => await _plc.GetPlcStatus();
 
-        private async Task WriteToPlc(int door, string target, Event @event)
+        private async Task WriteToPlc(int door, string target, string chassi, Event @event)
         {
             if (_doorService.Subscriptions.Count == 0)
                 _doorService.SubscribeDoors();
@@ -271,7 +271,7 @@ namespace Pickbyopen.Components
                 ErrorMessage.Show("Usuário não tem permissão para abrir portas.");
                 return;
             }
-            await _plcService.WriteToPlc(door, target, @event);
+            await _plcService.WriteToPlc(door, target, chassi, @event);
         }
 
         private void ManualDoorOpen(object sender, RoutedEventArgs e) =>

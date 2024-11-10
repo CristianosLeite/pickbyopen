@@ -215,8 +215,8 @@ namespace Pickbyopen.Services
                 if (Subscriptions.Count == 0)
                     SubscribeDoors();
 
-                // In case of direct selection, there will be no partnumber, target will be port number
-                _ = _plcService.WriteToPlc(door, door.ToString(), Event.Selection);
+                // In case of direct selection, there will be no partnumber, target will be null
+                _ = _plcService.WriteToPlc(door, null, null, Event.Selection);
                 SetOpen(button, door);
             }
         }

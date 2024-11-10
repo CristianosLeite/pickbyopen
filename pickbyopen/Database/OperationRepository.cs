@@ -19,7 +19,7 @@ namespace Pickbyopen.Database
                 {
                     connection.Open();
                     using var command = new NpgsqlCommand(
-                        "SELECT createdat, event, target, door, mode, userid FROM operations ORDER BY id DESC",
+                        "SELECT createdat, event, target, chassi, door, mode, userid FROM operations ORDER BY id DESC",
                         connection
                     );
                     using var reader = await command.ExecuteReaderAsync();
@@ -28,12 +28,13 @@ namespace Pickbyopen.Database
                         var createdAt = reader.GetDateTime(0);
                         var @event = reader.GetString(1);
                         var target = reader.GetString(2);
-                        var door = reader.GetString(3);
-                        var mode = reader.GetString(4);
-                        var userId = reader.GetString(5);
+                        var chassi = reader.GetString(3);
+                        var door = reader.GetString(4);
+                        var mode = reader.GetString(5);
+                        var userId = reader.GetString(6);
 
                         operations.Add(
-                            new Operation(createdAt, @event, target, door, mode, userId)
+                            new Operation(createdAt, @event, target, chassi, door, mode, userId)
                         );
                     }
                 }
@@ -48,6 +49,7 @@ namespace Pickbyopen.Database
 
         public async Task<List<Operation>> GetOperationsByDate(
             string target,
+            string chassi,
             string door,
             string initialDate,
             string finalDate
@@ -60,7 +62,7 @@ namespace Pickbyopen.Database
 
             var query = BuildQuery(target, door);
             using var command = new NpgsqlCommand(query, connection);
-            AddParameters(command, target, door, initialDate, finalDate);
+            AddParameters(command, target, chassi, door, initialDate, finalDate);
 
             using var reader = await command.ExecuteReaderAsync();
             while (reader.Read())
@@ -68,13 +70,14 @@ namespace Pickbyopen.Database
                 var createdAt = reader.GetDateTime(1);
                 var @event = reader.GetString(2);
                 var _target = reader.GetString(3);
-                var _door = reader.GetString(4);
-                var mode = reader.GetString(5);
-                var userId = reader.GetString(6);
-                var username = reader.GetString(7);
+                var _chassi = reader.GetString(4);
+                var _door = reader.GetString(5);
+                var mode = reader.GetString(6);
+                var userId = reader.GetString(7);
+                var username = reader.GetString(8);
 
                 operations.Add(
-                    new Operation(createdAt, @event, _target, _door, mode, userId, username)
+                    new Operation(createdAt, @event, _target, _chassi, _door, mode, userId, username)
                 );
             }
 
@@ -109,6 +112,7 @@ namespace Pickbyopen.Database
         private static void AddParameters(
             NpgsqlCommand command,
             string target,
+            string chassi,
             string door,
             string initialDate,
             string finalDate
@@ -117,6 +121,10 @@ namespace Pickbyopen.Database
             if (!string.IsNullOrEmpty(target))
             {
                 command.Parameters.AddWithValue("@target", target);
+            }
+
+            if (chassi != null) { 
+                command.Parameters.AddWithValue("@chassi", chassi);
             }
 
             if (!string.IsNullOrEmpty(door))

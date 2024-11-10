@@ -6,6 +6,6 @@ namespace Pickbyopen.Interfaces
     public interface IOperationRepository
     {
         Task<ObservableCollection<Operation>> LoadOperations();
-        Task<List<Operation>> GetOperationsByDate(string partnumber, string door, string initialDate, string finalDate);
+        Task<List<Operation>> GetOperationsByDate(string vpOrPartnumber, string chassi, string door, string initialDate, string finalDate);
     }
 }

@@ -24,14 +24,14 @@ namespace Pickbyopen.Database
                 UserLog userLog =>
                     "INSERT INTO UserLogs (CreatedAt, Event, Target, UserId) VALUES (@CreatedAt, @Event, @Target, @UserId)",
                 Operation Operation =>
-                    "INSERT INTO Operations (CreatedAt, Event, Target, Door, Mode, UserId) VALUES (@CreatedAt, @Event, @Target, @Door, @Mode, @UserId)",
+                    "INSERT INTO Operations (CreatedAt, Event, Target, Chassi, Door, Mode, UserId) VALUES (@CreatedAt, @Event, @Target, @Chassi, @Door, @Mode, @UserId)",
                 _ => throw new InvalidOperationException("Tipo de log desconhecido"),
             };
 
             using var command = new NpgsqlCommand(query, connection);
             command.Parameters.AddWithValue("CreatedAt", log.CreatedAt);
             command.Parameters.AddWithValue("Event", log.Event);
-            command.Parameters.AddWithValue("Target", log.Target);
+            command.Parameters.AddWithValue("Target", log.Target ?? string.Empty);
 
             switch (log)
             {
@@ -43,6 +43,7 @@ namespace Pickbyopen.Database
                     command.Parameters.AddWithValue("UserId", userLog.User.Id);
                     break;
                 case Operation Operation:
+                    command.Parameters.AddWithValue("Chassi", Operation.Chassi ?? string.Empty);
                     command.Parameters.AddWithValue("Door", Operation.Door);
                     command.Parameters.AddWithValue("Mode", Operation.Mode);
                     command.Parameters.AddWithValue("UserId", Operation.UserId);
@@ -94,14 +95,15 @@ namespace Pickbyopen.Database
                                 await userRepository.GetUserById(reader.GetString(3))
                                     ?? new User("0", "0", "0", [])
                             ),
-                        "SELECT CreatedAt, Event, Target, Door, Mode, UserId FROM Operations ORDER BY CreatedAt DESC LIMIT 200" =>
+                        "SELECT CreatedAt, Event, Target, Chassi, Door, Mode, UserId FROM Operations ORDER BY CreatedAt DESC LIMIT 200" =>
                             new Operation(
                                 reader.GetDateTime(0),
                                 reader.GetString(1),
                                 reader.GetString(2),
                                 reader.GetString(3),
                                 reader.GetString(4),
-                                reader.GetString(5)
+                                reader.GetString(5),
+                                reader.GetString(6)
                             ),
                         _ => throw new InvalidOperationException("Tipo de log desconhecido"),
                     };
@@ -212,12 +214,13 @@ namespace Pickbyopen.Database
         public async Task LogUserOperate(
             string @event,
             string target,
+            string chassi,
             string door,
             string mode,
             string userId
         )
         {
-            Operation Operation = new(DateTime.Now, @event, target, door, mode, userId);
+            Operation Operation = new(DateTime.Now, @event, target, chassi, door, mode, userId);
             await SaveLog(Operation);
         }
 

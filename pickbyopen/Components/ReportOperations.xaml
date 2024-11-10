@@ -22,7 +22,7 @@
         <TextBox x:Name="TbPartnumber" VerticalAlignment="Top"
              HorizontalAlignment="Left"
              Width="184"
-             materialDesign:HintAssist.Hint="Desenho do motor"
+             materialDesign:HintAssist.Hint="VP / Partnumber"
              MaxLength="15"
              IsUndoEnabled="False"
              Margin="5 5 20 5"

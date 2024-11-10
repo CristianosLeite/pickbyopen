@@ -21,7 +21,8 @@ namespace Pickbyopen.Components
         [
             "Data e hora",
             "Evento",
-            "Desenho",
+            "VP / Partnumber",
+            "Chassi",
             "Porta",
             "Modo",
             "Usuário",
@@ -32,6 +33,7 @@ namespace Pickbyopen.Components
             "CreatedAt",
             "Event",
             "Target",
+            "Chassi",
             "Door",
             "Mode",
             "UserName",
@@ -92,6 +94,7 @@ namespace Pickbyopen.Components
         {
             var operations = await db.GetOperationsByDate(
                 TbPartnumber.Text,
+                string.Empty,
                 TbDoor.Text,
                 InitialDate.SelectedDate.ToString()!,
                 FinalDate.SelectedDate.ToString()!

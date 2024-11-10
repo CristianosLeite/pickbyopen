@@ -80,7 +80,7 @@ namespace Pickbyopen.Database
         }
 
         // <summary>
-        // Create an index table for partnumber and doors association
+        // Create an index table for vpOrPartnumber and doors association
         // </summary>
         private static void CreatePartnumberIndex()
         {
@@ -112,7 +112,7 @@ namespace Pickbyopen.Database
         }
 
         // <summary>
-        // Create a table for partnumber
+        // Create a table for vpOrPartnumber
         // </summary>
         private static void CreatePartnumberTable()
         {
@@ -253,6 +253,7 @@ namespace Pickbyopen.Database
                         + "CreatedAt timestamp without time zone NOT NULL, "
                         + "Event character varying COLLATE pg_catalog.\"default\" NOT NULL, "
                         + "Target character varying COLLATE pg_catalog.\"default\", "
+                        + "Chassi character varying COLLATE pg_catalog.\"default\", "
                         + "Door character varying COLLATE pg_catalog.\"default\" NOT NULL, "
                         + "Mode character varying COLLATE pg_catalog.\"default\" NOT NULL, "
                         + "UserId character varying COLLATE pg_catalog.\"default\" NOT NULL, "
@@ -301,7 +302,7 @@ namespace Pickbyopen.Database
         }
 
         // <summary>
-        // Create recipe partnumber table
+        // Create recipe vpOrPartnumber table
         // </summary>
         private static void CreateRecipePartnumberTable()
         {
@@ -436,12 +437,13 @@ namespace Pickbyopen.Database
         public async Task LogUserOperate(
             string context,
             string target,
+            string chassi,
             string door,
             string mode,
             string userId
         )
         {
-            await _logRepository.LogUserOperate(context, target, door, mode, userId);
+            await _logRepository.LogUserOperate(context, target, chassi, door, mode, userId);
         }
 
         public async Task<List<UserLog>> GetUserLogsByDate(string initialDate, string finalDate)
@@ -470,14 +472,16 @@ namespace Pickbyopen.Database
         }
 
         public async Task<List<Operation>> GetOperationsByDate(
-            string partnumber,
+            string vpOrPartnumber,
+            string chassi,
             string door,
             string initialDate,
             string finalDate
         )
         {
             return await _operationRepository.GetOperationsByDate(
-                partnumber,
+                vpOrPartnumber,
+                chassi,
                 door,
                 initialDate,
                 finalDate
