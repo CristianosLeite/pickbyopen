@@ -1,8 +1,8 @@
-﻿using System.Windows.Controls;
-using System.IO.Ports;
+﻿using Pickbyopen.Settings;
 using System.Collections.ObjectModel;
-using Pickbyopen.Settings;
+using System.IO.Ports;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Pickbyopen.Components
 {
@@ -35,7 +35,13 @@ namespace Pickbyopen.Components
             CbCOM.SelectedItem = ConnectedCOMPort;
             DataContext = this;
 
-            Task.Run(() => MessageBox.Show("As alterações entrarão em vigor após a aplicação ser reiniciada.", "Aviso"));
+            Task.Run(
+                () =>
+                    MessageBox.Show(
+                        "As alterações entrarão em vigor após a aplicação ser reiniciada.",
+                        "Aviso"
+                    )
+            );
         }
 
         private void Save(object send, EventArgs e)

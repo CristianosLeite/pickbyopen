@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.Input;
+using Pickbyopen.Settings;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
-using Pickbyopen.Settings;
 
 namespace Pickbyopen.Models
 {
@@ -183,10 +183,7 @@ namespace Pickbyopen.Models
         {
             foreach (var config in PlcConfigurations)
             {
-                if (
-                    config.Name.StartsWith("Read")
-                    || config.Name.StartsWith("Write")
-                )
+                if (config.Name.StartsWith("Read") || config.Name.StartsWith("Write"))
                 {
                     SPlcAddresses.Default[config.Name] = config.Value;
                 }

@@ -1,5 +1,4 @@
 ﻿using Pickbyopen.Models;
-using Pickbyopen.Windows;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -18,7 +17,10 @@ namespace Pickbyopen.Components
 
         private void SaveButton_Click(object send, EventArgs e)
         {
-            MessageBox.Show("As alterações entrarão em vigor após a aplicação ser reiniciada.", "Aviso");
+            MessageBox.Show(
+                "As alterações entrarão em vigor após a aplicação ser reiniciada.",
+                "Aviso"
+            );
             Close();
         }
 
