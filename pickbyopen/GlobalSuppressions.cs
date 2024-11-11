@@ -5,4 +5,5 @@
 
 using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Performance", "SYSLIB1045:Converter em 'GeneratedRegexAttribute'.", Justification = "Has accessibility modifiers", Scope = "member", Target = "~M:Pickbyopen.Components.EditPartnumber.NumberValidationTextBox(System.Object,System.Windows.Input.TextCompositionEventArgs)")]
+[assembly: SuppressMessage("Performance", "SYSLIB1045:Converter em 'GeneratedRegexAttribute'.", Justification = "Has accessibility modifiers", Scope = "member", Target = "~M:Pickbyopen.Devices.Plc.Plc.HandleValue(System.String,System.String)~System.Threading.Tasks.Task")]
 [assembly: SuppressMessage("Performance", "SYSLIB1045:Converter em 'GeneratedRegexAttribute'.", Justification = "Necessary validation", Scope = "member", Target = "~M:Pickbyopen.Utils.ValidateNumberInput.IsValideInput(System.String)~System.Boolean")]

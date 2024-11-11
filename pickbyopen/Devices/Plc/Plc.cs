@@ -1,4 +1,5 @@
-﻿using Sharp7.Rx;
+﻿using Pickbyopen.Settings;
+using Sharp7.Rx;
 using Sharp7.Rx.Enums;
 using System.Reactive.Linq;
 using System.Text.RegularExpressions;
@@ -7,14 +8,14 @@ namespace Pickbyopen.Devices.Plc
 {
     public class Plc
     {
-        private readonly Sharp7Plc _client;
-        private readonly string _ip = "192.168.68.102";
-        private readonly int _rack = 0;
-        private readonly int _slot = 1;
+        private readonly Sharp7Plc Client;
+        private readonly string Ip = SPlc.Default.Ip;
+        private readonly int Rack = SPlc.Default.Rack;
+        private readonly int Slot = SPlc.Default.Slot;
 
         public Plc()
         {
-            _client = new Sharp7Plc(_ip, _rack, _slot);
+            Client = new Sharp7Plc(Ip, Rack, Slot);
             Task.Run(async () =>
             {
                 await InitializePlc();
@@ -37,7 +38,7 @@ namespace Pickbyopen.Devices.Plc
         {
             try
             {
-                await _client.InitializeConnection();
+                await Client.InitializeConnection();
                 Thread.Sleep(1000);
                 return await GetPlcStatus();
             }
@@ -51,7 +52,7 @@ namespace Pickbyopen.Devices.Plc
         {
             try
             {
-                var connectionStatus = await ReadFromPlc("DB1.DBX5.3");
+                var connectionStatus = await ReadFromPlc(SPlcAddresses.Default.ReadPlcStatus);
                 if ((bool)connectionStatus)
                     return true;
             }
@@ -64,24 +65,25 @@ namespace Pickbyopen.Devices.Plc
 
         public IDisposable SubscribeAddress<T>(string address, Action<T> callback)
         {
-            return _client.CreateNotification<T>(address, TransmissionMode.OnChange)
+            return Client
+                .CreateNotification<T>(address, TransmissionMode.OnChange)
                 .Subscribe(callback);
         }
 
         public async Task HandleFloats(string tag, float value)
         {
-            await _client.SetValue(tag, value);
+            await Client.SetValue(tag, value);
         }
 
         public async Task HandleNumbers(string tag, int value)
         {
             if (tag.Contains("DINT"))
             {
-                await _client.SetValue(tag, value * 1000);
+                await Client.SetValue(tag, value * 1000);
             }
             else
             {
-                await _client.SetValue(tag, value);
+                await Client.SetValue(tag, value);
             }
         }
 
@@ -89,7 +91,7 @@ namespace Pickbyopen.Devices.Plc
         {
             try
             {
-                return await _client.GetValue(tag);
+                return await Client.GetValue(tag);
             }
             catch (Exception ex)
             {
@@ -123,15 +125,15 @@ namespace Pickbyopen.Devices.Plc
             }
             else if (tag.Contains("STRING"))
             {
-                await _client.SetValue(tag, value);
+                await Client.SetValue(tag, value);
             }
             else if (tag.Contains("DBX"))
             {
-                await _client.SetValue(tag, bool.Parse(value));
+                await Client.SetValue(tag, bool.Parse(value));
             }
             else if (tag.Contains("BYTE"))
             {
-                await _client.SetValue(tag, byte.Parse(value));
+                await Client.SetValue(tag, byte.Parse(value));
             }
             else
             {

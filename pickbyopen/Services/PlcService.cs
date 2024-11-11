@@ -1,5 +1,6 @@
 ﻿using Pickbyopen.Devices.Plc;
 using Pickbyopen.Interfaces;
+using Pickbyopen.Settings;
 using Pickbyopen.Types;
 
 namespace Pickbyopen.Services
@@ -17,9 +18,9 @@ namespace Pickbyopen.Services
         public async Task WriteToPlc(int door, string? target, string? chassi, Event @event)
         {
             if (door < 10)
-                await _plc.WriteToPlc("DB1.BYTE0", door.ToString()); // Frontside intDoor
+                await _plc.WriteToPlc(SPlcAddresses.Default.WriteFrontsideDoor, door.ToString());
             else
-                await _plc.WriteToPlc("DB1.BYTE1", door.ToString()); // Backside intDoor
+                await _plc.WriteToPlc(SPlcAddresses.Default.WriteBacksideDoor, door.ToString());
 
             if (!_modeService.IsMaintenance)
             {

@@ -1,6 +1,7 @@
 ﻿using Pickbyopen.Components;
 using Pickbyopen.Devices.Plc;
 using Pickbyopen.Interfaces;
+using Pickbyopen.Settings;
 using Pickbyopen.Types;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,35 +35,35 @@ namespace Pickbyopen.Services
         public void SubscribeDoors()
         {
             // Open doors
-            DoorSubscription("DB1.DBX2.0", Doors[0], Context.Open);
-            DoorSubscription("DB1.DBX2.1", Doors[1], Context.Open);
-            DoorSubscription("DB1.DBX2.2", Doors[2], Context.Open);
-            DoorSubscription("DB1.DBX2.3", Doors[3], Context.Open);
-            DoorSubscription("DB1.DBX2.4", Doors[4], Context.Open);
-            DoorSubscription("DB1.DBX2.5", Doors[5], Context.Open);
-            DoorSubscription("DB1.DBX2.6", Doors[6], Context.Open);
-            DoorSubscription("DB1.DBX2.7", Doors[7], Context.Open);
-            DoorSubscription("DB1.DBX3.0", Doors[8], Context.Open);
-            DoorSubscription("DB1.DBX3.1", Doors[9], Context.Open);
-            DoorSubscription("DB1.DBX3.2", Doors[10], Context.Open);
-            DoorSubscription("DB1.DBX3.3", Doors[11], Context.Open);
-            DoorSubscription("DB1.DBX3.4", Doors[12], Context.Open);
-            DoorSubscription("DB1.DBX3.5", Doors[13], Context.Open);
-            DoorSubscription("DB1.DBX3.6", Doors[14], Context.Open);
-            DoorSubscription("DB1.DBX3.7", Doors[15], Context.Open);
-            DoorSubscription("DB1.DBX4.0", Doors[16], Context.Open);
-            DoorSubscription("DB1.DBX4.1", Doors[17], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen1, Doors[0], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen2, Doors[1], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen3, Doors[2], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen4, Doors[3], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen5, Doors[4], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen6, Doors[5], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen7, Doors[6], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen8, Doors[7], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen9, Doors[8], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen10, Doors[9], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen11, Doors[10], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen12, Doors[11], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen13, Doors[12], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen14, Doors[13], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen15, Doors[14], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen16, Doors[15], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen17, Doors[16], Context.Open);
+            DoorSubscription(SPlcAddresses.Default.ReadIsOpen18, Doors[17], Context.Open);
 
             // Refill doors
-            DoorSubscription("DB1.DBX4.2", Doors[9], Context.Refill);
-            DoorSubscription("DB1.DBX4.3", Doors[10], Context.Refill);
-            DoorSubscription("DB1.DBX4.4", Doors[11], Context.Refill);
-            DoorSubscription("DB1.DBX4.5", Doors[12], Context.Refill);
-            DoorSubscription("DB1.DBX4.6", Doors[13], Context.Refill);
-            DoorSubscription("DB1.DBX4.7", Doors[14], Context.Refill);
-            DoorSubscription("DB1.DBX5.0", Doors[15], Context.Refill);
-            DoorSubscription("DB1.DBX5.1", Doors[16], Context.Refill);
-            DoorSubscription("DB1.DBX5.2", Doors[17], Context.Refill);
+            DoorSubscription(SPlcAddresses.Default.ReadNeedsRefill10, Doors[9], Context.Refill);
+            DoorSubscription(SPlcAddresses.Default.ReadNeedsRefill11, Doors[10], Context.Refill);
+            DoorSubscription(SPlcAddresses.Default.ReadNeedsRefill12, Doors[11], Context.Refill);
+            DoorSubscription(SPlcAddresses.Default.ReadNeedsRefill13, Doors[12], Context.Refill);
+            DoorSubscription(SPlcAddresses.Default.ReadNeedsRefill14, Doors[13], Context.Refill);
+            DoorSubscription(SPlcAddresses.Default.ReadNeedsRefill15, Doors[14], Context.Refill);
+            DoorSubscription(SPlcAddresses.Default.ReadNeedsRefill16, Doors[15], Context.Refill);
+            DoorSubscription(SPlcAddresses.Default.ReadNeedsRefill17, Doors[16], Context.Refill);
+            DoorSubscription(SPlcAddresses.Default.ReadNeedsRefill18, Doors[17], Context.Refill);
         }
 
         public void DoorSubscription(string address, Button associatedDoor, Context context)
@@ -282,24 +283,24 @@ namespace Pickbyopen.Services
         {
             return door switch
             {
-                1 => (bool)await _plc.ReadFromPlc("DB1.DBX2.0"),
-                2 => (bool)await _plc.ReadFromPlc("DB1.DBX2.1"),
-                3 => (bool)await _plc.ReadFromPlc("DB1.DBX2.2"),
-                4 => (bool)await _plc.ReadFromPlc("DB1.DBX2.3"),
-                5 => (bool)await _plc.ReadFromPlc("DB1.DBX2.4"),
-                6 => (bool)await _plc.ReadFromPlc("DB1.DBX2.5"),
-                7 => (bool)await _plc.ReadFromPlc("DB1.DBX2.6"),
-                8 => (bool)await _plc.ReadFromPlc("DB1.DBX2.7"),
-                9 => (bool)await _plc.ReadFromPlc("DB1.DBX3.0"),
-                10 => (bool)await _plc.ReadFromPlc("DB1.DBX3.1"),
-                11 => (bool)await _plc.ReadFromPlc("DB1.DBX3.2"),
-                12 => (bool)await _plc.ReadFromPlc("DB1.DBX3.3"),
-                13 => (bool)await _plc.ReadFromPlc("DB1.DBX3.4"),
-                14 => (bool)await _plc.ReadFromPlc("DB1.DBX3.5"),
-                15 => (bool)await _plc.ReadFromPlc("DB1.DBX3.6"),
-                16 => (bool)await _plc.ReadFromPlc("DB1.DBX3.7"),
-                17 => (bool)await _plc.ReadFromPlc("DB1.DBX4.0"),
-                18 => (bool)await _plc.ReadFromPlc("DB1.DBX4.1"),
+                1 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen1),
+                2 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen2),
+                3 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen3),
+                4 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen4),
+                5 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen5),
+                6 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen6),
+                7 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen7),
+                8 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen8),
+                9 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen9),
+                10 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen10),
+                11 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen11),
+                12 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen12),
+                13 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen13),
+                14 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen14),
+                15 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen15),
+                16 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen16),
+                17 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen17),
+                18 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadIsOpen18),
                 _ => false,
             };
         }
@@ -308,15 +309,15 @@ namespace Pickbyopen.Services
         {
             return door switch
             {
-                10 => (bool)await _plc.ReadFromPlc("DB1.DBX4.2"),
-                11 => (bool)await _plc.ReadFromPlc("DB1.DBX4.3"),
-                12 => (bool)await _plc.ReadFromPlc("DB1.DBX4.4"),
-                13 => (bool)await _plc.ReadFromPlc("DB1.DBX4.5"),
-                14 => (bool)await _plc.ReadFromPlc("DB1.DBX4.6"),
-                15 => (bool)await _plc.ReadFromPlc("DB1.DBX4.7"),
-                16 => (bool)await _plc.ReadFromPlc("DB1.DBX5.0"),
-                17 => (bool)await _plc.ReadFromPlc("DB1.DBX5.1"),
-                18 => (bool)await _plc.ReadFromPlc("DB1.DBX5.2"),
+                10 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadNeedsRefill10),
+                11 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadNeedsRefill11),
+                12 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadNeedsRefill12),
+                13 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadNeedsRefill13),
+                14 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadNeedsRefill14),
+                15 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadNeedsRefill15),
+                16 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadNeedsRefill16),
+                17 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadNeedsRefill17),
+                18 => (bool)await _plc.ReadFromPlc(SPlcAddresses.Default.ReadNeedsRefill18),
                 _ => false,
             };
         }

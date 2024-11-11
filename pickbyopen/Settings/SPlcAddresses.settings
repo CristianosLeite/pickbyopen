@@ -1,0 +1,99 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Pickbyopen.Config" GeneratedClassName="PlcAddresses">
+  <Profiles />
+  <Settings>
+    <Setting Name="ReadIsOpen1" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX2.0</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen2" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX2.1</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen3" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX2.2</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen4" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX2.3</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen5" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX2.4</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen6" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX2.5</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen7" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX2.6</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen8" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX2.7</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen9" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX3.0</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen10" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX3.1</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen11" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX3.2</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen12" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX3.3</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen13" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX3.4</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen14" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX3.5</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen15" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX3.6</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen16" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX3.7</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen17" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX4.0</Value>
+    </Setting>
+    <Setting Name="ReadIsOpen18" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX4.1</Value>
+    </Setting>
+    <Setting Name="ReadNeedsRefill10" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX4.2</Value>
+    </Setting>
+    <Setting Name="ReadNeedsRefill11" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX4.3</Value>
+    </Setting>
+    <Setting Name="ReadNeedsRefill12" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX4.4</Value>
+    </Setting>
+    <Setting Name="ReadNeedsRefill13" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX4.5</Value>
+    </Setting>
+    <Setting Name="ReadNeedsRefill14" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX4.6</Value>
+    </Setting>
+    <Setting Name="ReadNeedsRefill15" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX4.7</Value>
+    </Setting>
+    <Setting Name="ReadNeedsRefill16" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX5.0</Value>
+    </Setting>
+    <Setting Name="ReadNeedsRefill17" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX5.1</Value>
+    </Setting>
+    <Setting Name="ReadNeedsRefill18" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX5.2</Value>
+    </Setting>
+    <Setting Name="ReadPlcStatus" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX5.3</Value>
+    </Setting>
+    <Setting Name="ReadDoorIsOpen" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.DBX5.4</Value>
+    </Setting>
+    <Setting Name="WriteFrontsideDoor" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.BYTE0</Value>
+    </Setting>
+    <Setting Name="WriteBacksideDoor" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DB1.BYTE1</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
