@@ -11,7 +11,6 @@ namespace Pickbyopen.Windows
         public ReportWindow()
         {
             InitializeComponent();
-            LoadChildren(null, null);
         }
 
         private void LoadChildren(object? sender, RoutedEventArgs? e)

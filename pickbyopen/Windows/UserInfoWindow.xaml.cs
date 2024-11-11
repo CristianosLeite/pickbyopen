@@ -1,4 +1,4 @@
-﻿using Pickbyopen.Components;
+﻿using Pickbyopen.Services;
 using System.Windows;
 using System.Windows.Media.Effects;
 
@@ -10,6 +10,7 @@ namespace Pickbyopen.Windows
     public partial class InfoWindow : Window
     {
         public string Context { get; set; }
+
         public InfoWindow(string context)
         {
             InitializeComponent();
@@ -17,7 +18,10 @@ namespace Pickbyopen.Windows
             Context = context;
 
             SetProperties();
-            LoadChildrenComponent();
+
+            Name.Text = Auth.LoggedInUser?.Username;
+            BadgeNumber.Text = Auth.LoggedInUser?.BadgeNumber;
+            TimeLogin.Text = Auth.LoggedAt;
         }
 
         private void SetProperties()
@@ -33,13 +37,10 @@ namespace Pickbyopen.Windows
             App.Current.MainWindow.Effect = null;
         }
 
-        private void LoadChildrenComponent()
+        private void Logout_Click(object sender, RoutedEventArgs e)
         {
-            if (Context == "user")
-            {
-                InfoUser infoUser = new();
-                Main.Children.Add(infoUser);
-            }
+            Close();
+            Auth.Logout();
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

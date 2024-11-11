@@ -76,7 +76,7 @@
         </StackPanel>
         <StackPanel Grid.Column="5" VerticalAlignment="Center">
             <Button x:Name="Config" Style="{StaticResource MaterialDesignFloatingActionButton}" HorizontalAlignment="Center"
-                BorderBrush="{x:Null}" Background="{x:Null}" Foreground="LightGray" Click="Reports_Click">
+                BorderBrush="{x:Null}" Background="{x:Null}" Foreground="LightGray" Click="Config_Click">
                 <StackPanel Margin="5">
                     <materialDesign:PackIcon Kind="Cog"/>
                 </StackPanel>

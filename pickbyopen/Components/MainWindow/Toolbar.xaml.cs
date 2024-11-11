@@ -95,5 +95,21 @@ namespace Pickbyopen.Components
             RecipeWindow recipe = new();
             recipe.Show();
         }
+
+        private void Config_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Auth.UserHasPermission("M"))
+            {
+                MessageBox.Show(
+                    "Você não tem permissão para acessar essa funcionalidade.",
+                    "Acesso negado",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+                return;
+            }
+            ConfigWindow config = new();
+            config.Show();
+        }
     }
 }

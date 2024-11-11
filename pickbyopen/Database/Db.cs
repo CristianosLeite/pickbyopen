@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace Pickbyopen.Database
 {
-    public class Db : DatabaseConfig
+    public class Db : DbConfig
     {
         protected readonly IDbConnectionFactory _connectionFactory;
         protected readonly IPartnumberRepository _partnumberRepository;
