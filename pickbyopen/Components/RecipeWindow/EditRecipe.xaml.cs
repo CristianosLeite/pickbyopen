@@ -140,14 +140,6 @@ namespace Pickbyopen.Components
             Index = -1;
         }
 
-        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
-        {
-            if (ValidateNumberInput.IsValideInput(e.Text))
-                e.Handled = false;
-            else
-                e.Handled = true;
-        }
-
         private async void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             try

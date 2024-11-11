@@ -70,7 +70,6 @@
             <materialDesign:Card Grid.Column="2" Margin="10">
                 <StackPanel>
                     <TextBox x:Name="TbVP" VerticalAlignment="Top"
-                        PreviewTextInput="NumberValidationTextBox"
                         HorizontalAlignment="Left"
                         Width="184"
                         Margin="5 5 0 10"
