@@ -23,30 +23,39 @@ namespace Pickbyopen.Settings {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("192.168.68.102")]
         public string Ip {
             get {
                 return ((string)(this["Ip"]));
             }
+            set {
+                this["Ip"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int Rack {
             get {
                 return ((int)(this["Rack"]));
             }
+            set {
+                this["Rack"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int Slot {
             get {
                 return ((int)(this["Slot"]));
+            }
+            set {
+                this["Slot"] = value;
             }
         }
     }

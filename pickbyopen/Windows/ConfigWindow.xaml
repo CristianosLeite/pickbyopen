@@ -16,6 +16,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TabControl x:Name="TcData" SelectionChanged="LoadChildren">
             <TabItem>
@@ -52,5 +53,6 @@
                 <Grid x:Name="Database" Background="Transparent"/>
             </TabItem>
         </TabControl>
+        <Grid Grid.Row="1" x:Name="Footer"/>
     </Grid>
 </Window>

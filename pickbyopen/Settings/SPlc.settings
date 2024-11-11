@@ -2,13 +2,13 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Pickbyopen.Settings" GeneratedClassName="SPlc">
   <Profiles />
   <Settings>
-    <Setting Name="Ip" Type="System.String" Scope="Application">
+    <Setting Name="Ip" Type="System.String" Scope="User">
       <Value Profile="(Default)">192.168.68.102</Value>
     </Setting>
-    <Setting Name="Rack" Type="System.Int32" Scope="Application">
+    <Setting Name="Rack" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="Slot" Type="System.Int32" Scope="Application">
+    <Setting Name="Slot" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
   </Settings>

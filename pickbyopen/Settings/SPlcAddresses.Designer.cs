@@ -23,282 +23,375 @@ namespace Pickbyopen.Settings {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX2.0")]
         public string ReadIsOpen1 {
             get {
                 return ((string)(this["ReadIsOpen1"]));
             }
+            set {
+                this["ReadIsOpen1"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX2.1")]
         public string ReadIsOpen2 {
             get {
                 return ((string)(this["ReadIsOpen2"]));
             }
+            set {
+                this["ReadIsOpen2"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX2.2")]
         public string ReadIsOpen3 {
             get {
                 return ((string)(this["ReadIsOpen3"]));
             }
+            set {
+                this["ReadIsOpen3"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX2.3")]
         public string ReadIsOpen4 {
             get {
                 return ((string)(this["ReadIsOpen4"]));
             }
+            set {
+                this["ReadIsOpen4"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX2.4")]
         public string ReadIsOpen5 {
             get {
                 return ((string)(this["ReadIsOpen5"]));
             }
+            set {
+                this["ReadIsOpen5"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX2.5")]
         public string ReadIsOpen6 {
             get {
                 return ((string)(this["ReadIsOpen6"]));
             }
+            set {
+                this["ReadIsOpen6"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX2.6")]
         public string ReadIsOpen7 {
             get {
                 return ((string)(this["ReadIsOpen7"]));
             }
+            set {
+                this["ReadIsOpen7"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX2.7")]
         public string ReadIsOpen8 {
             get {
                 return ((string)(this["ReadIsOpen8"]));
             }
+            set {
+                this["ReadIsOpen8"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX3.0")]
         public string ReadIsOpen9 {
             get {
                 return ((string)(this["ReadIsOpen9"]));
             }
+            set {
+                this["ReadIsOpen9"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX3.1")]
         public string ReadIsOpen10 {
             get {
                 return ((string)(this["ReadIsOpen10"]));
             }
+            set {
+                this["ReadIsOpen10"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX3.2")]
         public string ReadIsOpen11 {
             get {
                 return ((string)(this["ReadIsOpen11"]));
             }
+            set {
+                this["ReadIsOpen11"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX3.3")]
         public string ReadIsOpen12 {
             get {
                 return ((string)(this["ReadIsOpen12"]));
             }
+            set {
+                this["ReadIsOpen12"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX3.4")]
         public string ReadIsOpen13 {
             get {
                 return ((string)(this["ReadIsOpen13"]));
             }
+            set {
+                this["ReadIsOpen13"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX3.5")]
         public string ReadIsOpen14 {
             get {
                 return ((string)(this["ReadIsOpen14"]));
             }
+            set {
+                this["ReadIsOpen14"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX3.6")]
         public string ReadIsOpen15 {
             get {
                 return ((string)(this["ReadIsOpen15"]));
             }
+            set {
+                this["ReadIsOpen15"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX3.7")]
         public string ReadIsOpen16 {
             get {
                 return ((string)(this["ReadIsOpen16"]));
             }
+            set {
+                this["ReadIsOpen16"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX4.0")]
         public string ReadIsOpen17 {
             get {
                 return ((string)(this["ReadIsOpen17"]));
             }
+            set {
+                this["ReadIsOpen17"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX4.1")]
         public string ReadIsOpen18 {
             get {
                 return ((string)(this["ReadIsOpen18"]));
             }
+            set {
+                this["ReadIsOpen18"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX4.2")]
         public string ReadNeedsRefill10 {
             get {
                 return ((string)(this["ReadNeedsRefill10"]));
             }
+            set {
+                this["ReadNeedsRefill10"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX4.3")]
         public string ReadNeedsRefill11 {
             get {
                 return ((string)(this["ReadNeedsRefill11"]));
             }
+            set {
+                this["ReadNeedsRefill11"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX4.4")]
         public string ReadNeedsRefill12 {
             get {
                 return ((string)(this["ReadNeedsRefill12"]));
             }
+            set {
+                this["ReadNeedsRefill12"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX4.5")]
         public string ReadNeedsRefill13 {
             get {
                 return ((string)(this["ReadNeedsRefill13"]));
             }
+            set {
+                this["ReadNeedsRefill13"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX4.6")]
         public string ReadNeedsRefill14 {
             get {
                 return ((string)(this["ReadNeedsRefill14"]));
             }
+            set {
+                this["ReadNeedsRefill14"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX4.7")]
         public string ReadNeedsRefill15 {
             get {
                 return ((string)(this["ReadNeedsRefill15"]));
             }
+            set {
+                this["ReadNeedsRefill15"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX5.0")]
         public string ReadNeedsRefill16 {
             get {
                 return ((string)(this["ReadNeedsRefill16"]));
             }
+            set {
+                this["ReadNeedsRefill16"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX5.1")]
         public string ReadNeedsRefill17 {
             get {
                 return ((string)(this["ReadNeedsRefill17"]));
             }
+            set {
+                this["ReadNeedsRefill17"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX5.2")]
         public string ReadNeedsRefill18 {
             get {
                 return ((string)(this["ReadNeedsRefill18"]));
             }
+            set {
+                this["ReadNeedsRefill18"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX5.3")]
         public string ReadPlcStatus {
             get {
                 return ((string)(this["ReadPlcStatus"]));
             }
+            set {
+                this["ReadPlcStatus"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX5.4")]
         public string ReadDoorIsOpen {
             get {
                 return ((string)(this["ReadDoorIsOpen"]));
             }
+            set {
+                this["ReadDoorIsOpen"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.BYTE0")]
         public string WriteFrontsideDoor {
             get {
                 return ((string)(this["WriteFrontsideDoor"]));
             }
+            set {
+                this["WriteFrontsideDoor"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DB1.BYTE1")]
         public string WriteBacksideDoor {
             get {
                 return ((string)(this["WriteBacksideDoor"]));
+            }
+            set {
+                this["WriteBacksideDoor"] = value;
             }
         }
     }

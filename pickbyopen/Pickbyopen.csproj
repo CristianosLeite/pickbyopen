@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
     <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
     <PackageReference Include="MaterialDesignColors" Version="3.1.0" />
     <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
@@ -47,6 +48,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Settings\SCodeBarsReader.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SCodeBarsReader.settings</DependentUpon>
+    </Compile>
     <Compile Update="Settings\SPlc.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -63,6 +69,10 @@
     <None Update="Assets\logo-conecsa.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
+    </None>
+    <None Update="Settings\SCodeBarsReader.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>SCodeBarsReader.Designer.cs</LastGenOutput>
     </None>
     <None Update="Settings\SPlc.settings">
       <Generator>PublicSettingsSingleFileGenerator</Generator>

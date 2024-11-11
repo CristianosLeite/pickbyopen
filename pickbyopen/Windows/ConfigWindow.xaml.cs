@@ -11,6 +11,9 @@ namespace Pickbyopen.Windows
         public ConfigWindow()
         {
             InitializeComponent();
+
+            Footer footer = new();
+            Footer.Children.Add(footer);
         }
 
         private void LoadChildren(object? sender, RoutedEventArgs? e)
