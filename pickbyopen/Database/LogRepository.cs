@@ -66,7 +66,7 @@ namespace Pickbyopen.Database
             {
                 "SELECT CreatedAt, Event, Target, Device FROM SysLogs ORDER BY CreatedAt DESC LIMIT 200",
                 "SELECT CreatedAt, Event, Target, UserId FROM UserLogs ORDER BY CreatedAt DESC LIMIT 200",
-                "SELECT CreatedAt, Event, Target, Door, Mode, UserId FROM Operations ORDER BY CreatedAt DESC LIMIT 200",
+                "SELECT CreatedAt, Event, Target, Chassi, Door, Mode, UserId FROM Operations ORDER BY CreatedAt DESC LIMIT 200",
             };
 
             foreach (var query in queries)
