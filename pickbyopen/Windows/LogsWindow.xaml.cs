@@ -19,6 +19,7 @@ namespace Pickbyopen.Windows
         {
             InitializeComponent();
 
+            Topmost = true;
             DbConnectionFactory connectionFactory = new();
             db = new(connectionFactory);
 

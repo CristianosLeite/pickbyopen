@@ -11,6 +11,7 @@ namespace Pickbyopen.Windows
         public PartnumberWindow()
         {
             InitializeComponent();
+            Topmost = true;
             Main.Children.Add(new AppPartnumber());
         }
     }

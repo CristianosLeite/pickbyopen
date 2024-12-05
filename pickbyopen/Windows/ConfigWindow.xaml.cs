@@ -12,6 +12,7 @@ namespace Pickbyopen.Windows
         {
             InitializeComponent();
 
+            Topmost = true;
             Footer footer = new();
             Footer.Children.Add(footer);
         }

@@ -11,6 +11,7 @@ namespace Pickbyopen.Windows
         public AssociationWindow()
         {
             InitializeComponent();
+            Topmost = true;
             Main.Children.Add(new AssociatePartnumber());
         }
     }

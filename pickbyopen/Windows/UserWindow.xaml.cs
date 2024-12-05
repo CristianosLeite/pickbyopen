@@ -11,6 +11,7 @@ namespace Pickbyopen.Windows
         public UserWindow()
         {
             InitializeComponent();
+            Topmost = true;
             Main.Children.Add(new AppUser());
         }
     }

@@ -11,6 +11,7 @@ namespace Pickbyopen.Windows
         public RecipeWindow()
         {
             InitializeComponent();
+            Topmost = true;
             Main.Children.Add(new AppRecipe());
         }
     }
