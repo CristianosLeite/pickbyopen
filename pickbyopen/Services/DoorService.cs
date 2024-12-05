@@ -81,7 +81,7 @@ namespace Pickbyopen.Services
                                 {
                                     CloseDoor(associatedDoor, intDoor);
                                     MainApplication.DoorInput.Text = "0";
-                                    MainApplication.StatusInput.Text = "Aguardando leitura.";
+                                    MainApplication.StatusInput.Text = "Aguardando leitura...";
                                 })
                             );
                             return;

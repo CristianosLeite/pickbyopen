@@ -95,5 +95,59 @@
     <Setting Name="WriteBacksideDoor" Type="System.String" Scope="User">
       <Value Profile="(Default)">DB1.BYTE1</Value>
     </Setting>
+    <Setting Name="WriteOpen1" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX6.0</Value>
+    </Setting>
+    <Setting Name="WriteOpen2" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX6.1</Value>
+    </Setting>
+    <Setting Name="WriteOpen3" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX6.2</Value>
+    </Setting>
+    <Setting Name="WriteOpen4" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX6.3</Value>
+    </Setting>
+    <Setting Name="WriteOpen5" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX6.4</Value>
+    </Setting>
+    <Setting Name="WriteOpen6" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX6.5</Value>
+    </Setting>
+    <Setting Name="WriteOpen7" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX6.6</Value>
+    </Setting>
+    <Setting Name="WriteOpen8" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX6.7</Value>
+    </Setting>
+    <Setting Name="WriteOpen9" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX7.0</Value>
+    </Setting>
+    <Setting Name="WriteOpen10" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX8.0</Value>
+    </Setting>
+    <Setting Name="WriteOpen11" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX8.1</Value>
+    </Setting>
+    <Setting Name="WriteOpen12" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX8.2</Value>
+    </Setting>
+    <Setting Name="WriteOpen13" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX8.3</Value>
+    </Setting>
+    <Setting Name="WriteOpen14" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX8.4</Value>
+    </Setting>
+    <Setting Name="WriteOpen15" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX8.5</Value>
+    </Setting>
+    <Setting Name="WriteOpen16" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX8.6</Value>
+    </Setting>
+    <Setting Name="WriteOpen17" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX8.7</Value>
+    </Setting>
+    <Setting Name="WriteOpen18" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DB1.DBX9.0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

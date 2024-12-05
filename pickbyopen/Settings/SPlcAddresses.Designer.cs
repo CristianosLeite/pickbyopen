@@ -394,5 +394,221 @@ namespace Pickbyopen.Settings {
                 this["WriteBacksideDoor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX6.0")]
+        public string WriteOpen1 {
+            get {
+                return ((string)(this["WriteOpen1"]));
+            }
+            set {
+                this["WriteOpen1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX6.1")]
+        public string WriteOpen2 {
+            get {
+                return ((string)(this["WriteOpen2"]));
+            }
+            set {
+                this["WriteOpen2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX6.2")]
+        public string WriteOpen3 {
+            get {
+                return ((string)(this["WriteOpen3"]));
+            }
+            set {
+                this["WriteOpen3"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX6.3")]
+        public string WriteOpen4 {
+            get {
+                return ((string)(this["WriteOpen4"]));
+            }
+            set {
+                this["WriteOpen4"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX6.4")]
+        public string WriteOpen5 {
+            get {
+                return ((string)(this["WriteOpen5"]));
+            }
+            set {
+                this["WriteOpen5"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX6.5")]
+        public string WriteOpen6 {
+            get {
+                return ((string)(this["WriteOpen6"]));
+            }
+            set {
+                this["WriteOpen6"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX6.6")]
+        public string WriteOpen7 {
+            get {
+                return ((string)(this["WriteOpen7"]));
+            }
+            set {
+                this["WriteOpen7"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX6.7")]
+        public string WriteOpen8 {
+            get {
+                return ((string)(this["WriteOpen8"]));
+            }
+            set {
+                this["WriteOpen8"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX7.0")]
+        public string WriteOpen9 {
+            get {
+                return ((string)(this["WriteOpen9"]));
+            }
+            set {
+                this["WriteOpen9"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX8.0")]
+        public string WriteOpen10 {
+            get {
+                return ((string)(this["WriteOpen10"]));
+            }
+            set {
+                this["WriteOpen10"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX8.1")]
+        public string WriteOpen11 {
+            get {
+                return ((string)(this["WriteOpen11"]));
+            }
+            set {
+                this["WriteOpen11"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX8.2")]
+        public string WriteOpen12 {
+            get {
+                return ((string)(this["WriteOpen12"]));
+            }
+            set {
+                this["WriteOpen12"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX8.3")]
+        public string WriteOpen13 {
+            get {
+                return ((string)(this["WriteOpen13"]));
+            }
+            set {
+                this["WriteOpen13"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX8.4")]
+        public string WriteOpen14 {
+            get {
+                return ((string)(this["WriteOpen14"]));
+            }
+            set {
+                this["WriteOpen14"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX8.5")]
+        public string WriteOpen15 {
+            get {
+                return ((string)(this["WriteOpen15"]));
+            }
+            set {
+                this["WriteOpen15"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX8.6")]
+        public string WriteOpen16 {
+            get {
+                return ((string)(this["WriteOpen16"]));
+            }
+            set {
+                this["WriteOpen16"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX8.7")]
+        public string WriteOpen17 {
+            get {
+                return ((string)(this["WriteOpen17"]));
+            }
+            set {
+                this["WriteOpen17"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DB1.DBX9.0")]
+        public string WriteOpen18 {
+            get {
+                return ((string)(this["WriteOpen18"]));
+            }
+            set {
+                this["WriteOpen18"] = value;
+            }
+        }
     }
 }

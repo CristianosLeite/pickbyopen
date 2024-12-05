@@ -121,13 +121,15 @@ namespace Pickbyopen.Components
                 {
                     ChassiInput.Text = data;
                 }
-                else if (data.Length == 10)
+                else if (data.Length > 5 && data.Length < 11)
                 {
+                    // Add 0 until reach 10 characters
+                    data = data.PadLeft(10, '0');
                     PartnumberInput.Text = data;
                 }
                 else
                 {
-                    StatusInput.Text = "Leitura inválida.";
+                    data = "";
                 }
             });
         }
@@ -243,7 +245,10 @@ namespace Pickbyopen.Components
             var doorsToOpen = await _db.GetRecipeAssociatedDoors(vp);
             foreach (var door in doorsToOpen)
             {
+                if (_doorService.Subscriptions.Count == 0)
+                    SubscribeDoors();
                 await WriteToPlc(door, vp, chassi, Event.Reading);
+                Thread.Sleep(100);
             }
         }
 
@@ -272,6 +277,21 @@ namespace Pickbyopen.Components
                 return;
             }
             await _plcService.WriteToPlc(door, target, chassi, @event);
+
+            // Await for 3 seconds and reset the values
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(3000);
+                Dispatcher.Invoke(() =>
+                {
+                    PartnumberInput.Text = string.Empty;
+                    VPInput.Text = string.Empty;
+                    ChassiInput.Text = string.Empty;
+                    PartnumberInput.Text = string.Empty;
+                    RecipeInput.Text = "Nenhuma receita selecionada";
+                    StatusInput.Text = "Aguardando leitura...";
+                });
+            });
         }
 
         private void ManualDoorOpen(object sender, RoutedEventArgs e) =>

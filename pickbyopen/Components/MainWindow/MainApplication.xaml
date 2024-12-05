@@ -112,7 +112,7 @@
 
                     <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="10,0">
                         <TextBlock x:Name="StatusLabel" Grid.Column="0" FontSize="24" Text="Status: " VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                        <TextBlock x:Name="StatusInput" FontSize="24" Text="Aguardando leitura" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <TextBlock x:Name="StatusInput" FontSize="24" Text="Aguardando leitura..." VerticalAlignment="Center" HorizontalAlignment="Left"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">

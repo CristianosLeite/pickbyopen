@@ -56,6 +56,11 @@ namespace Pickbyopen.Devices.CodebarsReader
         private void Port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             data = port.ReadExisting();
+            Task.Run(() =>
+            {
+                Thread.Sleep(3000);
+                ClearComPort();
+            });
         }
 
         public void Close()
