@@ -1,9 +1,9 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using Pickbyopen.Settings;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
+using Pickbyopen.Settings;
 
 namespace Pickbyopen.Models
 {
@@ -14,7 +14,13 @@ namespace Pickbyopen.Models
 
         public PlcSettingsViewModel()
         {
-            PlcConfigurations =
+            PlcConfigurations = InitializePlcConfigurations();
+            SaveCommand = new RelayCommand(SaveSettings);
+        }
+
+        private static ObservableCollection<SettingsModel> InitializePlcConfigurations()
+        {
+            return
             [
                 new SettingsModel { Name = "Ip", Value = SPlc.Default.Ip },
                 new SettingsModel { Name = "Rack", Value = SPlc.Default.Rack.ToString() },
@@ -164,19 +170,61 @@ namespace Pickbyopen.Models
                     Name = "ReadDoorIsOpen",
                     Value = SPlcAddresses.Default.ReadDoorIsOpen,
                 },
+                new SettingsModel { Name = "WriteOpen1", Value = SPlcAddresses.Default.WriteOpen1 },
+                new SettingsModel { Name = "WriteOpen2", Value = SPlcAddresses.Default.WriteOpen2 },
+                new SettingsModel { Name = "WriteOpen3", Value = SPlcAddresses.Default.WriteOpen3 },
+                new SettingsModel { Name = "WriteOpen4", Value = SPlcAddresses.Default.WriteOpen4 },
+                new SettingsModel { Name = "WriteOpen5", Value = SPlcAddresses.Default.WriteOpen5 },
+                new SettingsModel { Name = "WriteOpen6", Value = SPlcAddresses.Default.WriteOpen6 },
+                new SettingsModel { Name = "WriteOpen7", Value = SPlcAddresses.Default.WriteOpen7 },
+                new SettingsModel { Name = "WriteOpen8", Value = SPlcAddresses.Default.WriteOpen8 },
+                new SettingsModel { Name = "WriteOpen9", Value = SPlcAddresses.Default.WriteOpen9 },
                 new SettingsModel
                 {
-                    Name = "WriteFrontsideDoor",
-                    Value = SPlcAddresses.Default.WriteFrontsideDoor,
+                    Name = "WriteOpen10",
+                    Value = SPlcAddresses.Default.WriteOpen10,
                 },
                 new SettingsModel
                 {
-                    Name = "WriteBacksideDoor",
-                    Value = SPlcAddresses.Default.WriteBacksideDoor,
+                    Name = "WriteOpen11",
+                    Value = SPlcAddresses.Default.WriteOpen11,
+                },
+                new SettingsModel
+                {
+                    Name = "WriteOpen12",
+                    Value = SPlcAddresses.Default.WriteOpen12,
+                },
+                new SettingsModel
+                {
+                    Name = "WriteOpen13",
+                    Value = SPlcAddresses.Default.WriteOpen13,
+                },
+                new SettingsModel
+                {
+                    Name = "WriteOpen14",
+                    Value = SPlcAddresses.Default.WriteOpen14,
+                },
+                new SettingsModel
+                {
+                    Name = "WriteOpen15",
+                    Value = SPlcAddresses.Default.WriteOpen15,
+                },
+                new SettingsModel
+                {
+                    Name = "WriteOpen16",
+                    Value = SPlcAddresses.Default.WriteOpen16,
+                },
+                new SettingsModel
+                {
+                    Name = "WriteOpen17",
+                    Value = SPlcAddresses.Default.WriteOpen17,
+                },
+                new SettingsModel
+                {
+                    Name = "WriteOpen18",
+                    Value = SPlcAddresses.Default.WriteOpen18,
                 },
             ];
-
-            SaveCommand = new RelayCommand(SaveSettings);
         }
 
         private void SaveSettings()
@@ -189,17 +237,9 @@ namespace Pickbyopen.Models
                 }
                 else if (config.Name == "Rack" || config.Name == "Slot")
                 {
-                    string name = config.Name;
-                    SPlc.Default[name] = int.Parse(config.Value);
+                    SPlc.Default[config.Name] = int.Parse(config.Value);
                 }
-                else if (
-                    config.Name == "Rack"
-                    || config.Name == "Slot"
-                    || config.Name == "ReadPlcStatus"
-                    || config.Name == "ReadDoorIsOpen"
-                    || config.Name == "WriteFrontsideDoor"
-                    || config.Name == "WriteBacksideDoor"
-                )
+                else
                 {
                     SPlc.Default[config.Name] = config.Value;
                 }
