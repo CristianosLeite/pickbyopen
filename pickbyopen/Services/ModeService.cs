@@ -37,7 +37,7 @@ namespace Pickbyopen.Services
                 MainApplication.ModeIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.Hand;
                 MainApplication.PartnumberInput.IsEnabled = true;
                 MainApplication.VPInput.IsEnabled = true;
-                MainApplication.ChassiInput.IsEnabled = true;
+                MainApplication.VANInput.IsEnabled = true;
                 IsMaintenance = false;
                 return;
             }
@@ -49,7 +49,7 @@ namespace Pickbyopen.Services
                 MainApplication.ModeIcon.Kind = MaterialDesignThemes.Wpf.PackIconKind.Automatic;
                 MainApplication.PartnumberInput.IsEnabled = false;
                 MainApplication.VPInput.IsEnabled = false;
-                MainApplication.ChassiInput.IsEnabled = false;
+                MainApplication.VANInput.IsEnabled = false;
                 IsMaintenance = false;
             }
             catch (Exception)
@@ -108,7 +108,7 @@ namespace Pickbyopen.Services
             MainApplication.ModeButton.ToolTip = "Modo de manutenção";
             MainApplication.PartnumberInput.IsEnabled = true;
             MainApplication.VPInput.IsEnabled = true;
-            MainApplication.ChassiInput.IsEnabled = true;
+            MainApplication.VANInput.IsEnabled = true;
             IsAutomatic = false;
             IsMaintenance = true;
 

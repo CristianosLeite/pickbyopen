@@ -6,6 +6,6 @@ namespace Pickbyopen.Interfaces
     {
         Task<bool> Connect();
         Task<bool> EnsureConnection();
-        Task WriteToPlc(int door, string target, string chassi, Event @event);
+        Task WriteToPlc(int door, string target, string van, Event @event);
     }
 }

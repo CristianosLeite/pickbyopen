@@ -18,6 +18,7 @@ namespace Pickbyopen.Components
         private readonly PlcService _plcService;
         private readonly DoorService _doorService;
         private readonly CodeBarsReaderService _codeBarsReaderService;
+        private bool _isVanReading = false;
 
         public MainApplication()
         {
@@ -116,16 +117,21 @@ namespace Pickbyopen.Components
                 if (data.Length == 14)
                 {
                     VPInput.Text = data;
-                }
-                else if (data.Length == 17)
-                {
-                    ChassiInput.Text = data;
+                    _isVanReading = true;
                 }
                 else if (data.Length > 5 && data.Length < 11)
                 {
-                    // Add 0 until reach 10 characters
-                    data = data.PadLeft(10, '0');
-                    PartnumberInput.Text = data;
+                    if (_isVanReading)
+                    {
+                        VANInput.Text = data;
+                        _isVanReading = false;
+                    }
+                    else
+                    {
+                        // Add 0 until reach 10 characters
+                        data = data.PadLeft(10, '0');
+                        PartnumberInput.Text = data;
+                    }
                 }
                 else
                 {
@@ -137,12 +143,12 @@ namespace Pickbyopen.Components
         private void SelectionChanged(object sender, RoutedEventArgs e)
         {
             string vp = VPInput.Text;
-            string chassi = ChassiInput.Text;
+            string van = VANInput.Text;
 
             if (PartnumberInput.Text is string partnumber && partnumber.Length == 10)
                 PartnumberChanged(partnumber);
-            else if (vp.Length == 14 || chassi.Length == 17)
-                VPOrChassiChanged(vp, chassi);
+            else if (vp.Length == 14 || van.Length == 7)
+                VPOrVANChanged(vp, van);
         }
 
         private async void PartnumberChanged(string partnumber)
@@ -190,23 +196,23 @@ namespace Pickbyopen.Components
             }
         }
 
-        private async void VPOrChassiChanged(string vp, string chassi)
+        private async void VPOrVANChanged(string vp, string van)
         {
             if (string.IsNullOrEmpty(vp))
             {
-                ChassiInput.Text = chassi;
+                VANInput.Text = van;
                 StatusInput.Text = "Aguardando leitura do VP.";
                 return;
             }
 
-            if (string.IsNullOrEmpty(chassi))
+            if (string.IsNullOrEmpty(van))
             {
                 VPInput.Text = vp;
-                StatusInput.Text = "Aguardando leitura do chassi.";
+                StatusInput.Text = "Aguardando leitura do código van.";
                 return;
             }
 
-            if (!IsValidVp(vp) || !IsValidChassi(chassi))
+            if (!IsValidVp(vp) || !IsValidVan(van))
             {
                 StatusInput.Text = "Leitura inválida.";
                 return;
@@ -226,13 +232,13 @@ namespace Pickbyopen.Components
             }
 
             RecipeInput.Text = recipe.Description;
-            await OpenDoorsForRecipe(vp, chassi);
+            await OpenDoorsForRecipe(vp, van);
             StatusInput.Text = "Receita carregada com sucesso!";
         }
 
         private static bool IsValidVp(string vp) => vp.Length == 14;
 
-        private static bool IsValidChassi(string chassi) => chassi.Length == 17;
+        private static bool IsValidVan(string van) => van.Length == 7;
 
         private async Task<bool> AreDoorsOpen()
         {
@@ -240,14 +246,14 @@ namespace Pickbyopen.Components
             return await CheckForOpenDoors(doors);
         }
 
-        private async Task OpenDoorsForRecipe(string vp, string chassi)
+        private async Task OpenDoorsForRecipe(string vp, string van)
         {
             var doorsToOpen = await _db.GetRecipeAssociatedDoors(vp);
             foreach (var door in doorsToOpen)
             {
                 if (_doorService.Subscriptions.Count == 0)
                     SubscribeDoors();
-                await WriteToPlc(door, vp, chassi, Event.Reading);
+                await WriteToPlc(door, vp, van, Event.Reading);
                 Thread.Sleep(100);
             }
         }
@@ -266,7 +272,7 @@ namespace Pickbyopen.Components
 
         private async Task<bool> IsPlcConnected() => await _plc.GetPlcStatus();
 
-        private async Task WriteToPlc(int door, string target, string chassi, Event @event)
+        private async Task WriteToPlc(int door, string target, string van, Event @event)
         {
             if (_doorService.Subscriptions.Count == 0)
                 _doorService.SubscribeDoors();
@@ -276,7 +282,7 @@ namespace Pickbyopen.Components
                 ErrorMessage.Show("Usuário não tem permissão para abrir portas.");
                 return;
             }
-            await _plcService.WriteToPlc(door, target, chassi, @event);
+            await _plcService.WriteToPlc(door, target, van, @event);
 
             // Await for 3 seconds and reset the values
             _ = Task.Run(async () =>
@@ -286,7 +292,7 @@ namespace Pickbyopen.Components
                 {
                     PartnumberInput.Text = string.Empty;
                     VPInput.Text = string.Empty;
-                    ChassiInput.Text = string.Empty;
+                    VANInput.Text = string.Empty;
                     PartnumberInput.Text = string.Empty;
                     RecipeInput.Text = "Nenhuma receita selecionada";
                     StatusInput.Text = "Aguardando leitura...";

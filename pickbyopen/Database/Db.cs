@@ -253,7 +253,7 @@ namespace Pickbyopen.Database
                         + "CreatedAt timestamp without time zone NOT NULL, "
                         + "Event character varying COLLATE pg_catalog.\"default\" NOT NULL, "
                         + "Target character varying COLLATE pg_catalog.\"default\", "
-                        + "Chassi character varying COLLATE pg_catalog.\"default\", "
+                        + "Van character varying COLLATE pg_catalog.\"default\", "
                         + "Door character varying COLLATE pg_catalog.\"default\" NOT NULL, "
                         + "Mode character varying COLLATE pg_catalog.\"default\" NOT NULL, "
                         + "UserId character varying COLLATE pg_catalog.\"default\" NOT NULL, "
@@ -437,13 +437,13 @@ namespace Pickbyopen.Database
         public async Task LogUserOperate(
             string context,
             string target,
-            string chassi,
+            string van,
             string door,
             string mode,
             string userId
         )
         {
-            await _logRepository.LogUserOperate(context, target, chassi, door, mode, userId);
+            await _logRepository.LogUserOperate(context, target, van, door, mode, userId);
         }
 
         public async Task<List<UserLog>> GetUserLogsByDate(string initialDate, string finalDate)
@@ -473,7 +473,7 @@ namespace Pickbyopen.Database
 
         public async Task<List<Operation>> GetOperationsByDate(
             string vpOrPartnumber,
-            string chassi,
+            string van,
             string door,
             string initialDate,
             string finalDate
@@ -481,7 +481,7 @@ namespace Pickbyopen.Database
         {
             return await _operationRepository.GetOperationsByDate(
                 vpOrPartnumber,
-                chassi,
+                van,
                 door,
                 initialDate,
                 finalDate

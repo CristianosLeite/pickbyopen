@@ -16,7 +16,7 @@ namespace Pickbyopen.Services
 
         public async Task<bool> EnsureConnection() => await _plc.GetPlcStatus();
 
-        public async Task WriteToPlc(int door, string? target, string? chassi, Event @event)
+        public async Task WriteToPlc(int door, string? target, string? van, Event @event)
         {
             switch (door)
             {
@@ -84,7 +84,7 @@ namespace Pickbyopen.Services
                 await _logService.LogUserOperate(
                     @event == Event.Reading ? "Leitura" : "Seleção",
                     target ?? string.Empty,
-                    chassi ?? string.Empty,
+                    van ?? string.Empty,
                     door.ToString(),
                     _modeService.IsAutomatic ? "Automático" : "Manual",
                     Auth.GetUserId()
