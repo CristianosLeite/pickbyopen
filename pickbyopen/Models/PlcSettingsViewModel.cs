@@ -1,9 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using CommunityToolkit.Mvvm.Input;
+using Pickbyopen.Settings;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
-using Pickbyopen.Settings;
 
 namespace Pickbyopen.Models
 {

@@ -1,13 +1,11 @@
 ﻿using Pickbyopen.Database;
 using Pickbyopen.Models;
 using Pickbyopen.Types;
-using Pickbyopen.Utils;
 using Pickbyopen.Windows;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace Pickbyopen.Components
 {

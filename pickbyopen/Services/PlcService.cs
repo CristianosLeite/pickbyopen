@@ -1,8 +1,8 @@
-﻿using System.Diagnostics;
-using Pickbyopen.Devices.Plc;
+﻿using Pickbyopen.Devices.Plc;
 using Pickbyopen.Interfaces;
 using Pickbyopen.Settings;
 using Pickbyopen.Types;
+using System.Diagnostics;
 
 namespace Pickbyopen.Services
 {
