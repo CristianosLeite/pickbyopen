@@ -101,7 +101,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="100, 0">
                             <TextBlock x:Name="VANLabel" FontSize="24" Text="VAN: " VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                            <TextBox x:Name="VANInput" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10, 0" Width="240" IsEnabled="False" MaxLength="7" SelectionChanged="SelectionChanged"/>
+                            <TextBox x:Name="VANInput" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10, 0" Width="120" IsEnabled="False" MaxLength="7" SelectionChanged="SelectionChanged"/>
                         </StackPanel>
                     </StackPanel>
 
